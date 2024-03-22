@@ -10,13 +10,19 @@ struct coord_t {
 
 struct board_t {
   igraph_t graph;
+  struct node vertices;
   struct coord_t* coord;
   unsigned int* last_node;
 };
 
+struct node_t {
+  enum color_t color;
+  unsigned int meeple;
+};
+
 struct board_t init_board(struct tile_t tile);
 
-void board_add_tile(struct board_t *board, struct tile_t tile);
+void update_board(struct board_t *board, struct move_t move);
 
 void destroy_board(struct board_t board);
 
