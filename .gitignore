@@ -2,3 +2,5 @@
 *.o
 install/*
 .clang-format
+src/test/test_board
+src/test/test_tile
