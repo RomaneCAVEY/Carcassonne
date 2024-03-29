@@ -4,7 +4,7 @@
 struct board_t init_board(struct tile_t tile)
 {
   igraph_t graph;
-  struct board_t board; /* TODO: init baord*/
+  struct board_t board={};/* TODO: init baord*/
 
   igraph_empty(&graph, 13, IGRAPH_UNDIRECTED);
 
