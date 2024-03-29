@@ -4,7 +4,7 @@
 #define BOARD_CENTER 101
 
 struct board_t {
-    struct tile_t **tiles;
+    struct tile_t *tiles[BOARD_SIZE];
 };
 
 struct board_t *board_init(struct tile_t tile)
@@ -13,7 +13,7 @@ struct board_t *board_init(struct tile_t tile)
     struct board_t *board = malloc(sizeof(struct board_t));
 
     for (int i = 0; i < BOARD_SIZE; i++) {
-        board->tiles[i] = malloc(sizeof(struct tile_t) * 201);
+        board->tiles[i] = malloc(sizeof(struct tile_t) * BOARD_SIZE);
         for (int j = 0; j < BOARD_SIZE; j++) {
             board->tiles[i][j] = CARC_TILE_EMPTY;
         }
@@ -24,9 +24,12 @@ struct board_t *board_init(struct tile_t tile)
     return board;
 }
 
-int board_add(struct board_t* board, struct tile_t tile, int x, int y) {
-  if (compare_tile(board->tiles[BOARD_CENTER + x][BOARD_CENTER + y], CARC_TILE_EMPTY) == 0)
-    return 0;
+int board_add(struct board_t *board, struct tile_t tile, int x, int y)
+{
+    if (compare_tile(
+            board->tiles[BOARD_CENTER + x][BOARD_CENTER + y], CARC_TILE_EMPTY)
+        == 0)
+        return 0;
 
     board->tiles[BOARD_CENTER + x][BOARD_CENTER + y] = tile;
 
@@ -44,5 +47,4 @@ void board_free(struct board_t *board)
         free(board->tiles[i]);
     }
     free(board);
-    board = NULL;
 }

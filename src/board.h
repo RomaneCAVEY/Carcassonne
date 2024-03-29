@@ -2,7 +2,7 @@
 #define __BOARD_H__
 
 #include "tile.h"
-//tile.h -> move.h -> deck.h
+// tile.h -> move.h -> deck.h
 
 struct board_t;
 
