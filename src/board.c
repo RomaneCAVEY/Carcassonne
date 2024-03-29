@@ -1,25 +1,47 @@
 #include "board.h"
-#include <igraph.h>
 
-struct board_t init_board(struct tile_t tile)
-{
-  igraph_t graph;
-  struct board_t board; /* TODO: init baord*/
+#define BOARD_SIZE 201
+#define BOARD_CENTER 101
 
-  igraph_empty(&graph, 13, IGRAPH_UNDIRECTED);
+struct board_t {
+  struct tile_t** tiles;
+};
 
-  /*TODO: add tile at pos (0, 0) */
+struct board_t* board_init(struct tile_t tile) {
+
+  struct board_t *board = malloc(sizeof(struct board_t));
+
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    board->tiles[i] = malloc(sizeof(struct tile_t) * 201);
+    for (int j = 0; j < BOARD_SIZE; j++) {
+      board->tiles[i][j] = CARC_TILE_EMPTY;
+    }
+  }
+
+  board->tiles[BOARD_CENTER][BOARD_CENTER] = tile;
 
   return board;
 }
 
-void update_board(struct board_t *board, struct move_t move)
-{
-  ;
+int board_add(struct board_t* board, struct tile_t tile, int x, int y) {
+  if (board->tiles[BOARD_CENTER + x][BOARD_CENTER + y] != CARC_TILE_EMPTY)
+    return 0;
+
+  board->tiles[BOARD_CENTER + x][BOARD_CENTER + y] = tile;
+
+  return 1;
+}
+
+struct tile_t board_get(struct board_t* board, int x, int y) {
+  return board->tiles[BOARD_CENTER + x][BOARD_CENTER + y];
+}
+
+void board_free(struct board_t* board) {
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    free(board->tiles[i]);
+  }
+  free(board);
+  board = NULL;
 }
 
 
-void destroy_board(struct board_t *board)
-{
-  igraph_destroy(board->graph);
-}
