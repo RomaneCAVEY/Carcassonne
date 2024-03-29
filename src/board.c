@@ -24,10 +24,9 @@ struct board_t *board_init(struct tile_t tile)
     return board;
 }
 
-int board_add(struct board_t *board, struct tile_t tile, int x, int y)
-{
-    if (board->tiles[BOARD_CENTER + x][BOARD_CENTER + y] != CARC_TILE_EMPTY)
-        return 0;
+int board_add(struct board_t* board, struct tile_t tile, int x, int y) {
+  if (compare_tile(board->tiles[BOARD_CENTER + x][BOARD_CENTER + y], CARC_TILE_EMPTY) == 0)
+    return 0;
 
     board->tiles[BOARD_CENTER + x][BOARD_CENTER + y] = tile;
 
