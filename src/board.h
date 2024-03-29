@@ -1,29 +1,16 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#include <igraph.h>
 #include "deck.h"
 
-struct coord_t {
-  int x, y;
-};
+struct board_t;
 
-struct board_t {
-  igraph_t graph;
-  struct node vertices;
-  struct coord_t* coord;
-  unsigned int* last_node;
-};
+struct board_t* board_init(struct tile_t tile);
 
-struct node_t {
-  enum color_t color;
-  unsigned int meeple;
-};
+int board_add(struct board_t* board, struct tile_t tile, int x, int y);
 
-struct board_t init_board(struct tile_t tile);
+struct tile_t board_get(struct board_t* board, int x, int y);
 
-void update_board(struct board_t *board, struct move_t move);
-
-void destroy_board(struct board_t board);
+void board_free(struct board_t* board);
 
 #endif // __BOARD_H__
