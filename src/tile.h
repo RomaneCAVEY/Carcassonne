@@ -3,6 +3,15 @@
 
 #include "move.h"
 
+enum card_point{
+  NORTH,
+  EAST,
+  SOUTH,
+  WEST,
+};
+
 int compare_tile(struct tile_t t1, struct tile_t t2);
+
+int tile_check(struct tile_t t0, struct tile_t t1, enum card_point nesw);
 
 #endif //__TILE_H__
