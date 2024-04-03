@@ -48,7 +48,7 @@ enum conn_t {
 struct tile_t {
   unsigned int t[MAX_CONNECTIONS]; // The connected components of the tile
                                    // Each vertex has one color (unsigned int)
-                                   // Each color represents a component
+               	                    // Each color represents a component
   enum color_t c[MAX_CONNECTIONS]; // The colors of the vertices of the tile
 };
 

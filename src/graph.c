@@ -20,7 +20,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile){
 		for (int j=0;j<13;j++){ // on parcourt chaque sommet du la tuile.t
 			if (tile.t[j]==component){
 				if (previous==-1){
-					previous==j;
+					previous=j;
 				}
 				else{
 					VECTOR(v1)[c] = previous ;
