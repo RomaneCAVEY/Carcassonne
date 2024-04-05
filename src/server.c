@@ -44,6 +44,13 @@ struct tile_t draw_tile(const struct deck_t* d) {
   return t;
 }
 
+int is_invalid(struct move_t move){
+  if (board_add_check(..., move.tile, move.x, move.y))
+      return 0;
+  return 1;
+
+}
+
 int is_game_over() {
   if (deck_pos + 1 >= DECK_SIZE)
     return 1;
