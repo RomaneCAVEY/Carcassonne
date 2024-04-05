@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 #include "deck.h"
+#include "board.h"
 #include "tile.h"
 #include "move.h"
 
@@ -44,7 +45,7 @@ struct tile_t draw_tile(const struct deck_t* d) {
   return t;
 }
 
-int is_invalid(struct board_t board, struct move_t move){
+int is_invalid(struct board_t *board, struct move_t move){
   if (board_add_check(board, move.tile, move.x, move.y))
       return 0;
   return 1;
@@ -79,7 +80,7 @@ int main(){
   
     
   struct move_t current_move = {.player_id=SERVER, .x=0, .y=0, .tile=deck_get(config.deck, 0), .meeple=NO_CONNECTION};
-  struct board_t board = board_init(current_move.tile);
+  struct board_t *board = board_init(current_move.tile);
   
   // init pj1
   enum player_color_t pcol0 = (current_player == 0) ? BLACK : WHITE;
