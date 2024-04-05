@@ -132,6 +132,7 @@ int main(){
   finalize0();
   finalize1();
   board_free(board);
+  deck_free(config.deck);
 
 
   ///////////// OUTILISATION DES LIBRAIRIES  //////////////
