@@ -9,8 +9,8 @@ struct board_t {
 
 struct board_t *board_init(struct tile_t tile)
 {
-  igraph_t graph;
-  struct board_t board={};/* TODO: init baord*/
+    igraph_t graph;
+    struct board_t board = {}; /* TODO: init baord*/
 
     struct board_t *board = malloc(sizeof(struct board_t));
 
@@ -28,9 +28,11 @@ struct board_t *board_init(struct tile_t tile)
 
 int board_add(struct board_t *board, struct tile_t tile, int x, int y)
 {
-    if (compare_tile(
-            board->tiles[BOARD_CENTER + x][BOARD_CENTER + y], CARC_TILE_EMPTY)
-        == 0)
+    if (x - BOARD_CENTER < 0 || y - BOARD_CENTER < 0
+        || x - BOARD_CENTER >= BOARD_SIZE || y - BOARD_CENTER >= BOARD_SIZE
+        || compare_tile(board->tiles[BOARD_CENTER + x][BOARD_CENTER + y],
+               CARC_TILE_EMPTY)
+            == 0)
         return 0;
 
     board->tiles[BOARD_CENTER + x][BOARD_CENTER + y] = tile;
@@ -40,21 +42,29 @@ int board_add(struct board_t *board, struct tile_t tile, int x, int y)
 
 int board_add_check(struct board_t *board, struct tile_t tile, int x, int y)
 {
-  if (compare_tile(board->tiles[BOARD_CENTER + x][BOARD_CENTER + y], CARC_TILE_EMPTY) == 0)
-    return 0;
-  
-  for (int i = -1; i <= 1; i++){
-    for (int j = -1; j <= 1 ; j++){
-      if( i != j && i != 2+j && i != j-2 && compare_tile(board->tiles[BOARD_CENTER + x + i][BOARD_CENTER + y +j], CARC_TILE_EMPTY) == 0)
-	return 1;
+    if (compare_tile(
+            board->tiles[BOARD_CENTER + x][BOARD_CENTER + y], CARC_TILE_EMPTY)
+        == 0)
+        return 0;
+
+    for (int i = -1; i <= 1; i++) {
+        for (int j = -1; j <= 1; j++) {
+            if (i != j && i != 2 + j && i != j - 2
+                && compare_tile(
+                       board->tiles[BOARD_CENTER + x + i][BOARD_CENTER + y + j],
+                       CARC_TILE_EMPTY)
+                    == 0)
+                return 1;
+        }
     }
-  }
-  return 0;
+    return 0;
 }
-    
 
 struct tile_t board_get(struct board_t *board, int x, int y)
 {
+    if (x - BOARD_CENTER < 0 || y - BOARD_CENTER < 0
+        || x - BOARD_CENTER >= BOARD_SIZE || | y - BOARD_CENTER >= BOARD_SIZE)
+        return CARC_TILE_EMPTY;
     return board->tiles[BOARD_CENTER + x][BOARD_CENTER + y];
 }
 
