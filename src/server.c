@@ -35,6 +35,15 @@ struct gameconfig_t make_config() {
   return cfg;
 }
 
+struct gameconfig_t copy_config(struct gameconfig_t template) {
+  struct gameconfig_t cfg = {
+    .mode = template.mode,
+    .meeples = template.meeples,
+    .deck = deck_copy(template.deck)
+  };
+  return cfg;
+}
+
 int next_player(int current_player) {
   return (current_player + 1) % 2;
 }
@@ -86,11 +95,11 @@ int main(){
   
   // init pj1
   enum player_color_t pcol0 = (current_player == 0) ? BLACK : WHITE;
-  initialize0(pcol0, current_move, config);
+  initialize0(pcol0, current_move, copy_config(config));
   
   // init pj2
   enum player_color_t pcol1 = (current_player == 1) ? BLACK : WHITE;
-  initialize1(pcol1, current_move, config);
+  initialize1(pcol1, current_move, copy_config(config));
 
   struct tile_t tile;
   
