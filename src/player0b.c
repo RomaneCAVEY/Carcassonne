@@ -1,6 +1,5 @@
 #include "board.h"
 #include "deck.h"
-#include "graph.h"
 #include "move.h"
 #include "player.h"
 #include <stdlib.h>
@@ -14,7 +13,7 @@ struct board_t board_1 = {};
 igraph_t graph_1 = {};
 struct gameconfig_t config_1 = {};
 
-char const *get_player_name() { return "Player_0a"; }
+char const *get_player_name() { return "Player_0b"; }
 
 void initialize(unsigned int player_id, const struct move_t first_move,
     struct gameconfig_t config)
