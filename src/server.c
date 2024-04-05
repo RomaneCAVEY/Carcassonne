@@ -44,8 +44,8 @@ struct tile_t draw_tile(const struct deck_t* d) {
   return t;
 }
 
-int is_invalid(struct move_t move){
-  if (board_add_check(..., move.tile, move.x, move.y))
+int is_invalid(struct board_t board, struct move_t move){
+  if (board_add_check(board, move.tile, move.x, move.y))
       return 0;
   return 1;
 
@@ -76,9 +76,11 @@ int main(){
   ///////////// INITIALISATION DE LA PARTIE //////////////
   int current_player = 1; // random(0,2);
   struct gameconfig_t config = make_config();
-
+  
+    
   struct move_t current_move = {.player_id=SERVER, .x=0, .y=0, .tile=deck_get(config.deck, 0), .meeple=NO_CONNECTION};
-
+  struct board_t board = board_init(current_move.tile);
+  
   // init pj1
   enum player_color_t pcol0 = (current_player == 0) ? BLACK : WHITE;
   initialize0(pcol0, current_move, config);
@@ -102,7 +104,7 @@ int main(){
     }
 
     
-    if (is_invalid(current_move)) {
+    if (is_invalid(board, current_move)) {
 	break;
       }
 
