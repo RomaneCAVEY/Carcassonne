@@ -7,7 +7,7 @@
 
 // The player ids
 #define NUM_PLAYERS 2
-enum player_color_t { BLACK=0, WHITE=1 };
+enum player_color_t { BLACK=0, WHITE=1, SERVER=-1 };
 
 // The game modes
 enum gamemode_t {
@@ -54,7 +54,7 @@ struct tile_t {
 
 // A move in the game
 struct move_t {
-  unsigned int player_id; // The id of the player doing the move
+  enum player_color_t player_id; // The id of the player doing the move
   int x, y;               // The central position of the tile
   struct tile_t tile;     // The tile itself
   enum conn_t meeple;     // The position of the meeple (or NO_CONNECTION)

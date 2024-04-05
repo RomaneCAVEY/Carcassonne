@@ -1,4 +1,8 @@
 IGRAPH_PATH ?= /net/npers/renault/save/igraph-0.10.10/install
+IGRAPH_LIBDIR = $(shell [ -e $(IGRAPH_PATH)/lib ] && \
+    echo $(IGRAPH_PATH)/lib || \
+    echo $(IGRAPH_PATH)/lib64) 
+
 CFLAGS = -std=gnu99 -Wall -Wextra -Wno-trampolines -fPIC -g3 \
 	-I$(IGRAPH_PATH)/include/igraph
 LDFLAGS = -ligraph -lm -ldl -L$(IGRAPH_PATH)/lib -Wl,--rpath=${IGRAPH_PATH}/lib
