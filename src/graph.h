@@ -1,5 +1,5 @@
-#ifndef __GRAPH_H__
-#define __GRAPH_H__
+#include <stdio.h>
+#include "graph.h"
 
 #include <igraph.h>
 #include <stdio.h>
@@ -22,4 +22,3 @@ igraph_t graph_add(struct tile_t tile,igraph_t g,struct board, enum color_t* col
 //free graph
 void free_graph(igraph_t graphe);
 
-#endif
