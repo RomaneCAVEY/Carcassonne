@@ -50,6 +50,6 @@ int tile_check(struct tile_t t0, struct tile_t t1, enum card_point nesw)
 }
 
 struct tile_t random_tile() {
-  struct tile_t tiles[4] = [CARC_TILE_INIT, CARC_TILE_GREEN, CARC_TILE_XROAD, CARC_TILE_TINI];
+  struct tile_t tiles[4] = {CARC_TILE_INIT, CARC_TILE_GREEN, CARC_TILE_XROAD, CARC_TILE_TINI};
   return tiles[rand() % 4];
 }
