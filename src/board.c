@@ -9,9 +9,6 @@ struct board_t {
 
 struct board_t *board_init(struct tile_t tile)
 {
-    igraph_t graph;
-    struct board_t board = {}; /* TODO: init baord*/
-
     struct board_t *board = malloc(sizeof(struct board_t));
 
     for (int i = 0; i < BOARD_SIZE; i++) {
@@ -63,7 +60,7 @@ int board_add_check(struct board_t *board, struct tile_t tile, int x, int y)
 struct tile_t board_get(struct board_t *board, int x, int y)
 {
     if (x - BOARD_CENTER < 0 || y - BOARD_CENTER < 0
-        || x - BOARD_CENTER >= BOARD_SIZE || | y - BOARD_CENTER >= BOARD_SIZE)
+        || x - BOARD_CENTER >= BOARD_SIZE || y - BOARD_CENTER >= BOARD_SIZE)
         return CARC_TILE_EMPTY;
     return board->tiles[BOARD_CENTER + x][BOARD_CENTER + y];
 }
