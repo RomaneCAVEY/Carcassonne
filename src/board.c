@@ -50,11 +50,15 @@ int board_add_check(struct board_t *board, struct tile_t tile, int x, int y)
                 && compare_tile(
                        board->tiles[BOARD_CENTER + x + i][BOARD_CENTER + y + j],
                        CARC_TILE_EMPTY)
-                    == 0)
-                return 1;
+                    == 0
+                && tile_check(tile,
+                    board->tiles[BOARD_CENTER + x + i][BOARD_CENTER + y + j],
+                    i - 2 * j))
+                return 0;
         }
     }
-    return 0;
+
+    return 1;
 }
 
 struct tile_t board_get(struct board_t *board, int x, int y)
