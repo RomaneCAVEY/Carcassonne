@@ -8,17 +8,17 @@
 
 #define DECK_SIZE 100
 
-char const* get_player_name0();
-void initialize0(unsigned int, const struct move_t, struct gameconfig_t);
-struct move_t play0(const struct move_t, const struct tile_t );
-void finalize0();
+char const* (*get_player_name0)();
+void (*initialize0)(unsigned int, const struct move_t, struct gameconfig_t);
+struct move_t (*play0)(const struct move_t, const struct tile_t );
+void (*finalize0)();
 
-char const* get_player_name1();
-void initialize1(unsigned int, const struct move_t, struct gameconfig_t);
-struct move_t play1(const struct move_t, const struct tile_t );
-void finalize1();
+char const* (*get_player_name1)();
+void (*initialize1)(unsigned int, const struct move_t, struct gameconfig_t);
+struct move_t (*play1)(const struct move_t, const struct tile_t);
+void (*finalize1)();
 
-int deck_pos = 0;
+int deck_pos;
 
 struct gameconfig_t make_config() {
   struct gameconfig_t cfg = {
@@ -59,15 +59,16 @@ int is_game_over() {
 }
 
 int main(){
+  printf("BONJOUR\n");
 
   ///////////// CHARGEMENT DES LIBRAIRIES //////////////
-  void *pj0 = dlopen("./playerRomane", RTLD_LAZY);
+  void *pj0 = dlopen("./player0a.so", RTLD_LAZY);
   get_player_name0 = dlsym(pj0, "get_player_name");
   initialize0 =dlsym(pj0, "initialize");
   play0 = dlsym(pj0, "play");
   finalize0 = dlsym(pj0, "finalize");
 
-  void *pj1 = dlopen("./playerRomane", RTLD_LAZY);
+  void *pj1 = dlopen("./player0b.so", RTLD_LAZY);
   get_player_name1 = dlsym(pj1, "get_player_name");
   initialize1 =dlsym(pj1, "initialize");
   play1 = dlsym(pj1, "play");
@@ -77,6 +78,7 @@ int main(){
   ///////////// INITIALISATION DE LA PARTIE //////////////
   int current_player = 1; // random(0,2);
   struct gameconfig_t config = make_config();
+  deck_pos = 0;
   
     
   struct move_t current_move = {.player_id=SERVER, .x=0, .y=0, .tile=deck_get(config.deck, 0), .meeple=NO_CONNECTION};

@@ -13,6 +13,8 @@ struct board_t *board_init(struct tile_t tile);
  */
 int board_add(struct board_t *board, struct tile_t tile, int x, int y);
 
+int board_add_check(struct board_t *board, struct tile_t tile, int x, int y);
+
 struct tile_t board_get(struct board_t *board, int x, int y);
 
 void board_free(struct board_t *board);

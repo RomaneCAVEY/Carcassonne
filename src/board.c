@@ -25,8 +25,8 @@ struct board_t *board_init(struct tile_t tile)
 
 int board_add(struct board_t *board, struct tile_t tile, int x, int y)
 {
-    if (x - BOARD_CENTER < 0 || y - BOARD_CENTER < 0
-        || x - BOARD_CENTER >= BOARD_SIZE || y - BOARD_CENTER >= BOARD_SIZE
+    if (x + BOARD_CENTER < 0 || y + BOARD_CENTER < 0
+        || x + BOARD_CENTER >= BOARD_SIZE || y + BOARD_CENTER >= BOARD_SIZE
         || compare_tile(board->tiles[BOARD_CENTER + x][BOARD_CENTER + y],
                CARC_TILE_EMPTY)
             == 0)
@@ -63,8 +63,8 @@ int board_add_check(struct board_t *board, struct tile_t tile, int x, int y)
 
 struct tile_t board_get(struct board_t *board, int x, int y)
 {
-    if (x - BOARD_CENTER < 0 || y - BOARD_CENTER < 0
-        || x - BOARD_CENTER >= BOARD_SIZE || y - BOARD_CENTER >= BOARD_SIZE)
+    if (x + BOARD_CENTER < 0 || y + BOARD_CENTER < 0
+        || x + BOARD_CENTER >= BOARD_SIZE || y + BOARD_CENTER >= BOARD_SIZE)
         return CARC_TILE_EMPTY;
     return board->tiles[BOARD_CENTER + x][BOARD_CENTER + y];
 }
