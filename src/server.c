@@ -105,17 +105,21 @@ int main(){
 
     
     if (is_invalid(board, current_move)) {
-	break;
-      }
-
+      break;
+    }
+    
     if (is_game_over()) {
-	break;
-      }
+      break;
+    }
+
+    board_add(board, current_move.tile, current_move.x, current_move.y);
+    // TODO: calculer les nouveaux points
   }
     
   ///////////// FIN BOUCLE DE JEU //////////////
   finalize0();
   finalize1();
+  board_free(board);
 
 
   ///////////// OUTILISATION DES LIBRAIRIES  //////////////
