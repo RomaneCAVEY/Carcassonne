@@ -71,13 +71,13 @@ int main(){
   printf("BONJOUR\n");
 
   ///////////// CHARGEMENT DES LIBRAIRIES //////////////
-  void *pj0 = dlopen("./player0a.so", RTLD_LAZY);
+  void *pj0 = dlopen("./install/player0a.so", RTLD_LAZY);
   get_player_name0 = dlsym(pj0, "get_player_name");
   initialize0 =dlsym(pj0, "initialize");
   play0 = dlsym(pj0, "play");
   finalize0 = dlsym(pj0, "finalize");
 
-  void *pj1 = dlopen("./player0b.so", RTLD_LAZY);
+  void *pj1 = dlopen("./install/player0b.so", RTLD_LAZY);
   get_player_name1 = dlsym(pj1, "get_player_name");
   initialize1 =dlsym(pj1, "initialize");
   play1 = dlsym(pj1, "play");
