@@ -17,9 +17,16 @@ build: server client deck.o
 %.o: src/%.c
 	$(CC) $< $(CFLAGS) -c
 
-server:
+server: server.o deck.o tile.o board.o
+	gcc $(LDFLAGS) $^ -o install/$@
 
-client:
+player0a.so: player0a.o board.o deck.o
+	gcc -shared -o $@ $^
+
+player0b.so: player0b.o board.o deck.o
+	gcc -shared -o $@ $^
+
+client: player0a.so player0b.so
 
 alltests:
 
@@ -31,3 +38,4 @@ clean:
 	@rm -f *~ src/*~ *.o
 
 .PHONY: client install test clean
+
