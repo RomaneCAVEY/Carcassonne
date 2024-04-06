@@ -35,6 +35,15 @@ struct gameconfig_t make_config() {
   return cfg;
 }
 
+struct gameconfig_t copy_config(struct gameconfig_t template) {
+  struct gameconfig_t cfg = {
+    .mode = template.mode,
+    .meeples = template.meeples,
+    .deck = deck_copy(template.deck)
+  };
+  return cfg;
+}
+
 int next_player(int current_player) {
   return (current_player + 1) % 2;
 }
@@ -62,13 +71,13 @@ int main(){
   printf("BONJOUR\n");
 
   ///////////// CHARGEMENT DES LIBRAIRIES //////////////
-  void *pj0 = dlopen("./player0a.so", RTLD_LAZY);
+  void *pj0 = dlopen("./install/player0a.so", RTLD_LAZY);
   get_player_name0 = dlsym(pj0, "get_player_name");
   initialize0 =dlsym(pj0, "initialize");
   play0 = dlsym(pj0, "play");
   finalize0 = dlsym(pj0, "finalize");
 
-  void *pj1 = dlopen("./player0b.so", RTLD_LAZY);
+  void *pj1 = dlopen("./install/player0b.so", RTLD_LAZY);
   get_player_name1 = dlsym(pj1, "get_player_name");
   initialize1 =dlsym(pj1, "initialize");
   play1 = dlsym(pj1, "play");
@@ -86,11 +95,11 @@ int main(){
   
   // init pj1
   enum player_color_t pcol0 = (current_player == 0) ? BLACK : WHITE;
-  initialize0(pcol0, current_move, config);
+  initialize0(pcol0, current_move, copy_config(config));
   
   // init pj2
   enum player_color_t pcol1 = (current_player == 1) ? BLACK : WHITE;
-  initialize1(pcol1, current_move, config);
+  initialize1(pcol1, current_move, copy_config(config));
 
   struct tile_t tile;
   
@@ -123,6 +132,7 @@ int main(){
   finalize0();
   finalize1();
   board_free(board);
+  deck_free(config.deck);
 
 
   ///////////// OUTILISATION DES LIBRAIRIES  //////////////
