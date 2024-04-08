@@ -40,7 +40,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile,struct super_board super_boa
 		MATRIX(mat, i, j) = m[i][j];
 	}
 
-	igraph_weighted_adjacency(&graph, &mat, IGRAPH_ADJ_DIRECTED, &weights, IGRAPH_LOOPS_ONCE);
+	igraph_weighted_adjacency(&graph, &mat, IGRAPH_ADJ_UNDIRECTED, &weights, IGRAPH_LOOPS_ONCE); // UNDIRECTED 
 	igraph_matrix_destroy(&mat);
 	igraph_vector_destroy(&weights);
 	igraph_vector_int_destroy(&el);
@@ -79,3 +79,8 @@ int main(void) {
 
 	return 0;
 }
+
+	// gcc graph.c -std=gnu99 -Wall -Wextra -Wno-trampolines -fPIC -g3 -I/home/gael/Documents/lib/igraph/include/igraph -c
+	// gcc graph.o -ligraph -lm -ldl -L/home/gael/Documents/lib/igraph/lib -Wl,--rpath=/home/gael/Documents/lib/igraph/lib -o tst_igraph
+	// ./tst_igraph 
+	// dot -Tx11 graph.dot 
