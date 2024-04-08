@@ -2,7 +2,7 @@
 #include "graph.h"
 
 
-igraph_t transform_tile_to_graph(struct tile_t tile) {
+igraph_t transform_tile_to_graph(struct tile_t tile,struct super_board super_board,int max_sommet) {
 
 	igraph_matrix_t mat;
 	igraph_t graph;
@@ -14,6 +14,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile) {
 	}
 	for (int i = 0; i < taille; ++i) {
 		int pass = -1;
+		add_color(tile.c[i],super_board);
 		for (int j = i; j < taille; ++j) {
 			if ((tile.t[j] == tile.t[i]) && (tile.t[i] != center) && (j != i) && (pass == -1)) {
 				m[i][j] = 1;
@@ -47,6 +48,21 @@ igraph_t transform_tile_to_graph(struct tile_t tile) {
 	return graph;
 
 }
+
+
+switch(tile.c){
+			
+		}
+
+
+
+
+
+
+
+
+
+
 
 int main(void) {
 
