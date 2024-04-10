@@ -2,7 +2,8 @@
 #include "graph.h"
 
 
-igraph_t transform_tile_to_graph(struct tile_t tile,struct super_board super_board,int max_sommet) {
+igraph_t transform_tile_to_graph(struct tile_t tile) 
+{
 
 	igraph_matrix_t mat;
 	igraph_t graph;
@@ -14,7 +15,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile,struct super_board super_boa
 	}
 	for (int i = 0; i < taille; ++i) {
 		int pass = -1;
-		add_color(tile.c[i],super_board);
+		// add_color(tile.c[i],super_board);
 		for (int j = i; j < taille; ++j) {
 			if ((tile.t[j] == tile.t[i]) && (tile.t[i] != center) && (j != i) && (pass == -1)) {
 				m[i][j] = 1;
@@ -50,32 +51,75 @@ igraph_t transform_tile_to_graph(struct tile_t tile,struct super_board super_boa
 }
 
 
-switch(tile.c){
-			
+igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super_board sboard, int x, int y)
+{
+	igraph_t graph_tile = transform_tile_to_graph(tile);
+	igraph_t union_graph;
+
+	// vector with new edges
+	igraph_vector_int_t add_edges;
+
+	igraph_disjoint_union(&union_graph, &main_graph, &graph_tile);
+
+	int size = sboard.size - 1; // tile already in super_board
+	int center_tile = (size+1)*13;
+	int center_add;
+	for (int i = 0; i < size; ++i) {
+		if ((sboard.list[i].x == x) && (sboard.list[i].y == y+1)) {
+			center_add = sboard.list[i].center;
+			igraph_vector_int_init_int(&add_edges, 6, (center_tile-9),(center_add-1), (center_tile-8),(center_add-2), (center_tile-7),(center_add-3));
+			igraph_add_edges(&union_graph, &add_edges, NULL);
 		}
+		if ((sboard.list[i].x == x) && (sboard.list[i].y == y-1)) {
+			center_add = sboard.list[i].center;
+			igraph_vector_int_init_int(&add_edges, 6, (center_tile-1),(center_add-9), (center_tile-2),(center_add-8), (center_tile-3),(center_add-7));
+			igraph_add_edges(&union_graph, &add_edges, NULL);
+		}
+		if ((sboard.list[i].x == x+1) && (sboard.list[i].y == y)) {
+			center_add = sboard.list[i].center;
+			igraph_vector_int_init_int(&add_edges, 6, (center_tile-12),(center_add-4), (center_tile-11),(center_add-5), (center_tile-10),(center_add-6));
+			igraph_add_edges(&union_graph, &add_edges, NULL);
+		}
+		if ((sboard.list[i].x == x-1) && (sboard.list[i].y == y)) {
+			center_add = sboard.list[i].center;
+			igraph_vector_int_init_int(&add_edges, 6, (center_tile-4),(center_add-12), (center_tile-5),(center_add-11), (center_tile-6),(center_add-10));
+			igraph_add_edges(&union_graph, &add_edges, NULL);
+		}
+	}
 
+	igraph_destroy(&main_graph);
+    igraph_destroy(&graph_tile);
+	igraph_vector_int_destroy(&add_edges);
 
-
-
-
-
-
-
-
-
+	return union_graph;
+}
 
 int main(void) {
 
 	FILE* out = fopen("graph.dot", "w");
 
-	struct tile_t tile = CARC_TILE_INIT;
+	struct tile_t tile1 = CARC_TILE_INIT;
+	struct tile_t tile2 = CARC_TILE_INIT;
 
-	igraph_t graph = transform_tile_to_graph(tile);
+	igraph_vector_int_t add_edges;
+	igraph_vector_int_init_int(&add_edges, 6, 3,24, 4,23, 5,22);
+
+	igraph_t uni;
+	igraph_t graph1 = transform_tile_to_graph(tile1);
+	igraph_t graph2 = transform_tile_to_graph(tile2);
 	
-	igraph_write_graph_edgelist(&graph, stdout);
-	igraph_write_graph_dot(&graph, out);
+	igraph_disjoint_union(&uni, &graph1, &graph2);
+	igraph_add_edges(&uni, &add_edges, NULL);
+
+	igraph_write_graph_dot(&uni, out);
 	fclose(out);
-	igraph_destroy(&graph);
+	igraph_destroy(&graph1);
+	igraph_destroy(&graph2);
+	igraph_destroy(&uni);
+
+	// test
+	/* struct super_board sboard = {};
+	init_super_board(13, tile1, &sboard); */
 
 	return 0;
 }

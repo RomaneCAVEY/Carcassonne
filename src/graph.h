@@ -8,7 +8,7 @@
 #include "super_board.h"
 
 //Trasnform a tile to graph
-igraph_t transform_tile_to_graph(struct tile_t,struct super_board);
+igraph_t transform_tile_to_graph(struct tile_t/* ,struct super_board */);
 
 
 //Init the graph with the first tile
