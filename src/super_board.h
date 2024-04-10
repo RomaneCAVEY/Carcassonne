@@ -1,19 +1,30 @@
 #ifndef __SUPER__BOARD__H
 #define __SUPER__BOARD__H
 
+#include "board.h"
 #include "move.h"
-struct super_board{
-	struct board;
+
+struct utils_graph_t{
+	int x;
+	int y;
+	int center;
+};
+
+
+struct super_board_t{
+	struct board_t *board;
+	struct utils_graph *list;
 	enum color_t* colors;
 	int capacite;
 	int size;
 };
 
+//Init the board
+void init_super_board(int taille,struct tile_t tile,struct super_board_t*) ;
 
-struct super_board init_board(int taille);
 
+//Add the color of the tile in the board
+void add_color(int sommet, enum color_t c,struct super_board_t* board);
 
-//realloc to use 
-void add_color(enum color_t,struct super_board*);
 
 #endif
