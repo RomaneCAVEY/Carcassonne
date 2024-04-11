@@ -1,6 +1,5 @@
-#include "../board.c"
 #include "../board.h"
-#include "../tile.c"
+#include "../tile.h"
 
 #include <assert.h>
 #include <stdio.h>

@@ -29,6 +29,13 @@ player0b.so: player0b.o board.o deck.o tile.o
 
 client: player0a.so player0b.so
 
+test_tile.o:
+	$(CC) src/test/test_tile.c $(CFLAGS) -c
+
+test_tuile: tile.o test_tile.o
+	gcc $(CFLAGS) $^ -o install/$@
+
+
 alltests:
 
 test: alltests

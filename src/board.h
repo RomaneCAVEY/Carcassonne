@@ -19,4 +19,7 @@ struct tile_t board_get(struct board_t *board, int x, int y);
 
 void board_free(struct board_t *board);
 
+
+void board_display(struct board_t *board);
+
 #endif // __BOARD_H__

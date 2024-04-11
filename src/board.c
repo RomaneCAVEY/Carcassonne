@@ -1,4 +1,6 @@
 #include "board.h"
+#include "tile.h"
+#include <stdio.h>
 
 #define BOARD_SIZE 201
 #define BOARD_CENTER 101
@@ -75,4 +77,15 @@ void board_free(struct board_t *board)
         free(board->tiles[i]);
     }
     free(board);
+}
+
+void board_display(struct board_t *board){
+	for (int i=0; i<BOARD_SIZE;i++){
+		for (int j=0;j<BOARD_SIZE;j++){
+			if (!compare_tile(CARC_TILE_EMPTY, board_get(board,i,j))){
+				tile_display(board_get(board,i,j));
+				printf("			(%d,%d) \n",i,j);
+			}
+		}
+	}
 }

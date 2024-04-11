@@ -1,6 +1,6 @@
-#include "../board.c"
+
 #include "../board.h"
-#include "../tile.c"
+#include "../tile.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -35,11 +35,27 @@ void test_tile_check()
   printf("\t\033[32;01mSUCCESS\033[00m\n");
 
 }
+void test_tile_display(struct tile_t tile){
+	tile_display(tile);
+} 
+
 
 int main()
 {
   test_compare_tile();
   test_tile_check();
-
+  struct tile_t tile_all_routes={
+  .t={0,0,0,1,2,3,3,3,3,3,2,1,2},
+  .c={BROWN,GRAY,BROWN,GREEN,GRAY,GREEN,
+      GREEN,GRAY,GREEN,GREEN,GRAY,GREEN,GRAY}
+} ; 
+  test_tile_display(tile_all_routes);
+	struct tile_t tile_without_routes={
+  .t={0,0,0,1,2,3,3,3,3,3,2,1,2},
+  .c={BROWN,GREEN,BROWN,GREEN,GREEN,GREEN,
+      GREEN,GREEN,GREEN,GREEN,GREEN,GREEN,GREEN}
+} ; 
+printf("\n");
+  test_tile_display(tile_without_routes);
     return 0;
 }
