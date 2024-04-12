@@ -3,6 +3,7 @@
 #include <dlfcn.h>
 #include <getopt.h>
 #include <string.h>
+#include <time.h>
 #include "deck.h"
 #include "board.h"
 #include "tile.h"
@@ -77,13 +78,19 @@ int main(int argc, char *argv[]) {
   char player_1_path[] = "./install/player0a.so";
   char player_2_path[] = "./install/player0b.so";
 
+  int seed = time(NULL);
+
   char opt;
   
-  while ((opt = getopt(argc, argv, "m:d")) != -1) {
+  while ((opt = getopt(argc, argv, "m:s:d")) != -1) {
     printf("%c > %s\n", opt, optarg);
     switch (opt) {
     case 'm':
       game_mode = atoi(optarg);
+      break;
+
+    case 's':
+      seed = atoi(optarg);
       break;
 
     case 'd':
@@ -91,7 +98,7 @@ int main(int argc, char *argv[]) {
       break;
 
     default:
-      printf("Usage: %s [-m game_mode] [-d] path_to_player.so path_to_player.so", argv[0]);
+      printf("Usage: %s [-s seed] [-m game_mode] [-d] path_to_player.so path_to_player.so", argv[0]);
       break;
     }
   }
@@ -128,7 +135,9 @@ int main(int argc, char *argv[]) {
 
 
   ///////////// INITIALISATION DE LA PARTIE //////////////
-  int current_player = 1; // random(0,2);
+  printf("Game seed: %d\n", seed);
+  srand(seed);
+  int current_player = rand() % 2;
   struct gameconfig_t config = make_config();
   deck_pos = 0;
   
@@ -144,7 +153,8 @@ int main(int argc, char *argv[]) {
   
   // init pj1
   enum player_color_t pcol0 = (current_player == 0) ? BLACK : WHITE;
-  initialize0(pcol0, current_move, copy_config(config));
+  struct gameconfig_t cfg2 = copy_config(config);
+  initialize0(pcol0, current_move, cfg2);
   
   // init pj2
   enum player_color_t pcol1 = (current_player == 1) ? BLACK : WHITE;
@@ -154,7 +164,6 @@ int main(int argc, char *argv[]) {
   
   ///////////// BOUCLE DE JEU //////////////
   while (1){
-    current_player = next_player(current_player);
     tile = draw_tile(config.deck);
 
     if (debug) {
@@ -189,6 +198,8 @@ int main(int argc, char *argv[]) {
 
     board_add(board, current_move.tile, current_move.x, current_move.y);
     // TODO: calculer les nouveaux points
+
+    current_player = next_player(current_player);
   }
     
   ///////////// FIN BOUCLE DE JEU //////////////

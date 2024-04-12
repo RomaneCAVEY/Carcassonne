@@ -15,16 +15,16 @@ all: build
 build: server client deck.o
 
 %.o: src/%.c
-	$(CC) $< $(CFLAGS) -c
+	$(CC) $< $(CFLAGS) -c --coverage
 
 server: server.o deck.o tile.o board.o
-	gcc $(CFLAGS) $^ -o install/$@  $(LDFLAGS)
+	gcc $(CFLAGS) $^ -o install/$@ -lgcov --coverage $(LDFLAGS)
 
 player0a.so: player0a.o board.o deck.o tile.o
-	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
+	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl -lgcov --coverage
 
 player0b.so: player0b.o board.o deck.o tile.o
-	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
+	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl -lgcov --coverage
 
 player1.so: player1.o board.o deck.o tile.o graph.o super_board.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl $(LDFLAGS)
@@ -32,36 +32,26 @@ player1.so: player1.o board.o deck.o tile.o graph.o super_board.o
 player2.so: player2.o board.o deck.o tile.o graph.o super_board.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl $(LDFLAGS)
 
-client: player0a.so player0b.so player1.so player2.so
+client: player0a.so player0b.so #player1.so player2.so
 
-test_tile.o:
+test_tile.o: src/test/test_tile.c
 	$(CC) src/test/test_tile.c $(CFLAGS) -c
 
-test_tile: tile.o test_tile.o
-	gcc $(CFLAGS) $^ -o install/$@
-
-test_board.o :
+test_board.o: src/test/test_board.c
 	$(CC) src/test/test_board.c $(CFLAGS) -c
 
-test_board: board.o tile.o test_board.o
-	gcc $(CFLAGS) $^ -o install/$@
+test_deck.o: src/test/test_deck.c
+	$(CC) src/test/test_deck.c $(CFLAGS) -c
 
-test_desk.o :
-	$(CC) src/test/test_desk.c $(CFLAGS) -c
-
-test_deck: deck.o tile.o test_desk.o
-	gcc $(CFLAGS) $^ -o install/$@
-
-
-
-alltests: test_deck test_tile test_board
+alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o
+	gcc $(CLFAGS) $^ -o install/$@ -lgcov --coverage
 
 test: alltests
 
 install: server client test
 
 clean:
-	@rm -f *~ src/*~ *.o
+	@rm -f *~ src/*~ *.o *.gcno *.gcda *.gcov
 
 .PHONY: client install test clean
 
