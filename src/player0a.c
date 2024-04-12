@@ -48,14 +48,19 @@ struct move_t play(const struct move_t previous_move,
   struct move_t current_move = {};
   current_move.player_id = 1;
 
-  for (int i = p1_board_min_y - 1; i < p1_board_max_y + 1; i++) {
-    for (int j = p1_board_min_x - 1; j < p1_board_max_x + 1; j++) {
+  //printf("xmin: %d; xmax: %d; ymin=%d; ymax=%d\n", p1_board_min_x, p1_board_max_x, p1_board_min_y, p1_board_max_y);
+
+  for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
+    for (int j = p1_board_min_y - 1; j < p1_board_max_y + 2; j++) {
+      //printf("Trying slot(%d, %d)", i, j);
       if (board_add_check(board_1, tile, i, j)) {
+	//printf(" Valid pos");
         current_move.x = i;
         current_move.y = j;
         // Note: We're using the last of all possible placements. This can be
         // further optimized.
       }
+      //printf("\n");
     }
   }
 
