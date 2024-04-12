@@ -68,7 +68,7 @@ int is_game_over() {
 }
 
 int main(){
-  printf("BONJOUR\n");
+  int debug = 1;
 
   ///////////// CHARGEMENT DES LIBRAIRIES //////////////
   void *pj0 = dlopen("./install/player0a.so", RTLD_LAZY);
@@ -93,6 +93,12 @@ int main(){
   struct move_t current_move = {.player_id=SERVER, .x=0, .y=0, .tile=deck_get(config.deck, 0), .meeple=NO_CONNECTION};
   struct board_t *board = board_init(current_move.tile);
   
+  if (debug) {
+    printf("-------\nInitial tile (0, 0):\n");
+      tile_display(current_move.tile);
+  }
+
+  
   // init pj1
   enum player_color_t pcol0 = (current_player == 0) ? BLACK : WHITE;
   initialize0(pcol0, current_move, copy_config(config));
@@ -107,6 +113,11 @@ int main(){
   while (1){
     current_player = next_player(current_player);
     tile = draw_tile(config.deck);
+
+    if (debug) {
+      printf("-------\nNew turn. Current player: %d\nTile to place:\n", current_player);
+      tile_display(tile);
+    }
     
     if (current_player == 0){
       current_move = play0(current_move, tile);
@@ -115,12 +126,18 @@ int main(){
       current_move = play1(current_move, tile);
     }
 
+    if (debug)
+      printf("Player %d is wants to place the tile at pos (%d, %d)\n", current_player, current_move.x, current_move.y);
+
     
     if (is_invalid(board, current_move)) {
+      if (debug)
+	printf("Invalid move!\n");
       break;
     }
     
     if (is_game_over()) {
+      printf("Game over!\n");
       break;
     }
 
@@ -129,6 +146,7 @@ int main(){
   }
     
   ///////////// FIN BOUCLE DE JEU //////////////
+  printf("==========\nGAME ENDED\n==========\n");
   finalize0();
   finalize1();
   board_free(board);

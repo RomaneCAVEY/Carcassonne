@@ -51,7 +51,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile)
 }
 
 
-igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super_board sboard, int x, int y)
+igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super_board_t sboard, int x, int y)
 {
 	igraph_t graph_tile = transform_tile_to_graph(tile);
 	igraph_t union_graph;
