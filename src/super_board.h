@@ -27,11 +27,11 @@ void init_super_board(struct tile_t tile, struct super_board_t* super_board) ;
 
 // TO DO :
 // facteur *13 pour la capcité pour les couleurs par rapport à list
-void add_tile_to_super_board(struct tile_t tile, struct super_board_t super_board, int x,int y);
+void add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_board, int x,int y);
 
 
 //Add the color of the tile in the board
-void add_color(int sommet, enum color_t c, struct super_board_t* super_board);
+void add_color_to_super_board(struct tile_t tile, struct super_board_t* super_board);
 
 
 // free the memory in the super_board
