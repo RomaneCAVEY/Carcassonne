@@ -37,24 +37,14 @@ client: player0a.so player0b.so player1.so player2.so
 test_tile.o:
 	$(CC) src/test/test_tile.c $(CFLAGS) -c
 
-test_tile: tile.o test_tile.o
-	gcc $(CFLAGS) $^ -o install/$@
-
 test_board.o :
 	$(CC) src/test/test_board.c $(CFLAGS) -c
 
-test_board: board.o tile.o test_board.o
-	gcc $(CFLAGS) $^ -o install/$@
+test_deck.o :
+	$(CC) src/test/test_deck.c $(CFLAGS) -c
 
-test_desk.o :
-	$(CC) src/test/test_desk.c $(CFLAGS) -c
-
-test_deck: deck.o tile.o test_desk.o
-	gcc $(CFLAGS) $^ -o install/$@
-
-
-
-alltests: test_deck test_tile test_board
+alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o
+	gcc $(CLFAGS) $^ -o install/$@
 
 test: alltests
 

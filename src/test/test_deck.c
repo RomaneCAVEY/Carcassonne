@@ -6,7 +6,7 @@
 
 void test_deck_empty()
 {
-  printf("%s", __func__);
+  printf(" • %s", __func__);
   
   size_t capa = 10;
   struct deck_t *deckG = deck_empty(capa);
@@ -15,12 +15,12 @@ void test_deck_empty()
 
   deck_free(deckG);
   
-  printf("\t\033[32;01mSUCCESS\033[00m\n");
+  printf("\t\e[1;102m SUCCESS \e[0m\n");
 }
 
 void test_deck_add()
 {
-  printf("%s", __func__);
+  printf(" • %s", __func__);
   
   size_t capa = 10;
   struct deck_t *deckG = deck_empty(capa);
@@ -39,20 +39,20 @@ void test_deck_add()
 
   deck_free(deckG);
   
-  printf("\t\033[32;01mSUCCESS\033[00m\n");
+  printf("\t\e[1;102m SUCCESS \e[0m\n");
 }
 
 void test_deck_size()
 {
-  printf("%s", __func__);
+  printf(" • %s", __func__);
   // is used in other test, so if previous tests works, it's tested !
   
-  printf("\t\033[32;01mSUCCESS\033[00m\n");
+  printf("\t\e[1;102m SUCCESS \e[0m\n");
 }
 
 void test_deck_get()
 {
-  printf("%s", __func__);
+  printf(" • %s", __func__);
   
   size_t capa = 10;
   struct deck_t *deckG = deck_empty(capa);
@@ -70,12 +70,12 @@ void test_deck_get()
 
   deck_free(deckG);
   
-  printf("\t\033[32;01mSUCCESS\033[00m\n");
+  printf("\t\e[1;102m SUCCESS \e[0m\n");
 }
 
 void test_deck_copy()
 {
-  printf("%s", __func__);
+  printf(" • %s", __func__);
   
   size_t capa = 10;
   struct deck_t *deckG = deck_empty(capa);
@@ -95,11 +95,13 @@ void test_deck_copy()
 
   deck_free(deckG);
   
-  printf("\t\033[32;01mSUCCESS\033[00m\n");
+  printf("\t\e[1;102m SUCCESS \e[0m\n");
 }
 
-int main()
+int deck_tests()
 {
+  printf("\n\e[30;47mFile %s\e[0m\n", __FILE__);
+  
   test_deck_empty();
   test_deck_add();
   test_deck_size();
