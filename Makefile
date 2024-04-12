@@ -18,7 +18,7 @@ build: server client deck.o
 	$(CC) $< $(CFLAGS) -c
 
 server: server.o deck.o tile.o board.o
-	gcc $(CFLAGS) $^ -o install/$@  $(LDFLAGS)
+	gcc $(CFLAGS) $^ -o install/$@ $(LDFLAGS)
 
 player0a.so: player0a.o board.o deck.o tile.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
@@ -32,15 +32,15 @@ player1.so: player1.o board.o deck.o tile.o graph.o super_board.o
 player2.so: player2.o board.o deck.o tile.o graph.o super_board.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl $(LDFLAGS)
 
-client: player0a.so player0b.so player1.so player2.so
+client: player0a.so player0b.so #player1.so player2.so
 
-test_tile.o:
+test_tile.o: src/test/test_tile.c
 	$(CC) src/test/test_tile.c $(CFLAGS) -c
 
-test_board.o :
+test_board.o: src/test/test_board.c
 	$(CC) src/test/test_board.c $(CFLAGS) -c
 
-test_deck.o :
+test_deck.o: src/test/test_boad.c
 	$(CC) src/test/test_deck.c $(CFLAGS) -c
 
 alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o
@@ -51,7 +51,7 @@ test: alltests
 install: server client test
 
 clean:
-	@rm -f *~ src/*~ *.o
+	@rm -f *~ src/*~ *.o *.gcno
 
 .PHONY: client install test clean
 

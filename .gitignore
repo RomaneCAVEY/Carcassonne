@@ -1,5 +1,6 @@
 *~
 *.o
+*.gcno
 install/*
 .clang-format
 src/test/test_board
