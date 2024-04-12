@@ -68,7 +68,7 @@ int is_game_over() {
 }
 
 int main(){
-  printf("BONJOUR\n");
+  int debug = 1;
 
   ///////////// CHARGEMENT DES LIBRAIRIES //////////////
   void *pj0 = dlopen("./install/player0a.so", RTLD_LAZY);
@@ -107,6 +107,11 @@ int main(){
   while (1){
     current_player = next_player(current_player);
     tile = draw_tile(config.deck);
+
+    if (debug) {
+      printf("-------\nNew turn. Current player: %d\nTile to place:\n", current_player);
+      tile_display(tile);
+    }
     
     if (current_player == 0){
       current_move = play0(current_move, tile);
@@ -115,12 +120,18 @@ int main(){
       current_move = play1(current_move, tile);
     }
 
+    if (debug)
+      printf("Player %d is wants to place the tile at pos (%d, %d)\n", current_player, current_move.x, current_move.y);
+
     
     if (is_invalid(board, current_move)) {
+      if (debug)
+	printf("Invalid move!\n");
       break;
     }
     
     if (is_game_over()) {
+      printf("Game over!\n");
       break;
     }
 
@@ -129,6 +140,7 @@ int main(){
   }
     
   ///////////// FIN BOUCLE DE JEU //////////////
+  printf("==========\nGAME ENDED\n==========\n");
   finalize0();
   finalize1();
   board_free(board);
