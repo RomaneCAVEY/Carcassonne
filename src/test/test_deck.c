@@ -94,6 +94,7 @@ void test_deck_copy()
   assert(compare_tile(deck_get(deckG, 3), deck_get(deckG, 3)));
 
   deck_free(deckG);
+  deck_free(deckC);
   
   printf("\t\e[1;102m SUCCESS \e[0m\n");
 }
