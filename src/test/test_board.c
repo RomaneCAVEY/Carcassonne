@@ -35,16 +35,29 @@ void test_board_add()
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
             if (i == BOARD_CENTER && j == BOARD_CENTER)
-                assert(compare_tile(board->tiles[i][j], CARC_TILE_INIT));
+                assert(compare_tile(board->tiles[j][i], CARC_TILE_INIT));
             else if (i == BOARD_CENTER + 1 && j == BOARD_CENTER + 0)
-                assert(compare_tile(board->tiles[i][j], CARC_TILE_GREEN));
+                assert(compare_tile(board->tiles[j][i], CARC_TILE_GREEN));
             else
-                assert(compare_tile(board->tiles[i][j], CARC_TILE_EMPTY));
+                assert(compare_tile(board->tiles[j][i], CARC_TILE_EMPTY));
         }
     }
 
     printf("\t\033[32;01mSUCCESS\033[00m\n");
 }
+
+
+void test_Alexis(){
+	printf("%s", __func__);
+    struct board_t *board = board_init(CARC_TILE_INIT);
+	assert(board_add_check(board, CARC_TILE_INIT, 1, 0));
+	assert(board_add(board, CARC_TILE_INIT, 1, 0));
+	assert(board_add_check(board, CARC_TILE_INIT, 2, 0));
+	printf("\t\033[32;01mSUCCESS\033[00m\n");
+}
+
+
+
 
 void test_board_add_check()
 {
@@ -57,7 +70,7 @@ void test_board_add_check()
     assert(board_add_check(board, CARC_TILE_GREEN, 3,1) ==  0);
     assert(board_add_check(board, CARC_TILE_GREEN, 2,1) == 0);
     assert(board_add_check(board, CARC_TILE_GREEN, 0,0) == 0);
-    assert(board_add_check(board, CARC_TILE_GREEN, 0,1) == 0);
+    assert(board_add_check(board, CARC_TILE_GREEN, 0,1) == 1);
 
 
     
@@ -101,6 +114,7 @@ int main()
     test_board_add();
     test_board_add_check();
     test_board_get();
+	test_Alexis();
 
     return 0;
 }

@@ -42,6 +42,7 @@ int board_add_check(struct board_t *board, struct tile_t tile, int x, int y)
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
             if (i != j && i != 2 + j && i != j - 2
+				&& (BOARD_CENTER+i+y)<BOARD_SIZE &&  (BOARD_CENTER+i+y)>=0 &&  (BOARD_CENTER+j+x)<BOARD_SIZE && (BOARD_CENTER+j+x)>=0 
                 && compare_tile(
                        board->tiles[BOARD_CENTER + y + i][BOARD_CENTER + x + j],
                        CARC_TILE_EMPTY)

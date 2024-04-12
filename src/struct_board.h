@@ -6,7 +6,7 @@
 #endif 
 
 #ifndef BOARD_CENTER
-#define BOARD_CENTER 101
+#define BOARD_CENTER 100
 #endif
 
 #include "board.h"

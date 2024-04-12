@@ -7,14 +7,14 @@
 #include "ansi_color.h"
 
 const char * prefix_color_display[9] = {
-	GRN,
-	WHT,
-	BLU,
-	BLK,
-	MAG,
-	CYN,
-	YEL,
-	RED,
+	BHGRN,
+	BHWHT,
+	BHBLU,
+	BHBLK,
+	BHMAG,
+	BHCYN,
+	BHYEL,
+	BHRED,
 	COLOR_RESET,
 };
 
@@ -36,28 +36,28 @@ int tile_check(struct tile_t t0, struct tile_t t1, enum card_point nesw)
   case NORTH:
     for (int i = 0; i < 3; i++) {
       if (t0.c[i] != t1.c[8 - i])
-	  return 0;
+	  	return 0;
     }
     return 1;
     
   case EAST:
     for (int i = 0; i < 3; i++) {
       if (t0.c[i + 3] != t1.c[11 - i])
-	return 0;
+		return 0;
     }
     return 1;
     
   case SOUTH:
     for (int i = 0; i < 3; i++) {
       if (t0.c[i + 6] != t1.c[2 - i])
-	return 0;
+		return 0;
     }
     return 1;
     
   case WEST:
     for (int i = 0; i < 3; i++) {
       if (t0.c[i + 9] != t1.c[5 - i])
-	return 0;
+		return 0;
     }
     return 1;
   }
@@ -77,6 +77,11 @@ const char* prefix_color(enum color_t c){
 
 
 void tile_display(struct tile_t tile){
+	if( compare_tile(CARC_TILE_EMPTY, tile)){
+		printf("THE TILE IS EMPTY");
+		return ;
+	}
+	printf("\n");
 	printf( "  ");
 	for (int i=0; i<3; i++){
 		printf( " %sO %s",prefix_color(tile.c[i]),COLOR_RESET  );
