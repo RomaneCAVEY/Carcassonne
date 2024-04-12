@@ -16,7 +16,6 @@
 
 //VARIABLE GLOBALE
 struct super_board_t board_2={};
-igraph_t graph_2={};
 struct gameconfig_t config_2={};
 
 char const* get_player_name(){
@@ -24,9 +23,9 @@ char const* get_player_name(){
 }
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
-	init_super_board(first_move.tile,&board_2);
-	graph_2=init_graph(first_move.tile);
-	config_2=config;
+	init_super_board(first_move.tile, &board_2);
+	create_dot_igraph2((board_2.graph));
+	config_2 = config;
 }
 
 
@@ -42,24 +41,42 @@ void initialize(unsigned int player_id, const struct move_t first_move, struct g
 
 
 
-struct move_t play(const struct move_t previous_move, const struct tile_t tile){
-	  add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, previous_move.y);
+struct move_t play(const struct move_t previous_move, const struct tile_t tile)
+{
+	add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, previous_move.y);
 	struct move_t current_move={};
+	int previous_x = previous_move.x;
+	int previous_y = previous_move.y;
+	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
 	current_move.player_id=2;
+	int flag = 0; // 
 	for (int i=0;i<BOARD_SIZE;i++){
+		if (flag == 1)
+			break;
 		for (int j=0;j<BOARD_SIZE;j++){
-			if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
-				if(is_place_available(board_2.board, i, j, tile)){
-						current_move.x=i;
-						current_move.y=j;
+			if (flag == 1)
+				break;
+			// TO DO : check placement of tile (coordonnee)
+			if(compare_tile(board_get(board_2.board, j, i), CARC_TILE_EMPTY)){
+				if(is_place_available(board_2.board, j, i, tile)){
+					printf("----------- Place trouvé ! ----------- (%d, %d)\n", j, i);
+					current_move.x=j;
+					current_move.y=i;
+					flag = 1;
 				}
+			}
+			if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
+				printf("No placment found !\n");
+				current_move.x=previous_x;
+				current_move.y=previous_y;
 			}
 		}
 	}
-	
-
 	current_move.tile=tile;
+	// tile_display(current_move.tile);
+	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
 	add_tile_to_super_board(current_move.tile, &board_2, current_move.x, current_move.y);
+	create_dot_igraph2(board_2.graph);
 	return current_move;
 }
 
@@ -94,9 +111,9 @@ int is_there_a_connection_beetween_tiles(struct board_t *board, struct tile_t ti
  * - every allocation done during the calls to initialize and play
  *   functions must have been freed
  */
-void finalize(){
+void finalize()
+{
 	board_free(board_2.board);
-	free_graph(graph_2);
 	deck_free(config_2.deck);
 	free_super_board(&board_2);
-	}
+}

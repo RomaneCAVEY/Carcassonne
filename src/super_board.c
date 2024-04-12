@@ -62,18 +62,31 @@ void add_to_utils_graph(struct super_board_t * super_board, int x, int y, int ce
 }
 
 
-void add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_board, int x, int y)
+// return 1 if success else return 0 
+int add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_board, int x, int y)
 {
+	for (int i = 0; i < super_board->size; ++i) {
+		if ((super_board->list[i].x == x) && (super_board->list[i].y == y))
+			return 0;
+	}
+	// printf("------ You want to add a tile on a super board ------\n");
 	if (super_board->capacite == super_board->size) {
+		// printf("Capacity double\n");
 		super_board->capacite *= 2;
 		super_board->colors = realloc(super_board->colors, 13*super_board->capacite*sizeof(enum color_t));
 		super_board->list = realloc(super_board->list, super_board->capacite*sizeof(struct utils_graph_t));
 	}
+	// printf("add tile to board \n");
 	board_add(super_board->board, tile, x, y);
-	add_tile_to_graph(tile, super_board->graph, super_board, x, y);
-	add_to_utils_graph(super_board, x, y, (size_super_board(super_board)+1)*13); // n° of the last vertice in the tile
+	// printf("add in utils graph\n");
+	add_to_utils_graph(super_board, x, y, (size_super_board(super_board)*13-1)+13); // n° of the last vertice in the tile
+	// printf("add colors\n");
 	add_color_to_super_board(tile, super_board);
+	// printf("add tile to a graph\n");
+	super_board->graph = add_tile_to_graph(tile, super_board->graph, super_board, x, y);
 	super_board->size += 1;
+	// printf("------ End add a tile on a super board ------\n");
+	return 1;
 }
 
 /*Free the memory

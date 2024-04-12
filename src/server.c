@@ -159,12 +159,12 @@ int main(int argc, char *argv[]) {
 
     if (debug) {
       if (current_player == 0)
-	printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name0());
+		printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name0());
       else
-	printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name1());
+		printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name1());
       tile_display(tile);
     }
-    
+    printf("Previous move in server : (%d, %d)\n", current_move.x, current_move.y);
     if (current_player == 0){
       current_move = play0(current_move, tile);
     }

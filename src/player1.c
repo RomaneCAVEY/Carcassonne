@@ -24,28 +24,62 @@ char const* get_player_name(){
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
 	init_super_board(first_move.tile,&board_1);
+	create_dot_igraph1(board_1.graph);
 	config_1=config;
 }
 
 
-struct move_t play(const struct move_t previous_move, const struct tile_t tile){
-  add_tile_to_super_board(previous_move.tile, &board_1, previous_move.x, previous_move.y);
-  struct move_t current_move={};
-  current_move.player_id=1;
-  for (int i=0;i<BOARD_SIZE;i++){
-    for (int j=0;j<BOARD_SIZE;j++){
-      if(compare_tile(board_get(board_1.board, i, j), CARC_TILE_EMPTY)){
-	if(is_place_available(board_1.board, i, j, tile)){
-	  current_move.x=i;
-	  current_move.y=j;
+struct move_t play(const struct move_t previous_move, const struct tile_t tile)
+{
+	add_tile_to_super_board(previous_move.tile, &board_1, previous_move.x, previous_move.y);
+	struct move_t current_move={};
+	int previous_x = previous_move.x;
+	int previous_y = previous_move.y;
+	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
+	current_move.player_id=1;
+	int flag = 0; // 
+	for (int i=0;i<BOARD_SIZE;i++){
+		if (flag == 1)
+			break;
+		for (int j=0;j<BOARD_SIZE;j++){
+			if (flag == 1)
+				break;
+			// TO DO : check placement of tile (coordonnee)
+			if(compare_tile(board_get(board_1.board, j, i), CARC_TILE_EMPTY)){
+				if(is_place_available(board_1.board, j, i, tile)){
+					printf("----------- Place trouvé ! ----------- (%d, %d)\n", j, i);
+					current_move.x=j;
+					current_move.y=i;
+					flag = 1;
+				}
+			}
+			if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
+				printf("No placment found !\n");
+				current_move.x=previous_x;
+				current_move.y=previous_y;
+			}
+		}
 	}
-      }
-    }
-  }
-  
-  current_move.tile=tile;
-  add_tile_to_super_board(current_move.tile, &board_1, current_move.x, current_move.y);
-  return current_move;
+	current_move.tile=tile;
+	// tile_display(current_move.tile);
+	printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
+	add_tile_to_super_board(current_move.tile, &board_1, current_move.x, current_move.y);
+	create_dot_igraph1(board_1.graph);
+	return current_move;
+}
+
+int is_place_available(struct board_t *board,int i, int j,struct tile_t tile){
+
+	if (!(compare_tile(board_get(board, i-1, j),CARC_TILE_EMPTY) && tile_check(board_get(board, i-1, j), tile, WEST)))
+		return 1;
+	if (!(compare_tile(board_get(board, i, j+1),CARC_TILE_EMPTY) && tile_check(board_get(board, i-1, j), tile, NORTH)))
+		return 1;
+	if (!(compare_tile(board_get(board, i, j-1),CARC_TILE_EMPTY) && tile_check(board_get(board, i-1, j), tile, SOUTH)))
+		return 1;
+	if (!(compare_tile(board_get(board, i+1, j),CARC_TILE_EMPTY) && tile_check(board_get(board, i-1, j), tile, EAST)))
+		return 1;
+	return 0;
+
 }
 
 int is_there_a_connection_beetween_tiles(struct board_t *board, struct tile_t tile, struct tile_t tile_to_add){
@@ -58,11 +92,11 @@ int is_there_a_connection_beetween_tiles(struct board_t *board, struct tile_t ti
 }
 
 /* Clean up the resources the player has been using. Is called once at
-   the end of the game.
- * POSTCOND:
- * - every allocation done during the calls to initialize and play
- *   functions must have been freed
- */
+the end of the game.
+* POSTCOND:
+* - every allocation done during the calls to initialize and play
+*   functions must have been freed
+*/
 void finalize(){
 	board_free(board_1.board);
 	deck_free(config_1.deck);
