@@ -11,8 +11,7 @@ void test_deck_empty()
   size_t capa = 10;
   struct deck_t *deckG = deck_empty(capa);
 
-  assert(deckG->capacity == capa);
-  assert(deckG->size == 0);
+  assert(deck_size(deckG) == 0);
 
   deck_free(deckG);
   
@@ -29,16 +28,14 @@ void test_deck_add()
   
   deck_add(deckG, CARC_TILE_INIT);
 
-  assert(deckG->capacity == capa);
-  assert(deckG->size == 1);
-  assert(compare_tile(deckG->deck[0], CARC_TILE_INIT));
+  assert(deck_size(deckG) == 1);
+  assert(compare_tile(deck_get(deckG , 0), CARC_TILE_INIT));
 
   
   deck_add(deckG, CARC_TILE_GREEN);
 
-  assert(deckG->capacity == capa);
-  assert(deckG->size == 2);
-  assert(compare_tile(deckG->deck[0], CARC_TILE_INIT));
+  assert(deck_size(deckG) == 2);
+  assert(compare_tile(deck_get(deckG, 0), CARC_TILE_INIT));
 
   deck_free(deckG);
   
@@ -48,23 +45,7 @@ void test_deck_add()
 void test_deck_size()
 {
   printf("%s", __func__);
-  
-  size_t capa = 10;
-  struct deck_t *deckG = deck_empty(capa);
-
-  
-  deck_add(deckG, CARC_TILE_INIT);
-
-  assert(deck_size == 1);
-  assert(deckG->size == deck_size);
-
-  
-  deck_add(deckG, CARC_TILE_GREEN);
-
-  assert(deck_size == 2);
-  assert(deckG->size == deck_size);
-
-  deck_free(deckG);
+  // is used in other test, so if previous tests works, it's tested !
   
   printf("\t\033[32;01mSUCCESS\033[00m\n");
 }

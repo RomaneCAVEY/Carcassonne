@@ -46,9 +46,15 @@ test_board.o :
 test_board: board.o tile.o test_board.o
 	gcc $(CFLAGS) $^ -o install/$@
 
+test_desk.o :
+	$(CC) src/test/test_desk.c $(CFLAGS) -c
+
+test_deck: deck.o tile.o test_desk.o
+	gcc $(CFLAGS) $^ -o install/$@
 
 
-alltests: test_board test_tile
+
+alltests: test_deck test_tile test_board
 
 test: alltests
 
