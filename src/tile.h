@@ -4,10 +4,10 @@
 #include "move.h"
 
 enum card_point{
-  NORTH = -2,
-  EAST = 1,
-  SOUTH = 2,
-  WEST = -1,
+  NORTH = -1,
+  EAST = -2,
+  SOUTH = 1,
+  WEST = 2,
 };
 
 
