@@ -43,8 +43,7 @@ void initialize(unsigned int player_id, const struct move_t first_move, struct g
 
 
 struct move_t play(const struct move_t previous_move, const struct tile_t tile){
-	board_add(board_2.board,previous_move.tile,previous_move.x,previous_move.y);
-	add_tile_to_graph(tile, graph_2, board_2, previous_move.x, previous_move.y);
+	  add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, previous_move.y);
 	struct move_t current_move={};
 	current_move.player_id=2;
 	for (int i=0;i<BOARD_SIZE;i++){
@@ -60,8 +59,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile){
 	
 
 	current_move.tile=tile;
-	board_add( board_2.board,current_move.tile,current_move.x,current_move.y);
-	add_tile_to_graph(tile, graph_2, board_2, current_move.x, current_move.y);
+	add_tile_to_super_board(current_move.tile, &board_2, current_move.x, current_move.y);
 	return current_move;
 }
 
