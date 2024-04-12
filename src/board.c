@@ -22,12 +22,12 @@ int board_add(struct board_t *board, struct tile_t tile, int x, int y)
 {
     if (x + BOARD_CENTER < 0 || y + BOARD_CENTER < 0
         || x + BOARD_CENTER >= BOARD_SIZE || y + BOARD_CENTER >= BOARD_SIZE
-        || compare_tile(board->tiles[BOARD_CENTER + x][BOARD_CENTER + y],
+        || compare_tile(board->tiles[BOARD_CENTER + y][BOARD_CENTER + x],
                CARC_TILE_EMPTY)
             == 0)
         return 0;
 
-    board->tiles[BOARD_CENTER + x][BOARD_CENTER + y] = tile;
+    board->tiles[BOARD_CENTER + y][BOARD_CENTER + x] = tile;
 
     return 1;
 }
@@ -35,7 +35,7 @@ int board_add(struct board_t *board, struct tile_t tile, int x, int y)
 int board_add_check(struct board_t *board, struct tile_t tile, int x, int y)
 {
     if (compare_tile(
-            board->tiles[BOARD_CENTER + x][BOARD_CENTER + y], CARC_TILE_EMPTY)
+            board->tiles[BOARD_CENTER + y][BOARD_CENTER + x], CARC_TILE_EMPTY)
         == 0)
         return 0;
 
@@ -43,11 +43,11 @@ int board_add_check(struct board_t *board, struct tile_t tile, int x, int y)
         for (int j = -1; j <= 1; j++) {
             if (i != j && i != 2 + j && i != j - 2
                 && compare_tile(
-                       board->tiles[BOARD_CENTER + x + i][BOARD_CENTER + y + j],
+                       board->tiles[BOARD_CENTER + y + i][BOARD_CENTER + x + j],
                        CARC_TILE_EMPTY)
                     == 0
                 && tile_check(tile,
-                    board->tiles[BOARD_CENTER + x + i][BOARD_CENTER + y + j],
+                    board->tiles[BOARD_CENTER + y + i][BOARD_CENTER + x + j],
                     i - 2 * j))
                 return 1;
         }
@@ -61,7 +61,7 @@ struct tile_t board_get(struct board_t *board, int x, int y)
     if (x + BOARD_CENTER < 0 || y + BOARD_CENTER < 0
         || x + BOARD_CENTER >= BOARD_SIZE || y + BOARD_CENTER >= BOARD_SIZE)
         return CARC_TILE_EMPTY;
-    return board->tiles[BOARD_CENTER + x][BOARD_CENTER + y];
+    return board->tiles[BOARD_CENTER + y][BOARD_CENTER + x];
 }
 
 void board_free(struct board_t *board)

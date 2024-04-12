@@ -57,7 +57,7 @@ struct super_board_t{
 
 void add_to_utils_graph(struct super_board_t * super_board, int x, int y, int center)
 {
-	struct utils_graph u = {.x=x, .y=y, .center=center};
+	struct utils_graph_t u = {.x=x, .y=y, .center=center};
 	super_board->list[size_super_board(super_board)] = u;
 }
 
@@ -66,8 +66,8 @@ void add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_bo
 {
 	if (super_board->capacite == super_board->size) {
 		super_board->capacite *= 2;
-		super_board->colors = realloc(super_board->colors, 13*board->capacite*sizeof(enum color_t));
-		super_board->list = realloc(super_board->list, board->capacite*sizeof(struct utils_graph));
+		super_board->colors = realloc(super_board->colors, 13*super_board->capacite*sizeof(enum color_t));
+		super_board->list = realloc(super_board->list, super_board->capacite*sizeof(struct utils_graph_t));
 	}
 	board_add(super_board->board, tile, x, y);
 	add_tile_to_graph(tile, super_board->graph, super_board, x, y);

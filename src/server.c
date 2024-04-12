@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dlfcn.h>
+#include <getopt.h>
+#include <string.h>
 #include "deck.h"
 #include "board.h"
 #include "tile.h"
@@ -67,17 +69,58 @@ int is_game_over() {
   return 0;
 }
 
-int main(){
-  int debug = 1;
+int main(int argc, char *argv[]) {
+
+  ///////////// COMMAND LINE OPTIONS //////////////
+  int debug = 0;
+  enum gamemode_t game_mode = NO_MEEPLE;
+  char player_1_path[] = "./install/player0a.so";
+  char player_2_path[] = "./install/player0b.so";
+
+  char opt;
+  
+  while ((opt = getopt(argc, argv, "m:d")) != -1) {
+    printf("%c > %s\n", opt, optarg);
+    switch (opt) {
+    case 'm':
+      game_mode = atoi(optarg);
+      break;
+
+    case 'd':
+      debug = 1;
+      break;
+
+    default:
+      printf("Usage: %s [-m game_mode] [-d] path_to_player.so path_to_player.so", argv[0]);
+      break;
+    }
+  }
+  if (optind < argc) {
+    strcpy(player_1_path, argv[optind]);
+    if (debug)
+      printf("Custom player 1 provided!\n");
+  }
+  if (optind+1 < argc) {
+    strcpy(player_2_path, argv[optind+1]);
+    if (debug)
+      printf("Custom player 2 provided!\n");
+  }
+    
+
+  // temporaire > TODO(implémenter les autres gamemode)
+  if (game_mode != NO_MEEPLE) {
+    printf("WARNING: Provided game mode is not yet supported.\nDefaulting to NO_MEEPLE game mode.\n");
+    game_mode = NO_MEEPLE;
+  }
 
   ///////////// CHARGEMENT DES LIBRAIRIES //////////////
-  void *pj0 = dlopen("./install/player0a.so", RTLD_LAZY);
+  void *pj0 = dlopen(player_1_path, RTLD_LAZY);
   get_player_name0 = dlsym(pj0, "get_player_name");
   initialize0 =dlsym(pj0, "initialize");
   play0 = dlsym(pj0, "play");
   finalize0 = dlsym(pj0, "finalize");
 
-  void *pj1 = dlopen("./install/player0b.so", RTLD_LAZY);
+  void *pj1 = dlopen(player_2_path, RTLD_LAZY);
   get_player_name1 = dlsym(pj1, "get_player_name");
   initialize1 =dlsym(pj1, "initialize");
   play1 = dlsym(pj1, "play");
@@ -127,7 +170,7 @@ int main(){
     }
 
     if (debug)
-      printf("Player %d is wants to place the tile at pos (%d, %d)\n", current_player, current_move.x, current_move.y);
+      printf("Player %d wants to place the tile at pos (%d, %d)\n", current_player, current_move.x, current_move.y);
 
     
     if (is_invalid(board, current_move)) {

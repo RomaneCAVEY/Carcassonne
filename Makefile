@@ -1,12 +1,11 @@
-
-1;115;0cIGRAPH_PATH ?= /net/npers/renault/save/igraph-0.10.10/install
+IGRAPH_PATH ?= /net/npers/renault/save/igraph-0.10.10/install
 IGRAPH_LIBDIR = $(shell [ -e $(IGRAPH_PATH)/lib ] && \
     echo $(IGRAPH_PATH)/lib || \
     echo $(IGRAPH_PATH)/lib64) 
 
 CFLAGS = -std=gnu99 -Wall -Wextra -Wno-trampolines -fPIC -g3 -O0 \
 	-I$(IGRAPH_PATH)/include/igraph
-LDFLAGS = -ligraph -lm -ldl -L$(IGRAPH_PATH)/lib -Wl,--rpath=${IGRAPH_PATH}/lib
+LDFLAGS = -ligraph -lm -ldl -L$(IGRAPH_LIBDIR) -Wl,--rpath=${IGRAPH_LIBDIR}
 
 BASE_FILES = \
         deck.c
@@ -19,7 +18,7 @@ build: server client deck.o
 	$(CC) $< $(CFLAGS) -c
 
 server: server.o deck.o tile.o board.o
-	gcc $(CFLAGS) $^ -o install/$@
+	gcc $(CFLAGS) $^ -o install/$@  $(LDFLAGS)
 
 player0a.so: player0a.o board.o deck.o tile.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
@@ -28,10 +27,10 @@ player0b.so: player0b.o board.o deck.o tile.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
 
 player1.so: player1.o board.o deck.o tile.o graph.o super_board.o
-	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
+	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl $(LDFLAGS)
 
 player2.so: player2.o board.o deck.o tile.o graph.o super_board.o
-	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
+	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl $(LDFLAGS)
 
 client: player0a.so player0b.so player1.so player2.so
 
@@ -47,9 +46,15 @@ test_board.o :
 test_board: board.o tile.o test_board.o
 	gcc $(CFLAGS) $^ -o install/$@
 
+test_desk.o :
+	$(CC) src/test/test_desk.c $(CFLAGS) -c
+
+test_deck: deck.o tile.o test_desk.o
+	gcc $(CFLAGS) $^ -o install/$@
 
 
-alltests: test_board test_tile
+
+alltests: test_deck test_tile test_board
 
 test: alltests
 
