@@ -158,7 +158,10 @@ int main(int argc, char *argv[]) {
     tile = draw_tile(config.deck);
 
     if (debug) {
-      printf("-------\nNew turn. Current player: %d\nTile to place:\n", current_player);
+      if (current_player == 0)
+	printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name0());
+      else
+	printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name1());
       tile_display(tile);
     }
     
@@ -170,7 +173,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (debug)
-      printf("Player %d wants to place the tile at pos (%d, %d)\n", current_player, current_move.x, current_move.y);
+      printf("Current player wants to place the tile at pos (%d, %d)\n", current_move.x, current_move.y);
 
     
     if (is_invalid(board, current_move)) {
