@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (debug)
-      printf("Player %d is wants to place the tile at pos (%d, %d)\n", current_player, current_move.x, current_move.y);
+      printf("Player %d wants to place the tile at pos (%d, %d)\n", current_player, current_move.x, current_move.y);
 
     
     if (is_invalid(board, current_move)) {
