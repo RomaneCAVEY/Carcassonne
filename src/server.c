@@ -43,7 +43,6 @@ struct gameconfig_t copy_config(struct gameconfig_t template) {
     .meeples = template.meeples,
     .deck = deck_copy(template.deck)
   };
-  printf("test1\n");
   return cfg;
 }
 
@@ -146,7 +145,6 @@ int main(int argc, char *argv[]) {
   // init pj1
   enum player_color_t pcol0 = (current_player == 0) ? BLACK : WHITE;
   struct gameconfig_t cfg2 = copy_config(config);
-  printf("BONJOUR\n");
   initialize0(pcol0, current_move, cfg2);
   
   // init pj2
