@@ -35,6 +35,12 @@ test_tile.o:
 test_tuile: tile.o test_tile.o
 	gcc $(CFLAGS) $^ -o install/$@
 
+test_board.o :
+	$(CC) src/test/test_board.c $(CFLAGS) -c
+
+test_board: board.o tile.o test_board.o
+	gcc $(CFLAGS) $^ -o install/$@
+
 
 alltests:
 
