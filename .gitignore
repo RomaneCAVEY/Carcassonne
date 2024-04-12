@@ -1,6 +1,8 @@
 *~
 *.o
 *.gcno
+*.gcda
+*.gcov
 install/*
 .clang-format
 src/test/test_board
