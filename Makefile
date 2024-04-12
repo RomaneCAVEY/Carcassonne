@@ -38,7 +38,7 @@ client: player0a.so player0b.so player1.so player2.so
 test_tile.o:
 	$(CC) src/test/test_tile.c $(CFLAGS) -c
 
-test_tuile: tile.o test_tile.o
+test_tile: tile.o test_tile.o
 	gcc $(CFLAGS) $^ -o install/$@
 
 test_board.o :
@@ -48,7 +48,8 @@ test_board: board.o tile.o test_board.o
 	gcc $(CFLAGS) $^ -o install/$@
 
 
-alltests:
+
+alltests: test_board test_tile
 
 test: alltests
 
@@ -58,4 +59,6 @@ clean:
 	@rm -f *~ src/*~ *.o
 
 .PHONY: client install test clean
+
+
 
