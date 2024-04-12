@@ -27,16 +27,29 @@ player0a.so: player0a.o board.o deck.o tile.o
 player0b.so: player0b.o board.o deck.o tile.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
 
-client: player0a.so player0b.so
+player1.so: player1.o board.o deck.o tile.o graph.o super_board.o
+	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
+
+player2.so: player2.o board.o deck.o tile.o graph.o super_board.o
+	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
+
+client: player0a.so player0b.so player1.so player2.so
 
 test_tile.o:
 	$(CC) src/test/test_tile.c $(CFLAGS) -c
 
-test_tuile: tile.o test_tile.o
+test_tile: tile.o test_tile.o
+	gcc $(CFLAGS) $^ -o install/$@
+
+test_board.o :
+	$(CC) src/test/test_board.c $(CFLAGS) -c
+
+test_board: board.o tile.o test_board.o
 	gcc $(CFLAGS) $^ -o install/$@
 
 
-alltests:
+
+alltests: test_board test_tile
 
 test: alltests
 
@@ -46,4 +59,6 @@ clean:
 	@rm -f *~ src/*~ *.o
 
 .PHONY: client install test clean
+
+
 

@@ -2,8 +2,8 @@
 #define __SUPER__BOARD__H
 
 #include "board.h"
-#include "graph.h"
 #include "move.h"
+#include <igraph.h>
 
 struct utils_graph_t{
 	int x;

@@ -4,6 +4,12 @@
 #include "tile.h"
 // tile.h -> move.h -> deck.h
 
+/* Coordonnées dans board: 
+ * Centré en (0, 0)
+ * x positif vers la droite
+ * y positif vers le bas
+ */
+
 struct board_t;
 
 struct board_t *board_init(struct tile_t tile);

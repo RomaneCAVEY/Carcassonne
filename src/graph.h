@@ -16,7 +16,7 @@ igraph_t init_graph(struct tile_t t);
 
 //Add a tile which is transformed in graph to the main graph and add the colors of the vertices to the tab color
 //Use realloc if colors is full (but no size so...)
-igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super_board sboard, int x, int y);
+igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super_board_t sboard, int x, int y);
 
 
 //free graph
