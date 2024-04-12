@@ -2,7 +2,7 @@
 #include "extended_player.h"
 #include "board.h"
 #include <stdlib.h>
-#include"graph.h"
+#include "graph.h"
 #include "deck.h"
 #include "board.h"
 #include "super_board.h"
@@ -24,7 +24,7 @@ char const* get_player_name(){
 }
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
-	init_super_board(MAX_CONNECTIONS,first_move.tile,&board_1);
+	init_super_board(first_move.tile,&board_1);
 	graph_1=init_graph(first_move.tile);
 	config_1=config;
 }
@@ -32,7 +32,7 @@ void initialize(unsigned int player_id, const struct move_t first_move, struct g
 
 struct move_t play(const struct move_t previous_move, const struct tile_t tile){
 	board_add(board_1.board,previous_move.tile,previous_move.x,previous_move.y);
-	graph_add(tile, graph_1);
+	add_tile_to_graph(tile, graph_1, board_1, previous_move.x, previous_move.y);
 	struct move_t current_move={};
 	current_move.player_id=1;
 	for (int i=0;i<BOARD_SIZE;i++){
@@ -48,7 +48,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile){
 
 	current_move.tile=tile;
 	board_add(board_1.board,current_move.tile,current_move.x,current_move.y);
-	graph_add(tile, graph_1);
+	add_tile_to_graph(tile, graph_1, board_1, current_move.x, current_move.y);
 	return current_move;
 
 }
@@ -59,6 +59,7 @@ int is_there_a_connection_beetween_tiles(struct board_t *board, struct tile_t ti
 			return 1;
 		}
 	}
+	return 0;
 }
 
 /* Clean up the resources the player has been using. Is called once at

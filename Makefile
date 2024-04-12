@@ -27,10 +27,10 @@ player0a.so: player0a.o board.o deck.o tile.o
 player0b.so: player0b.o board.o deck.o tile.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
 
-player1.so: player1.o board.o deck.o tile.o move.o extended_player.o graph.o super_board.o
+player1.so: player1.o board.o deck.o tile.o graph.o super_board.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
 
-player2.so: player2.o board.o deck.o tile.o move.o extended_player.o graph.o super_board.o
+player2.so: player2.o board.o deck.o tile.o graph.o super_board.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl
 
 client: player0a.so player0b.so player1.so player2.so

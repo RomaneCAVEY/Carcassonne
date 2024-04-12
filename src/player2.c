@@ -9,7 +9,7 @@
 
 
 #ifndef BOARD_SIZE
-#define BOARD_SIZE 202
+#define BOARD_SIZE 201
 #endif
 
 
@@ -24,7 +24,7 @@ char const* get_player_name(){
 }
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
-	init_super_board(MAX_CONNECTIONS,first_move.tile,&board_2);
+	init_super_board(first_move.tile,&board_2);
 	graph_2=init_graph(first_move.tile);
 	config_2=config;
 }
@@ -44,7 +44,7 @@ void initialize(unsigned int player_id, const struct move_t first_move, struct g
 
 struct move_t play(const struct move_t previous_move, const struct tile_t tile){
 	board_add(board_2.board,previous_move.tile,previous_move.x,previous_move.y);
-	graph_add(tile, graph_2);
+	add_tile_to_graph(tile, graph_2, board_2, previous_move.x, previous_move.y);
 	struct move_t current_move={};
 	current_move.player_id=2;
 	for (int i=0;i<BOARD_SIZE;i++){
@@ -61,7 +61,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile){
 
 	current_move.tile=tile;
 	board_add( board_2.board,current_move.tile,current_move.x,current_move.y);
-	graph_add(tile, graph_2);
+	add_tile_to_graph(tile, graph_2, board_2, current_move.x, current_move.y);
 	return current_move;
 }
 
@@ -87,6 +87,7 @@ int is_there_a_connection_beetween_tiles(struct board_t *board, struct tile_t ti
 			return 1;
 		}
 	}
+	return 0;
 }
 
 /* Clean up the resources the player has been using. Is called once at

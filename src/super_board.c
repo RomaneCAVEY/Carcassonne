@@ -1,5 +1,6 @@
 #include"super_board.h"
 #include "move.h"
+#include "graph.h"
 #include <stdlib.h>
 
 
