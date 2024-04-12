@@ -41,7 +41,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     current_move.player_id = 1;
     for (int i = 0; i < BOARD_SIZE; i++) {
         for (int j = 0; j < BOARD_SIZE; j++) {
-            if (compare_tile(board_get(board_2, i, j), CARC_TILE_EMPTY) == 0) {
+            if (compare_tile(board_get(board_2, i, j), CARC_TILE_EMPTY) == 1) {
                 if (compare_tile(board_get(board_2, i - 1, j), CARC_TILE_EMPTY)
                         == 0
                     || compare_tile(
