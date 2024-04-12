@@ -6,6 +6,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+#ifndef BOARD_SIZE
+#define BOARD_SIZE 201
+#endif 
+
+#ifndef BOARD_CENTER
+#define BOARD_CENTER 101
+#endif
+
 void test_compare_tile()
 {
   printf("%s", __func__);

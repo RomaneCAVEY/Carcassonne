@@ -1,13 +1,6 @@
-#include "board.h"
+#include "struct_board.h"
 #include "tile.h"
 #include <stdio.h>
-
-#define BOARD_SIZE 201
-#define BOARD_CENTER 101
-
-struct board_t {
-    struct tile_t *tiles[BOARD_SIZE];
-};
 
 struct board_t *board_init(struct tile_t tile)
 {
@@ -56,11 +49,11 @@ int board_add_check(struct board_t *board, struct tile_t tile, int x, int y)
                 && tile_check(tile,
                     board->tiles[BOARD_CENTER + x + i][BOARD_CENTER + y + j],
                     i - 2 * j))
-                return 0;
+                return 1;
         }
     }
 
-    return 1;
+    return 0;
 }
 
 struct tile_t board_get(struct board_t *board, int x, int y)

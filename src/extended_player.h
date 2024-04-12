@@ -5,8 +5,8 @@
 
 
 
-/*Return 1 if we wan play, else 0
-* @param: the board, and the coordonate of a neighburght tile, the tile we want to play
+/*Return 1 if we can play, else 0
+* @param: the board, and the coordonate of a neighbour tile, the tile we want to play
 * @return: int , 1 if we are allowed to put the tile here, else 0
 */
 int is_place_available(struct board_t *board,int i, int j,struct tile_t tile);

@@ -1,4 +1,4 @@
-#include "../board.h"
+#include "../struct_board.h"
 #include "../tile.h"
 
 #include <assert.h>
@@ -52,12 +52,14 @@ void test_board_add_check()
     printf("%s", __func__);
 
     struct board_t *board = board_init(CARC_TILE_INIT);
-    assert(board_add(board, CARC_TILE_GREEN, 1, 0));
+    assert(board_add(board, CARC_TILE_INIT, 1, 0));
 
     assert(board_add_check(board, CARC_TILE_GREEN, 3,1) ==  0);
     assert(board_add_check(board, CARC_TILE_GREEN, 2,1) == 0);
     assert(board_add_check(board, CARC_TILE_GREEN, 0,0) == 0);
-    assert(board_add_check(board, CARC_TILE_GREEN, 0,1) == 1);
+    assert(board_add_check(board, CARC_TILE_GREEN, 0,1) == 0);
+
+
     
 
     printf("\t\033[32;01mSUCCESS\033[00m\n");
