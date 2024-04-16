@@ -42,8 +42,10 @@ void update_board_bounds(struct move_t move) {
 
 struct move_t play(const struct move_t previous_move,
                    const struct tile_t tile) {
-  board_add(board_2, previous_move.tile, previous_move.x, previous_move.y);
-  update_board_bounds(previous_move);
+  struct move_t pm = previous_move;
+  pm.y = -pm.y; // y axis is inverted in our implementation
+  board_add(board_2, pm.tile, pm.x, pm.y);
+  update_board_bounds(pm);
 
   struct move_t current_move = {};
   current_move.player_id = 1;
@@ -67,6 +69,7 @@ struct move_t play(const struct move_t previous_move,
   board_add(board_2, current_move.tile, current_move.x, current_move.y);
   update_board_bounds(current_move);
 
+  current_move.y = -current_move.y; // y axis needs to be inverted to match the spec
   return current_move;
 }
 

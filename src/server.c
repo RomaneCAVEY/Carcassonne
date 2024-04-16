@@ -58,6 +58,7 @@ struct tile_t draw_tile(const struct deck_t* d) {
 }
 
 int is_invalid(struct board_t *board, struct move_t move){
+  move.y = -move.y; // y axis is inverted in our implementation
   if (board_add_check(board, move.tile, move.x, move.y))
       return 0;
   return 1;
@@ -196,7 +197,7 @@ int main(int argc, char *argv[]) {
       break;
     }
 
-    board_add(board, current_move.tile, current_move.x, current_move.y);
+    board_add(board, current_move.tile, current_move.x, -current_move.y); // y axis is inverted in our implementation
     // TODO: calculer les nouveaux points
 
     current_player = next_player(current_player);
