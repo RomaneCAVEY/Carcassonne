@@ -24,5 +24,7 @@ struct tile_t random_tile();
 //display the tile
 void tile_display(struct tile_t tile);
 
+//display the tile with the position of a possible meeple
+void tile_display_with_meeple(struct move_t move);
 
 #endif //__TILE_H__

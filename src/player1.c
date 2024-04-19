@@ -2,12 +2,13 @@
 #include "extended_player.h"
 #include "struct_board.h"
 #include "board.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include "graph.h"
 #include "deck.h"
 #include "board.h"
 #include "super_board.h"
-
+#include "meeple.h"
 
 #ifndef BOARD_SIZE
 #define BOARD_SIZE 201
@@ -18,6 +19,8 @@
 //VARIABLE GLOBALE
 struct super_board_t board_1={};
 struct gameconfig_t config_1={};
+struct meeple_t meeple_player1={};
+
 
 int p1_board_min_x = 0;
 int p1_board_max_x = 0;
@@ -32,6 +35,7 @@ void initialize(unsigned int player_id, const struct move_t first_move, struct g
 	init_super_board(first_move.tile,&board_1);
 	create_dot_igraph1(board_1.graph);
 	config_1=config;
+	meeple_player1=init_meeple(7);
 }
 
 void update_board_bounds(struct move_t move) {
@@ -54,7 +58,11 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	pm.y = -pm.y;
 	add_tile_to_super_board(previous_move.tile, &board_1, previous_move.x, -previous_move.y);
 	update_board_bounds(pm);
+	add_meeple(&meeple_player1, previous_move);
 	struct move_t current_move={};
+	//printf("QJFAÙOIHZF TAILLE DU BOARD %d \n\n", board_1.size);
+	current_move.meeple= (13*(board_1.size)+rand()%13); 
+
 	int previous_x = previous_move.x;
 	int previous_y = previous_move.y;
 	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
@@ -83,6 +91,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 		}
 	}
 	current_move.tile=tile;
+	add_meeple(&meeple_player1, current_move);
 	// tile_display(current_move.tile);
 	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
 	add_tile_to_super_board(current_move.tile, &board_1, current_move.x, -current_move.y);
@@ -139,4 +148,5 @@ void finalize(){
 	board_free(board_1.board);
 	deck_free(config_1.deck);
 	free_super_board(&board_1);
+	free_meeple(meeple_player1);
 }

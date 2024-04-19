@@ -42,5 +42,5 @@ void get_back_meeple(struct meeple_t *meeple, int *vertices, int size);
 
 /*free the tabs player1 and player2 of the meeple
  * */
-void free_meepple(struct meeple_t meeple);
+void free_meeple(struct meeple_t meeple);
 #endif

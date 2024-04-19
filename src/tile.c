@@ -128,5 +128,12 @@ void tile_display(struct tile_t tile){
 		printf(" %sO%s ",prefix_color(tile.c[i]),COLOR_RESET   );
 	}
 	printf( "\n");
+	
 }
 
+void tile_display_with_meeple(struct move_t move){
+	tile_display(move.tile);
+	if ( move.meeple>13){
+		printf(URED"===>There is Meeple in  %d \n"COLOR_RESET, move.meeple);
+	}
+}
