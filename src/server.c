@@ -58,8 +58,7 @@ struct tile_t draw_tile(const struct deck_t* d) {
 }
 
 int is_invalid(struct board_t *board, struct move_t move){
-  move.y = -move.y; // y axis is inverted in our implementation
-  if (board_add_check(board, move.tile, move.x, move.y))
+  if (board_add_check(board, move.tile, move.x, -move.y)) // y axis is inverted in our implementation
       return 0;
   return 1;
 
@@ -76,12 +75,14 @@ int main(int argc, char *argv[]) {
   ///////////// COMMAND LINE OPTIONS //////////////
   int debug = 0;
   enum gamemode_t game_mode = NO_MEEPLE;
-  char player_1_path[] = "./install/player0a.so";
-  char player_2_path[] = "./install/player0b.so";
+  char p1def[] = "./install/player0a.so";
+  char p2def[] = "./install/player0b.so";
+  char *player_1_path = p1def;
+  char *player_2_path = p2def;
 
   int seed = time(NULL);
 
-  char opt;
+  int opt;
   
   while ((opt = getopt(argc, argv, "m:s:d")) != -1) {
     printf("%c > %s\n", opt, optarg);
@@ -104,12 +105,12 @@ int main(int argc, char *argv[]) {
     }
   }
   if (optind < argc) {
-    strcpy(player_1_path, argv[optind]);
+    player_1_path = argv[optind];
     if (debug)
       printf("Custom player 1 provided!\n");
   }
   if (optind+1 < argc) {
-    strcpy(player_2_path, argv[optind+1]);
+    player_2_path = argv[optind+1];
     if (debug)
       printf("Custom player 2 provided!\n");
   }
