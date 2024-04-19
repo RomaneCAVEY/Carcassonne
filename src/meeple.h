@@ -1,6 +1,9 @@
 #ifndef __MEEPLE_H__
 #define __MEEPLE_H__
 
+#include"move.h"
+
+
 /* Struct meeple
  * @param:
  * -The tab player1 has all the vertices where the player 1 has a meeple, same for player2
@@ -29,7 +32,7 @@ struct meeple_t init_meeple(int capacity);
  *@param: the meeple and the move 
  *@return: the meeple with the new meeple according to the player who played 
  * */
-void add_meeple(stuct meeple_t *meeple, struct move_t move);
+void add_meeple(struct meeple_t *meeple, struct move_t move);
 
 
 
