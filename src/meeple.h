@@ -18,7 +18,7 @@ struct meeple_t{
 	int size2;
 	int capacity1;
 	int capacity2;
-}
+};
 
 
 /*@ Init the struct meeple
