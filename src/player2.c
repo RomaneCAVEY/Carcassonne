@@ -43,10 +43,10 @@ void initialize(unsigned int player_id, const struct move_t first_move, struct g
 
 struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 {
-	add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, previous_move.y);
+	add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, -previous_move.y);
 	struct move_t current_move={};
 	int previous_x = previous_move.x;
-	int previous_y = previous_move.y;
+	int previous_y = -previous_move.y;
 	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
 	current_move.player_id=2;
 	int flag = 0; // 
@@ -57,40 +57,49 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 			if (flag == 1)
 				break;
 			// TO DO : check placement of tile (coordonnee)
-			if(compare_tile(board_get(board_2.board, j, i), CARC_TILE_EMPTY)){
-				if(is_place_available(board_2.board, j, i, tile)){
-					printf("----------- Place trouvé ! ----------- (%d, %d)\n", j, i);
-					current_move.x=j;
-					current_move.y=i;
+			if(compare_tile(board_get(board_2.board, i, -j), CARC_TILE_EMPTY)){
+				if(is_place_available(board_2.board, i, -j, tile)){
+					printf("----------- Place trouvé ! ----------- (%d, %d)\n", i, -j);
+					current_move.x=i;
+					current_move.y=-j;
 					flag = 1;
 				}
 			}
 			if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
 				printf("No placment found !\n");
 				current_move.x=previous_x;
-				current_move.y=previous_y;
+				current_move.y=-previous_y;
 			}
 		}
 	}
 	current_move.tile=tile;
 	// tile_display(current_move.tile);
 	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
-	add_tile_to_super_board(current_move.tile, &board_2, current_move.x, current_move.y);
+	add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
 	create_dot_igraph2(board_2.graph);
 	return current_move;
 }
 
 int is_place_available(struct board_t *board,int i, int j,struct tile_t tile){
 
-	if (!(compare_tile(board_get(board, i-1, j),CARC_TILE_EMPTY) && tile_check(board_get(board, i-1, j), tile, WEST)))
-		return 1;
-	if (!(compare_tile(board_get(board, i, j+1),CARC_TILE_EMPTY) && tile_check(board_get(board, i-1, j), tile, NORTH)))
-		return 1;
-	if (!(compare_tile(board_get(board, i, j-1),CARC_TILE_EMPTY) && tile_check(board_get(board, i-1, j), tile, SOUTH)))
-		return 1;
-	if (!(compare_tile(board_get(board, i+1, j),CARC_TILE_EMPTY) && tile_check(board_get(board, i-1, j), tile, EAST)))
-		return 1;
-	return 0;
+	if (!compare_tile(board_get(board, i-1, j),CARC_TILE_EMPTY) && !tile_check(board_get(board, i-1, j), tile, WEST)) {
+		printf("Can't place here : %d, %d\n", i, j);
+		return 0;
+	}
+	if (!compare_tile(board_get(board, i, j+1),CARC_TILE_EMPTY) && !tile_check(board_get(board, i, j+1), tile, NORTH)) {
+		printf("Can't place here : %d, %d\n", i, j);
+		return 0;
+	}
+	if (!compare_tile(board_get(board, i, j-1),CARC_TILE_EMPTY) && !tile_check(board_get(board, i, j-j), tile, SOUTH)){
+		printf("Can't place here : %d, %d\n", i, j);
+		return 0;
+	}
+	if (!compare_tile(board_get(board, i+1, j),CARC_TILE_EMPTY) && !tile_check(board_get(board, i+1, j), tile, EAST)){
+		printf("Can't place here : %d, %d\n", i, j);
+		return 0;
+	}
+	printf("available \n");
+	return 1;
 
 }
 
