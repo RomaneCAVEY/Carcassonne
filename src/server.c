@@ -107,18 +107,18 @@ int main(int argc, char *argv[]) {
   if (optind < argc) {
     player_1_path = argv[optind];
     if (debug)
-      printf("Custom player 1 provided!\n");
+      printf("[server] Custom player 1 provided!\n");
   }
   if (optind+1 < argc) {
     player_2_path = argv[optind+1];
     if (debug)
-      printf("Custom player 2 provided!\n");
+      printf("[server] Custom player 2 provided!\n");
   }
     
 
   // temporaire > TODO(implémenter les autres gamemode)
   if (game_mode != NO_MEEPLE) {
-    printf("WARNING: Provided game mode is not yet supported.\nDefaulting to NO_MEEPLE game mode.\n");
+    printf("[server] WARNING: Provided game mode is not yet supported.\nDefaulting to NO_MEEPLE game mode.\n");
     game_mode = NO_MEEPLE;
   }
 
@@ -137,7 +137,7 @@ int main(int argc, char *argv[]) {
 
 
   ///////////// INITIALISATION DE LA PARTIE //////////////
-  printf("Game seed: %d\n", seed);
+  printf("[server] Game seed: %d\n", seed);
   srand(seed);
   int current_player = rand() % 2;
   struct gameconfig_t config = make_config();
@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
 		printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name1());
       tile_display(tile);
     }
-    printf("Previous move in server : (%d, %d)\n", current_move.x, current_move.y);
+    printf("[server] Previous move: (%d, %d)\n", current_move.x, current_move.y);
     if (current_player == 0){
       current_move = play0(current_move, tile);
     }
@@ -184,17 +184,17 @@ int main(int argc, char *argv[]) {
     }
 
     if (debug)
-      printf("Current player wants to place the tile at pos (%d, %d)\n", current_move.x, current_move.y);
+      printf("[server] Current player wants to place the tile at pos (%d, %d)\n", current_move.x, current_move.y);
 
     
     if (is_invalid(board, current_move)) {
       if (debug)
-	printf("Invalid move!\n");
+	printf("[server] Invalid move!\n");
       break;
     }
     
     if (is_game_over()) {
-      printf("Game over!\n");
+      printf("[server] Game over!\n");
       break;
     }
 
