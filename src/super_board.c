@@ -1,9 +1,14 @@
-#include"super_board.h"
+#include "super_board.h"
+#include "board.h"
 #include "move.h"
 #include "graph.h"
 #include <stdlib.h>
+#include <stdio.h>
 
-
+const char * str_color[8] = {
+  "GREEN", "GRAY", "BLUE", "BROWN",
+  "PURPLE", "GOLD", "AZURE", "MAHOGANY",
+};
 
 /*Init the super_board
 * @param: the size of colors, the first tile to init the board, the super_board
@@ -36,23 +41,6 @@ int size_super_board(struct super_board_t * super_board)
 {
 	return super_board->size;
 }
-/* 
-struct utils_graph_t{
-	int x;
-	int y;
-	int center;
-};
-
-// the size of list is size
-struct super_board_t{
-	struct board_t *board;
-	igraph_t graph;
-	struct utils_graph *list;
-	enum color_t* colors;
-	int capacite;
-	int size;
-};
-*/
 
 
 void add_to_utils_graph(struct super_board_t * super_board, int x, int y, int center)
@@ -87,6 +75,71 @@ int add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_boa
 	super_board->size += 1;
 	// printf("------ End add a tile on a super board ------\n");
 	return 1;
+}
+
+void create_neato(struct super_board_t * super_board)
+{
+	FILE* out = fopen("neato_graph.dot", "w+");
+	fprintf(out, "graph {\n");
+	for (int i=0; i < super_board->size; ++i) {
+		// printf("\n-----Index %d-----\n", i);
+		float x = (float) super_board->list[i].x * 5;
+		float y = (float) - super_board->list[i].y * 5;
+		int center = super_board->list[i].center;
+		struct tile_t tile = board_get(super_board->board, x/5, -y/5);
+		// tile_display(tile);
+		// printf("x = %f, y = %f, center = %d", x, y, center);
+		for (int j=(center-12); j < center+1; ++j) {
+			// printf("\n-----Index %d-----\n", j%13);
+			switch (j%13)
+			{
+			case 0:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y+2);
+				break;
+			case 1:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y+2);
+				break;
+			case 2:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+1, y+2);
+				break;
+			case 3:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y+1);
+				break;
+			case 4:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y);
+				break;
+			case 5:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y-1);
+				break;
+			case 6:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+1, y-2);
+				break;
+			case 7:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y-2);
+				break;
+			case 8:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y-2);
+				break;
+			case 9:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y-1);
+				break;
+			case 10:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y);
+				break;
+			case 11:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y+1);
+				break;
+			case 12:
+				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	fprintf(out, "}\n");
+	fclose(out);
+	// neato -Tx11 neato_graph.dot &
 }
 
 /*Free the memory
