@@ -16,16 +16,18 @@ struct meeple_t init_meeple(int capacity)
   return meeple;
 };
 
-void add_meeple(struct meeple_t *meeple, struct move_t move)
+void add_meeple(struct meeple_t *meeple, struct move_t move, int infinit)
 {
-  if (meeple->capacity1 == meeple->size1 ){
-    meeple->capacity1 *= 2;
-    meeple->player1 = realloc(meeple->player1, sizeof(int)*meeple->capacity1);
-  }
+  if ( infinit == 1){
+    if (meeple->capacity1 == meeple->size1 ){
+      meeple->capacity1 *= 2;
+      meeple->player1 = realloc(meeple->player1, sizeof(int)*meeple->capacity1);
+    }
 
-  if (meeple->capacity2 == meeple->size2 ){
-    meeple->capacity2 *= 2;
-    meeple->player2 = realloc(meeple->player2, sizeof(int)*meeple->capacity2);
+    if (meeple->capacity2 == meeple->size2 ){
+      meeple->capacity2 *= 2;
+      meeple->player2 = realloc(meeple->player2, sizeof(int)*meeple->capacity2);
+    }
   }
 
   if (move.player_id == 1){
