@@ -17,7 +17,7 @@ build: server client deck.o
 %.o: src/%.c
 	$(CC) $< $(CFLAGS) -c --coverage
 
-server: server.o deck.o tile.o board.o
+server: server.o deck.o tile.o board.o super_board.o graph.o score.o common.o
 	gcc $(CFLAGS) $^ -o install/$@ -lgcov --coverage $(LDFLAGS)
 
 player0a.so: player0a.o board.o deck.o tile.o
