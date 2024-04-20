@@ -3,14 +3,19 @@
 #include "deck.h"
 #include "common.h"
 
-int calculate_points(struct super_board_t board) {
+int calculate_points(struct super_board_t *board) {
   igraph_vector_int_t components;
   igraph_vector_int_t csize;
-  igraph_integer_t count;
+  igraph_integer_t count = 0;
 
-  igraph_connected_components(&board.graph, &components, &csize, &count, IGRAPH_WEAK);
+  igraph_vector_int_init(&csize, 0);
+  igraph_vector_int_init(&components, 0);
+
+  igraph_connected_components(&board->graph, &components, &csize, &count, IGRAPH_WEAK);
 
   igraph_integer_t nb_vertices = igraph_vector_int_size(&components);
+  printf("nb_vertices %ld\n", nb_vertices);
+
   int *vertices = malloc(nb_vertices * sizeof(int));
   int size;
   struct int_pair_t *tiles_sides = malloc(nb_vertices * sizeof(struct int_pair_t));
@@ -38,6 +43,7 @@ int calculate_points(struct super_board_t board) {
     // TODO: skip les composantes terminées déjà évaluées à un tour précédent
     // (pour ça, on peut lister les premiers sommets de chaque composante déjà évaluée dans super_board par exemple)
     for (int j = 0; j < size; j++) {
+      printf("comp[%ld] : %d\n", i, vertices[j]);
       // On détermine quel côtés est concerné
       int tile = vertices[j] / 13;
       int side = (vertices[j] % 13) / 3; // 0 = nord, 1 = est, etc.
@@ -51,36 +57,42 @@ int calculate_points(struct super_board_t board) {
 	// On traite ce côté
 	switch(side) {
 	case 0: // North
-	  if (compare_tile(board_get(board.board, board.list[tile].x, board.list[tile].y - 1), CARC_TILE_EMPTY) == 1)
+	  if (compare_tile(board_get(board->board, board->list[tile].x, board->list[tile].y - 1), CARC_TILE_EMPTY) == 1) {
 	    is_finished = 0;
+	  }
 	  break;
 
 	case 1: // East
-	  if (compare_tile(board_get(board.board, board.list[tile].x + 1, board.list[tile].y), CARC_TILE_EMPTY) == 1)
+	  if (compare_tile(board_get(board->board, board->list[tile].x + 1, board->list[tile].y), CARC_TILE_EMPTY) == 1) {
 	    is_finished = 0;
+	  }
 	  break;
 
 	case 2: // South
-	  if (compare_tile(board_get(board.board, board.list[tile].x, board.list[tile].y + 1), CARC_TILE_EMPTY) == 1)
+	  if (compare_tile(board_get(board->board, board->list[tile].x, board->list[tile].y + 1), CARC_TILE_EMPTY) == 1) {
 	    is_finished = 0;
+	  }
 	  break;
 
 	case 3: // West
-	  if (compare_tile(board_get(board.board, board.list[tile].x - 1, board.list[tile].y), CARC_TILE_EMPTY) == 1)
+	  if (compare_tile(board_get(board->board, board->list[tile].x - 1, board->list[tile].y), CARC_TILE_EMPTY) == 1) {
 	    is_finished = 0;
+	  }
 	  break;
 	}
       }
+    }
 
-      if (is_finished) {
-	int color_score_factor = 1; // TODO: factor depends on the color of the component. field=1, road=4 and castle=8
-	int center_vertices = count_center_vertices(vertices, size);
-	int score = (size + center_vertices) / 2 * color_score_factor; // We add the number of center vertices to the vertices count, since all vertices are duplicated, except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
-	printf("Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
-	// TODO: when playing with meeples, determine which player wins the points
-	total = total + score;
-	printf("Total: %d\n", total);
-      }
+    if (is_finished == 1) {
+      int color_score_factor = 1; // TODO: factor depends on the color of the component. field=1, road=4 and castle=8
+      int center_vertices = count_center_vertices(vertices, size);
+      int score = (size + center_vertices) / 2 * color_score_factor; // We add the number of center vertices to the vertices count, since all vertices are duplicated, except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
+      printf("Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
+      // TODO: when playing with meeples, determine which player wins the points
+      total = total + score;
+      printf("Total: %d\n", total);
+    } else {
+      printf("Structure nb %ld (vertex %d) is not finished\n", i, vertices[0]);
     }
   }
 
@@ -89,7 +101,7 @@ int calculate_points(struct super_board_t board) {
   igraph_vector_int_destroy(&components);
   igraph_vector_int_destroy(&csize);
 
-  return 0;
+  return total;
 }
 
 int vector_extract_component(igraph_vector_int_t components, int component_id, int* result) {

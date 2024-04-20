@@ -12,7 +12,7 @@
  * TODO(): This function should only count the points for structure that haven't been evaluted before
  * TODO(): When playing with meeples, this function should return points for each player and not a global sum.
  */
-int calculate_points(struct super_board_t board);
+int calculate_points(struct super_board_t *board);
 
 /** Extracts the vertex indices of all vertices that are in a component.
  *
