@@ -86,6 +86,8 @@ int calculate_points(struct super_board_t board) {
 
   free(vertices);
   free(tiles_sides);
+  igraph_vector_int_destroy(&components);
+  igraph_vector_int_destroy(&csize);
 
   return 0;
 }
