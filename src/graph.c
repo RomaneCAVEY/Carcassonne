@@ -138,10 +138,12 @@ int calculate_points(struct super_board_t board) {
 
   igraph_connected_components(&board.graph, &components, &csize, &count, IGRAPH_WEAK);
 
-  igraph_vector_int_t nb_vertices = igraph_vector_size(&components);
+  igraph_integer_t nb_vertices = igraph_vector_int_size(&components);
   int *vertices = malloc(nb_vertices * sizeof(int));
   int size;
   struct int_pair_t *tiles_sides = malloc(nb_vertices * sizeof(struct int_pair_t));
+
+  int total = 0;
 
   /* Steps (for each component):
    *  - List all the tiles it spans on
@@ -170,9 +172,8 @@ int calculate_points(struct super_board_t board) {
 
       // Si le couple (tuile, côté) est déjà connu, on ne l'ajoute pas une deuxième fois.
       if (side < 4 && is_int_pair_in_list(tiles_sides, tile_count, tile, side) == 0) {
-	struct int_pair_t p = {.a = tile, .b = side};
-	tiles_sides[tile_count]->a = tile;
-	tiles_sides[tile_count]->b = side;
+	tiles_sides[tile_count].a = tile;
+	tiles_sides[tile_count].b = side;
 	tile_count++;
 
 	// On traite ce côté
@@ -200,21 +201,27 @@ int calculate_points(struct super_board_t board) {
       }
 
       if (is_finished) {
-	// TODO: calculate the points
+	int color_score_factor = 1; // TODO: factor depends on the color of the component. field=1, road=4 and castle=8
+	int center_vertices = count_center_vertices(vertices, size);
+	int score = (size + center_vertices) / 2 * color_score_factor; // We add the number of center vertices to the vertices count, since all vertices are duplicated, except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
+	printf("Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
+	// TODO: when playing with meeples, determine which player wins the points
+	total = total + score;
+	printf("Total: %d\n", total);
       }
     }
   }
 
   free(vertices);
-  free(tiles);
+  free(tiles_sides);
 
   return 0;
 }
 
-int vector_extract_component(igraph_vector_int_t *components, int component_id, int* result) {
+int vector_extract_component(igraph_vector_int_t components, int component_id, int* result) {
   int j = 0;
-  for (igraph_integer_t i =0; i < igraph_vector_int_size(&components)) {
-    if (igraph_vector_get(&components, i) == component_id) {
+  for (igraph_integer_t i =0; i < igraph_vector_int_size(&components); i++) {
+    if (VECTOR(components)[i] == component_id) {
       result[j] = i;
       j++;
     }
@@ -223,12 +230,13 @@ int vector_extract_component(igraph_vector_int_t *components, int component_id, 
 }
 
 /* Counts the number of vertices in a component that correspond to a centre vertex in the tile representation. */
-int count_center_vertices(igraph_vector_int_t *component) {
-  /* TODO: iterate over every vertices of the component and check if index%12 == 0.
-   * If that is the case, then increase a counter.
-   * This counter will then be returned.
-   */
-  return 0;
+int count_center_vertices(int *component, int size) {
+  int count = 0;
+  for (int i = 0; i < size; i++) {
+    if ((component[i] + 1) % 13 == 0) // This checks that it is the middle of a tile
+      count++;
+  }
+  return count;
 }
 
 

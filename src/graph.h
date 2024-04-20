@@ -18,6 +18,10 @@ igraph_t init_graph(struct tile_t t);
 //Use realloc if colors is full (but no size so...)
 igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super_board_t* sboard, int x, int y);
 
+int vector_extract_component(igraph_vector_int_t components, int component_id, int* result);
+
+int count_center_vertices(int *component, int size);
+
 // Create a .dot with the graph of the party
 void create_dot_igraph1(igraph_t graph);
 
