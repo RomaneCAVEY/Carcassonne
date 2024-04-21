@@ -3,6 +3,7 @@
 
 #include <igraph.h>
 #include "super_board.h"
+#include "move.h"
 
 /** Calculates all points for the current state of the game
  *
@@ -13,6 +14,13 @@
  * TODO(): When playing with meeples, this function should return points for each player and not a global sum.
  */
 int calculate_points(struct super_board_t *board);
+
+/** Returns the score factor associated to a color
+ *
+ * @param color A color
+ * @return The score factor (1 for fields, 4 for roads, 8 for castles, etc.)
+ */
+int color_score_factor(enum color_t color);
 
 /** Extracts the vertex indices of all vertices that are in a component.
  *

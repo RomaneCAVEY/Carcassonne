@@ -92,7 +92,7 @@ void test_caculate_points()
 
   int points = calculate_points(&sb);
   //printf("points: %d\n", points);
-  assert(points == 6); // TODO(): Update with correct amount of points
+  assert(points == 36);
 
   board_free(sb.board);
   free_super_board(&sb);

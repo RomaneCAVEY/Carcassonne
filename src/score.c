@@ -82,11 +82,14 @@ int calculate_points(struct super_board_t *board) {
       }
     }
 
-    if (is_finished == 1 && size != 1) { // Size 1 is excluded, since it should not be considered as a structure (only happens on the center vertex of CARC_TILE_XROAD)
-      int color_score_factor = 1; // TODO: factor depends on the color of the component. field=1, road=4 and castle=8
+    if (is_finished == 1 && size > 1) { // Size 1 is excluded, since it should not be considered as a structure (only happens on the center vertex of CARC_TILE_XROAD)
+      
+      int factor = color_score_factor(board->colors[vertices[0]]); 
       int center_vertices = count_center_vertices(vertices, size);
-      int score = (size + center_vertices) / 2 * color_score_factor; // We add the number of center vertices to the vertices count, since all vertices are duplicated, except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
+      int score = (size + center_vertices) / 2 * factor; // We add the number of center vertices to the vertices count, since all vertices are duplicated, except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
+      
       //printf("Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
+      
       // TODO: when playing with meeples, determine which player wins the points
       total = total + score;
       //printf("Total: %d\n", total);
@@ -101,6 +104,22 @@ int calculate_points(struct super_board_t *board) {
   igraph_vector_int_destroy(&csize);
 
   return total;
+}
+
+int color_score_factor(enum color_t color) {
+  switch (color) {
+  case GREEN:
+    return 1;
+
+  case GRAY:
+    return 4;
+
+  case BROWN:
+    return 8;
+
+  default:
+    return 0;
+  }
 }
 
 int vector_extract_component(igraph_vector_int_t components, int component_id, int* result) {
