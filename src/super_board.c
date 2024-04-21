@@ -17,6 +17,7 @@ void init_super_board(struct tile_t tile,struct super_board_t *super_board){
 	struct utils_graph_t ugraph = {.x=0, .y=0, .center=12};
 	super_board->list[0] = ugraph;
 	super_board->capacite = 1;
+	add_color_to_super_board(tile, super_board);
 	super_board->size = 1;
 }
 
