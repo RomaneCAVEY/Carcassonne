@@ -94,6 +94,7 @@ void test_caculate_points()
   //printf("points: %d\n", points);
   assert(points == 6); // TODO(): Update with correct amount of points
 
+  board_free(sb.board);
   free_super_board(&sb);
   
   printf("\t\e[1;102m SUCCESS \e[0m\n");  
