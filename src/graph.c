@@ -26,7 +26,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile)
 			}
 		}
 		if (taille == 12) {
-			if (ccenter == tile.c[i]) {
+			if (tcenter == tile.t[i]) {
 				m[i][taille] = 1;
 				m[taille][i] = 1;
 			}
