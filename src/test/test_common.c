@@ -30,11 +30,31 @@ void test_is_int_pair_in_list()
   printf("\t\e[1;102m SUCCESS \e[0m\n");
 }
 
+void test_is_int_in_list()
+{
+  printf(" • %s", __func__);
+
+  int l[2];
+  l[0] = 1;
+  l[1] = 3;
+
+  assert(is_int_in_list(l, 2, 1) == 1);
+  assert(is_int_in_list(l, 2, 3) == 1);
+  
+  assert(is_int_in_list(l, 2, 2) == 0);
+  assert(is_int_in_list(l, 2, 4) == 0);
+
+  assert(is_int_in_list(l, 1, 3) == 0);
+  
+  printf("\t\e[1;102m SUCCESS \e[0m\n");
+}
+
 int common_tests()
 {
   printf("\n\e[30;47mFile %s\e[0m\n", __FILE__);
   
   test_is_int_pair_in_list();
+  test_is_int_in_list();
 	
   return 0;
 }
