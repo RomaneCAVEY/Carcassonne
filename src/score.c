@@ -1,9 +1,14 @@
 #include <stdio.h>
 #include "score.h"
 #include "deck.h"
-#include "common.h"
 
-int calculate_points(struct super_board_t *board) {
+struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player) {
+
+  // TODO: Implement all game modes
+  if (mode != NO_MEEPLE) {
+    printf("[score] \e[1;37;103mWARNING:\e[0m Current game mode not supported. Defaulting to NO_MEEPLE for score calculation\n");
+  }
+  
   igraph_vector_int_t components;
   igraph_vector_int_t csize;
   igraph_integer_t count = 0;
@@ -19,7 +24,7 @@ int calculate_points(struct super_board_t *board) {
   int size;
   struct int_pair_t *tiles_sides = malloc(nb_vertices * sizeof(struct int_pair_t));
 
-  int total = 0;
+  struct int_pair_t total = {.a = 0, .b = 0};
 
   /* Steps (for each component):
    *  - List all the tiles it spans on
@@ -105,7 +110,14 @@ int calculate_points(struct super_board_t *board) {
       //printf("[score] Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
       
       // TODO: when playing with meeples, determine which player wins the points
-      total = total + score;
+      if (current_player == 0) {
+	total.a = total.a + score;
+      } else if (current_player == 1) {
+	total.b = total.b + score;
+      } else {
+	printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.", vertices[0], current_player);
+      }
+      
       //printf("[score] Total: %d\n", total);
     } /*else {
       printf("[score] Structure nb %ld (vertex %d) is not finished\n", i, vertices[0]);

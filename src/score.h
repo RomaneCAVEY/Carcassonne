@@ -4,16 +4,18 @@
 #include <igraph.h>
 #include "super_board.h"
 #include "move.h"
+#include "common.h"
 
 /** Calculates all points for the current state of the game
  *
  * @param board A pointer to the super board
- * @return The sum of the points of all finished structures at this state of the game.
+ * @param mode The selected game mode
+ * @param current_player The index of the current player (0 or 1)
+ * @return An int_pair_t containing the amount of points should receive (pair.a for player 0 and pair.b for player 1)
  *
- * TODO(): This function should only count the points for structure that haven't been evaluted before
- * TODO(): When playing with meeples, this function should return points for each player and not a global sum.
+ * TODO(): Add support for all game modes (currently, only NO_MEEPLE is supported).
  */
-/*struct int_pair_t*/ int calculate_points(struct super_board_t *board/*, enum gamemode_t mode, int current_player*/);
+struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player);
 
 /** Adds a finished structure to the list of already evaluted structures
  *
