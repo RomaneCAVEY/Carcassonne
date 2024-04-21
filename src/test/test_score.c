@@ -67,6 +67,9 @@ void test_caculate_points()
 
   struct super_board_t sb;
   init_super_board(CARC_TILE_INIT, &sb);
+
+  assert(calculate_points(&sb) == 0); // Board is empty, so there shouldn't be any points.
+  
   assert(add_tile_to_super_board(CARC_TILE_XROAD, &sb, 1, 0) == 1);
   assert(add_tile_to_super_board(CARC_TILE_XROAD, &sb, -1, 0) == 1);
   assert(add_tile_to_super_board(CARC_TILE_TINI, &sb, 0, -1) == 1);
@@ -93,6 +96,8 @@ void test_caculate_points()
   int points = calculate_points(&sb);
   //printf("points: %d\n", points);
   assert(points == 36);
+
+  assert(calculate_points(&sb) == 0); // All finished structures have already been evaluted, to there should be no new points.
 
   board_free(sb.board);
   free_super_board(&sb);
