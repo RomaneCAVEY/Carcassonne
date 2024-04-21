@@ -83,6 +83,7 @@ igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super
 			center_add = sboard->list[i].center;
 			igraph_vector_int_init_int(&add_edges, 6, (center_tile-12),(center_add-4), (center_tile-11),(center_add-5), (center_tile-10),(center_add-6));
 			igraph_add_edges(&union_graph, &add_edges, NULL);
+			igraph_vector_int_destroy(&add_edges); // Vector should be destroyed before re-initialization to avoid memory leak
 		}
 		// Connect with the up tile
 		if ((sboard->list[i].x == x) && (sboard->list[i].y-1 == y)) {
@@ -90,6 +91,7 @@ igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super
 			center_add = sboard->list[i].center;
 			igraph_vector_int_init_int(&add_edges, 6, (center_tile-4),(center_add-12), (center_tile-5),(center_add-11), (center_tile-6),(center_add-10));
 			igraph_add_edges(&union_graph, &add_edges, NULL);
+			igraph_vector_int_destroy(&add_edges); // Vector should be destroyed before re-initialization to avoid memory leak
 		}
 		// Connect with the right tile
 		if ((sboard->list[i].x+1 == x) && (sboard->list[i].y == y)) {
@@ -98,6 +100,7 @@ igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super
 			//printf("Center of left tile : %d\n", center_add);
 			igraph_vector_int_init_int(&add_edges, 6, (center_tile-1),(center_add-9), (center_tile-2),(center_add-8), (center_tile-3),(center_add-7));
 			igraph_add_edges(&union_graph, &add_edges, NULL);
+			igraph_vector_int_destroy(&add_edges); // Vector should be destroyed before re-initialization to avoid memory leak
 		}
 		// Connect with the left tile
 		if ((sboard->list[i].x-1 == x) && (sboard->list[i].y == y)) {
@@ -105,11 +108,12 @@ igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super
 			center_add = sboard->list[i].center;
 			igraph_vector_int_init_int(&add_edges, 6, (center_tile-9),(center_add-1), (center_tile-8),(center_add-2), (center_tile-7),(center_add-3));
 			igraph_add_edges(&union_graph, &add_edges, NULL);
+			igraph_vector_int_destroy(&add_edges); // Vector should be destroyed before re-initialization to avoid memory leak
 		}
 	}
 	
 	igraph_destroy(&main_graph);
-    igraph_destroy(&graph_tile);
+	igraph_destroy(&graph_tile);
 	igraph_vector_int_destroy(&add_edges);
 
 	return union_graph;
