@@ -6,19 +6,28 @@
 #include <igraph.h>
 
 struct utils_graph_t{
-	int x;
-	int y;
-	int center;
+  int x;
+  int y;
+  int center;
+};
+
+/** Stores all completed structures (i.e. structures whose points have already been computed).
+ */
+struct finished_structures_t {
+  int *list; /* Pointer to an array containing the first vertex of each completed structures. */
+  int count; /* The number of elements inside "list". */
+  int size;  /* The number of "cells" allocated in memory for "list" (sizeof(list) = size*sizeof(int)). */
 };
 
 // the size of list is size
 struct super_board_t{
-	struct board_t *board;
-	igraph_t graph;
-	struct utils_graph_t *list;
-	enum color_t* colors;
-	int capacite;
-	int size;
+  struct board_t *board;
+  igraph_t graph;
+  struct utils_graph_t *list;
+  struct finished_structures_t finished_structures;
+  enum color_t* colors;
+  int capacite;
+  int size;
 };
 
 //Init the board

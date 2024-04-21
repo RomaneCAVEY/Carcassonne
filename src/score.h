@@ -13,7 +13,14 @@
  * TODO(): This function should only count the points for structure that haven't been evaluted before
  * TODO(): When playing with meeples, this function should return points for each player and not a global sum.
  */
-int calculate_points(struct super_board_t *board);
+/*struct int_pair_t*/ int calculate_points(struct super_board_t *board/*, enum gamemode_t mode, int current_player*/);
+
+/** Adds a finished structure to the list of already evaluted structures
+ *
+ * @param sb A pointer to the super board
+ * @param first_vertex The smallest vertex id for the connected component corresponding to that structure
+ */
+void add_finished_structure(struct super_board_t *sb, int first_vertex);
 
 /** Returns the score factor associated to a color
  *

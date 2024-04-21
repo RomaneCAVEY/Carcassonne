@@ -9,16 +9,21 @@
 * @param: the size of colors, the first tile to init the board, the super_board
 * @return:the super_board with the first tile in the board
 */
-void init_super_board(struct tile_t tile,struct super_board_t *super_board){
-	super_board->board = board_init(tile);
-	super_board->graph = init_graph(tile);
-	super_board->colors = malloc(sizeof(enum color_t)*MAX_CONNECTIONS);
-	super_board->list = malloc(sizeof(struct utils_graph_t)*1);
-	struct utils_graph_t ugraph = {.x=0, .y=0, .center=12};
-	super_board->list[0] = ugraph;
-	super_board->capacite = 1;
-	add_color_to_super_board(tile, super_board);
-	super_board->size = 1;
+void init_super_board(struct tile_t tile, struct super_board_t *super_board){
+  super_board->board = board_init(tile);
+  super_board->graph = init_graph(tile);
+  super_board->colors = malloc(sizeof(enum color_t)*MAX_CONNECTIONS);
+  super_board->list = malloc(sizeof(struct utils_graph_t)*1);
+  struct utils_graph_t ugraph = {.x=0, .y=0, .center=12};
+  super_board->list[0] = ugraph;
+  super_board->capacite = 1;
+  super_board->size = 0;
+  add_color_to_super_board(tile, super_board);
+  super_board->size++;
+
+  super_board->finished_structures.count = 0;
+  super_board->finished_structures.size = 1;
+  super_board->finished_structures.list = malloc(sizeof(int));
 }
 
 /*Add the colors of a vertice of the graph in the board
@@ -95,7 +100,8 @@ int add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_boa
 * @return: void
 */
 void free_super_board(struct super_board_t* super_board){
-	free(super_board->colors);
-	free(super_board->list);
-	free_graph(super_board->graph);
+  free(super_board->colors);
+  free(super_board->list);
+  free_graph(super_board->graph);
+  free(super_board->finished_structures.list);
 }

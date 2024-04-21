@@ -34,6 +34,14 @@ int calculate_points(struct super_board_t *board) {
   for (igraph_integer_t i = 0; i < count; i++) {
     // On récupère les indices des sommets du composant
     size = vector_extract_component(components, i, vertices);
+
+    // Skip already evaluted components (the points awarded by a finished structure should only be counted once).
+    // Components of size 1 are excluded, since they should not be considered as structures (this should only happen on the center vertex of CARC_TILE_XROAD).
+    if (size < 2 || is_int_in_list(board->finished_structures.list, board->finished_structures.count, vertices[0])) { 
+      //printf("[score] Component %ld too small or already evaluted (size: %d)\n", i, size);
+      continue;
+    }
+    
     int is_finished = 1;
 
     int tile_count = 0;
@@ -42,7 +50,7 @@ int calculate_points(struct super_board_t *board) {
     // TODO: skip les composantes terminées déjà évaluées à un tour précédent
     // (pour ça, on peut lister les premiers sommets de chaque composante déjà évaluée dans super_board par exemple)
     for (int j = 0; j < size; j++) {
-      //printf("comp[%ld] : %d\n", i, vertices[j]);
+      //printf("[score] comp[%ld] : %d\n", i, vertices[j]);
       // On détermine quel côtés est concerné
       int tile = vertices[j] / 13;
       int side = (vertices[j] % 13) / 3; // 0 = nord, 1 = est, etc.
@@ -82,19 +90,25 @@ int calculate_points(struct super_board_t *board) {
       }
     }
 
-    if (is_finished == 1 && size > 1) { // Size 1 is excluded, since it should not be considered as a structure (only happens on the center vertex of CARC_TILE_XROAD)
-      
+    if (is_finished == 1) {
+      // Add the structure to the list of already evaluted structures
+      add_finished_structure(board, vertices[0]);
+
+      // Calculate the corresponding score
       int factor = color_score_factor(board->colors[vertices[0]]); 
       int center_vertices = count_center_vertices(vertices, size);
-      int score = (size + center_vertices) / 2 * factor; // We add the number of center vertices to the vertices count, since all vertices are duplicated, except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
+
+      // We add the number of center vertices to the vertices count, since all vertices are duplicated,
+      // except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
+      int score = (size + center_vertices) / 2 * factor;
       
-      //printf("Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
+      //printf("[score] Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
       
       // TODO: when playing with meeples, determine which player wins the points
       total = total + score;
-      //printf("Total: %d\n", total);
+      //printf("[score] Total: %d\n", total);
     } /*else {
-      printf("Structure nb %ld (vertex %d) is not finished\n", i, vertices[0]);
+      printf("[score] Structure nb %ld (vertex %d) is not finished\n", i, vertices[0]);
       }*/
   }
 
@@ -104,6 +118,18 @@ int calculate_points(struct super_board_t *board) {
   igraph_vector_int_destroy(&csize);
 
   return total;
+}
+
+void add_finished_structure(struct super_board_t *sb, int first_vertex) {
+  // If the list is full, realloc it to be twice as big
+  if (sb->finished_structures.size <= sb->finished_structures.count) {
+    sb->finished_structures.list = realloc(sb->finished_structures.list, 2 * sb->finished_structures.size * sizeof(int));
+    sb->finished_structures.size = 2 * sb->finished_structures.size;
+  }
+
+  // Add the first vertex to the list
+  sb->finished_structures.list[sb->finished_structures.count] = first_vertex;
+  sb->finished_structures.count++;
 }
 
 int color_score_factor(enum color_t color) {
