@@ -14,7 +14,6 @@ int calculate_points(struct super_board_t *board) {
   igraph_connected_components(&board->graph, &components, &csize, &count, IGRAPH_WEAK);
 
   igraph_integer_t nb_vertices = igraph_vector_int_size(&components);
-  printf("nb_vertices %ld\n", nb_vertices);
 
   int *vertices = malloc(nb_vertices * sizeof(int));
   int size;
@@ -43,7 +42,7 @@ int calculate_points(struct super_board_t *board) {
     // TODO: skip les composantes terminées déjà évaluées à un tour précédent
     // (pour ça, on peut lister les premiers sommets de chaque composante déjà évaluée dans super_board par exemple)
     for (int j = 0; j < size; j++) {
-      printf("comp[%ld] : %d\n", i, vertices[j]);
+      //printf("comp[%ld] : %d\n", i, vertices[j]);
       // On détermine quel côtés est concerné
       int tile = vertices[j] / 13;
       int side = (vertices[j] % 13) / 3; // 0 = nord, 1 = est, etc.
@@ -83,17 +82,17 @@ int calculate_points(struct super_board_t *board) {
       }
     }
 
-    if (is_finished == 1) {
+    if (is_finished == 1 && size != 1) { // Size 1 is excluded, since it should not be considered as a structure (only happens on the center vertex of CARC_TILE_XROAD)
       int color_score_factor = 1; // TODO: factor depends on the color of the component. field=1, road=4 and castle=8
       int center_vertices = count_center_vertices(vertices, size);
       int score = (size + center_vertices) / 2 * color_score_factor; // We add the number of center vertices to the vertices count, since all vertices are duplicated, except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
-      printf("Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
+      //printf("Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
       // TODO: when playing with meeples, determine which player wins the points
       total = total + score;
-      printf("Total: %d\n", total);
-    } else {
+      //printf("Total: %d\n", total);
+    } /*else {
       printf("Structure nb %ld (vertex %d) is not finished\n", i, vertices[0]);
-    }
+      }*/
   }
 
   free(vertices);
