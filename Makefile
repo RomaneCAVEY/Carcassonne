@@ -49,7 +49,7 @@ test_common.o: src/test/test_common.c
 test_score.o: src/test/test_score.c
 	$(CC) src/test/test_score.c $(CFLAGS) -c
 
-alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o test_common.o common.o test_score.o score.o
+alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o test_common.o common.o test_score.o score.o super_board.o graph.o
 	gcc $(CLFAGS) $^ -o install/$@ -lgcov --coverage -ldl $(LDFLAGS)
 
 test: alltests
