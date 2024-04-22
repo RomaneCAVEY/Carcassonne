@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "graph.h"
+#include "common.h"
 
 
 igraph_t transform_tile_to_graph(struct tile_t tile) 
@@ -25,7 +26,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile)
 			}
 		}
 		if (taille == 12) {
-			if (ccenter == tile.c[i]) {
+			if (tcenter == tile.t[i]) {
 				m[i][taille] = 1;
 				m[taille][i] = 1;
 			}
@@ -71,44 +72,48 @@ igraph_t add_tile_to_graph(struct tile_t tile, igraph_t main_graph, struct super
 
 	int size = sboard->size;
 	int center_tile = ((size)*13 - 1)+13;
-	printf("Center of tile : %d\n", center_tile);
+	//printf("Center of tile : %d\n", center_tile);
 	int center_add;
 
 
 	for (int i = 0; i < size; ++i) {
 		// Connect with the down tile
 		if ((sboard->list[i].x == x) && (sboard->list[i].y+1 == y)) {
-			printf("down\n");
+		  //printf("down\n");
 			center_add = sboard->list[i].center;
 			igraph_vector_int_init_int(&add_edges, 6, (center_tile-12),(center_add-4), (center_tile-11),(center_add-5), (center_tile-10),(center_add-6));
 			igraph_add_edges(&union_graph, &add_edges, NULL);
+			igraph_vector_int_destroy(&add_edges); // Vector should be destroyed before re-initialization to avoid memory leak
 		}
 		// Connect with the up tile
 		if ((sboard->list[i].x == x) && (sboard->list[i].y-1 == y)) {
-			printf("up\n");
+		  //printf("up\n");
 			center_add = sboard->list[i].center;
 			igraph_vector_int_init_int(&add_edges, 6, (center_tile-4),(center_add-12), (center_tile-5),(center_add-11), (center_tile-6),(center_add-10));
 			igraph_add_edges(&union_graph, &add_edges, NULL);
+			igraph_vector_int_destroy(&add_edges); // Vector should be destroyed before re-initialization to avoid memory leak
 		}
 		// Connect with the right tile
 		if ((sboard->list[i].x+1 == x) && (sboard->list[i].y == y)) {
-			printf("right\n");
+		  //printf("right\n");
 			center_add = sboard->list[i].center;
-			printf("Center of left tile : %d\n", center_add);
+			//printf("Center of left tile : %d\n", center_add);
 			igraph_vector_int_init_int(&add_edges, 6, (center_tile-1),(center_add-9), (center_tile-2),(center_add-8), (center_tile-3),(center_add-7));
 			igraph_add_edges(&union_graph, &add_edges, NULL);
+			igraph_vector_int_destroy(&add_edges); // Vector should be destroyed before re-initialization to avoid memory leak
 		}
 		// Connect with the left tile
 		if ((sboard->list[i].x-1 == x) && (sboard->list[i].y == y)) {
-			printf("left\n");
+		  //printf("left\n");
 			center_add = sboard->list[i].center;
 			igraph_vector_int_init_int(&add_edges, 6, (center_tile-9),(center_add-1), (center_tile-8),(center_add-2), (center_tile-7),(center_add-3));
 			igraph_add_edges(&union_graph, &add_edges, NULL);
+			igraph_vector_int_destroy(&add_edges); // Vector should be destroyed before re-initialization to avoid memory leak
 		}
 	}
 	
 	igraph_destroy(&main_graph);
-    igraph_destroy(&graph_tile);
+	igraph_destroy(&graph_tile);
 	igraph_vector_int_destroy(&add_edges);
 
 	return union_graph;
@@ -129,27 +134,6 @@ void create_dot_igraph2(igraph_t graph)
 	igraph_write_graph_dot(&graph, out);
 	fclose(out);
 }
-
-
-/* igraph_error_t igraph_connected_components(
-    const igraph_t *graph, igraph_vector_int_t *membership,
-    igraph_vector_int_t *csize, igraph_integer_t *no, igraph_connectedness_t mode
-);
-
-void function_get_point(struct super_board_t board){
-  
-//initialiser vector de pointor
-  
-igraph_vector_int_t memebership;
-igraph_vector_int_t cisize;
-int * ohno;
-
-igraph_connected_components(board.graph,  &memebership, &cisize, &ohno, IGRAPH_WEAK );
-
-
- 
-} */
-
 
 void free_graph(igraph_t graph)
 {

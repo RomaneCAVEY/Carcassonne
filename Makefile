@@ -17,7 +17,7 @@ build: server client deck.o
 %.o: src/%.c
 	$(CC) $< $(CFLAGS) -c --coverage
 
-server: server.o deck.o tile.o board.o
+server: server.o deck.o tile.o board.o super_board.o graph.o score.o common.o
 	gcc $(CFLAGS) $^ -o install/$@ -lgcov --coverage $(LDFLAGS)
 
 player0a.so: player0a.o board.o deck.o tile.o
@@ -43,8 +43,14 @@ test_board.o: src/test/test_board.c
 test_deck.o: src/test/test_deck.c
 	$(CC) src/test/test_deck.c $(CFLAGS) -c
 
-alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o
-	gcc $(CLFAGS) $^ -o install/$@ -lgcov --coverage
+test_common.o: src/test/test_common.c
+	$(CC) src/test/test_common.c $(CFLAGS) -c
+
+test_score.o: src/test/test_score.c
+	$(CC) src/test/test_score.c $(CFLAGS) -c
+
+alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o test_common.o common.o test_score.o score.o super_board.o graph.o
+	gcc $(CLFAGS) $^ -o install/$@ -lgcov --coverage -ldl $(LDFLAGS)
 
 test: alltests
 

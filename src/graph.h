@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include <igraph.h>
 #include <stdio.h>
 #include "move.h"
