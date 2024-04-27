@@ -135,6 +135,31 @@ void create_dot_igraph2(igraph_t graph)
 	fclose(out);
 }
 
+
+/* igraph_error_t igraph_connected_components(
+    const igraph_t *graph, igraph_vector_int_t *membership,
+    igraph_vector_int_t *csize, igraph_integer_t *no, igraph_connectedness_t mode
+);
+
+void function_get_point(struct super_board_t board){
+  
+//initialiser vector de pointor
+  
+igraph_vector_int_t memebership;
+igraph_vector_int_t cisize;
+int * ohno;
+
+igraph_connected_components(board.graph,  &memebership, &cisize, &ohno, IGRAPH_WEAK );
+
+
+int component_is_over(struct board_t board, ){
+	for 
+}
+
+ 
+} */
+
+
 void free_graph(igraph_t graph)
 {
 	igraph_destroy(&graph);
