@@ -144,7 +144,7 @@ int main(int argc, char *argv[]) {
   int current_player = rand() % 2;
   struct gameconfig_t config = make_config();
   deck_pos = 0;
-  struct meeple_t meeples= init_meeple(7);
+  //struct meeple_t meeples= init_meeple(7);
   
     
   struct move_t current_move = {.player_id=SERVER, .x=0, .y=0, .tile=deck_get(config.deck, 0), .meeple=NO_CONNECTION};
@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) {
     else{
       current_move = play1(current_move, tile);
     }
-	tile_display_with_meeple(current_move);
+	//tile_display_with_meeple(current_move);
     if (debug)
       printf("[server] Current player wants to place the tile at pos (%d, %d)\n", current_move.x, current_move.y);
 
@@ -215,6 +215,9 @@ int main(int argc, char *argv[]) {
       printf("[server] Game over!\n");
       break;
     }
+   // add_meeple(&meeples, current_move);
+    board_add(&super_board, current_move.tile, current_move.x, -current_move.y); // y axis is inverted in our implementation
+    // TODO: calculer les nouveaux points
 
     current_player = next_player(current_player);
   }
@@ -244,7 +247,7 @@ int main(int argc, char *argv[]) {
   board_free(super_board.board);
   free_super_board(&super_board);
   deck_free(config.deck);
-  free_meeple(meeples);
+  //free_meeple(meeples);
 
   ///////////// OUTILISATION DES LIBRAIRIES  //////////////
   dlclose(pj0);
