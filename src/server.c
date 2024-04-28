@@ -6,11 +6,11 @@
 #include <time.h>
 #include "deck.h"
 #include "board.h"
+#include "meeple.h"
 #include "super_board.h"
 #include "score.h"
 #include "tile.h"
 #include "move.h"
-#include"meeple.h"
 
 #define DECK_SIZE 100
 
@@ -144,12 +144,13 @@ int main(int argc, char *argv[]) {
   int current_player = rand() % 2;
   struct gameconfig_t config = make_config();
   deck_pos = 0;
-  //struct meeple_t meeples= init_meeple(7);
   
     
   struct move_t current_move = {.player_id=SERVER, .x=0, .y=0, .tile=deck_get(config.deck, 0), .meeple=NO_CONNECTION};
   struct super_board_t super_board;
   init_super_board(current_move.tile, &super_board);
+
+  struct meeple_t meeple=init_meeple(7);
   
   if (debug) {
     printf("-------\nInitial tile (0, 0):\n");
@@ -180,7 +181,7 @@ int main(int argc, char *argv[]) {
       } else {
 	printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name1());
       }
-      tile_display(tile);
+      //tile_display(tile);
     }
     printf("[server] Previous move: (%d, %d)\n", current_move.x, current_move.y);
     if (current_player == 0){
@@ -189,7 +190,7 @@ int main(int argc, char *argv[]) {
     else{
       current_move = play1(current_move, tile);
     }
-	//tile_display_with_meeple(current_move);
+
     if (debug)
       printf("[server] Current player wants to place the tile at pos (%d, %d)\n", current_move.x, current_move.y);
 
@@ -199,8 +200,8 @@ int main(int argc, char *argv[]) {
 	printf("[server] Invalid move!\n");
       break;
     }
-    
-
+    tile_display_with_meeple(current_move);
+	add_meeple(&meeple, current_move);
     add_tile_to_super_board(current_move.tile, &super_board, current_move.x, -current_move.y); // y axis is inverted in our implementation
 
     // Calculate points
@@ -215,9 +216,6 @@ int main(int argc, char *argv[]) {
       printf("[server] Game over!\n");
       break;
     }
-   // add_meeple(&meeples, current_move);
-    board_add(&super_board, current_move.tile, current_move.x, -current_move.y); // y axis is inverted in our implementation
-    // TODO: calculer les nouveaux points
 
     current_player = next_player(current_player);
   }
@@ -247,7 +245,8 @@ int main(int argc, char *argv[]) {
   board_free(super_board.board);
   free_super_board(&super_board);
   deck_free(config.deck);
-  //free_meeple(meeples);
+  free_meeple(meeple);
+
 
   ///////////// OUTILISATION DES LIBRAIRIES  //////////////
   dlclose(pj0);
