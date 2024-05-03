@@ -32,7 +32,7 @@ player1.so: player1.o board.o deck.o tile.o graph.o super_board.o
 player2.so: player2.o board.o deck.o tile.o graph.o super_board.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl -lgcov --coverage $(LDFLAGS)
 
-client: player0a.so player0b.so #player1.so player2.so
+client: player0a.so player0b.so player1.so player2.so
 
 test_tile.o: src/test/test_tile.c
 	$(CC) src/test/test_tile.c $(CFLAGS) -c
