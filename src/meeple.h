@@ -28,7 +28,10 @@ struct meeple_t{
  */
 struct meeple_t init_meeple(int capacity);
 
+//serveur 
+int add_meeple_to_board(struct move_t* move, struct super_board_t sboard, enum gamemode_t gt);
 
+//client
 /*Add the meeple played in the move
  *@param: the meeple and the move and super_board
  *@return: the meeple with the new meeple according to the player who played 
