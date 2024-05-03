@@ -2,6 +2,7 @@
 #define __MEEPLE_H__
 
 #include"move.h"
+#include "super_board.h"
 
 
 /* Struct meeple
@@ -32,7 +33,7 @@ struct meeple_t init_meeple(int capacity);
  *@param: the meeple and the move and super_board
  *@return: the meeple with the new meeple according to the player who played 
  * */
-void add_meeple(struct meeple_t *meeple, struct move_t *move, struct super_board_t sboard,enum gamemode_t gt);
+int add_meeple(struct meeple_t *meeple, struct move_t* move, struct super_board_t sboard, enum gamemode_t gt);
 
 /* check if there is a valide place to let a meeple*/
 int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple);

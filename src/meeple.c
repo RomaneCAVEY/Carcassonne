@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "move.h"
 #include "meeple.h"
-#include "super_board.h"
 
 struct meeple_t init_meeple(int capacity)
 {
@@ -17,16 +15,16 @@ struct meeple_t init_meeple(int capacity)
   return meeple;
 };
 
-void add_meeple(struct meeple_t *meeple, struct move_t* move, struct super_board_t sboard, enum gamemode_t gt)
+int add_meeple(struct meeple_t *meeple, struct move_t* move, struct super_board_t sboard, enum gamemode_t gt)
 {
   if(gt == FINITE_MEEPLE){
     if (move->player_id == 1 && meeple->size2 == 7 ){
-      move->meeple = 14;
-      return move;
+      	move->meeple = 14;
+		return 0;
     }
     if (move->player_id == 0 && meeple->size1 == 7 ){
       move->meeple = 14;
-      return move;
+	  return 0;
     }
   }
   
@@ -45,28 +43,27 @@ void add_meeple(struct meeple_t *meeple, struct move_t* move, struct super_board
   
   for (int i= 0; i <12; i++){
     if(check_add_meeple(sboard, i, meeple)){
-      if (move.player_id == 0 ){
+      if (move->player_id == 0 ){
 	move->meeple = i;
 	meeple->player1[meeple->size1] = ((sboard.size-1) * 13) + move->meeple ;
 	meeple->size1 +=1;
-	return move;
+	return 1;
       }
 
-      if (move.player_id == 1 ){
+      if (move->player_id == 1 ){
 	move->meeple = i;
 	meeple->player2[meeple->size2] = ((sboard.size-1) * 13) + move->meeple ;
 	meeple->size2 +=1;
-	return move;
+	return 1;
       }
     }
   }
-  move->meeple = 14;
-  return move;
+  	move->meeple = 14;
+  	return 0;
   
 }
 
-int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple)
-{
+int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple){
    
   igraph_vector_int_t components;
   igraph_vector_int_t csize;
