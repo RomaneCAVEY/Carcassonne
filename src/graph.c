@@ -10,7 +10,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile)
 	igraph_t graph;
 	int m[13][13] = { {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0} };
 	unsigned int tcenter = tile.t[12];
-	enum color_t ccenter = tile.c[12];
+	// enum color_t ccenter = tile.c[12];
 	int taille = 13;
 	if (tile.c[12] == GRAY) {
 		taille = 12;
@@ -19,7 +19,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile)
 		int pass = -1;
 		// add_color(tile.c[i],super_board);
 		for (int j = i; j < taille; ++j) {
-			if ((tile.t[j] == tile.t[i]) && (tile.c[i] != ccenter) && (j != i) && (pass == -1)) {
+			if ((tile.t[j] == tile.t[i]) && /* (tile.c[i] != ccenter)  && */ (j != i) && (pass == -1)) {
 				m[i][j] = 1;
 				m[j][i] = 1;
 				pass = i;
