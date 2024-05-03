@@ -16,6 +16,7 @@ int p2_board_min_x = 0;
 int p2_board_max_x = 0;
 int p2_board_min_y = 0;
 int p2_board_max_y = 0;
+int p2_player_id = 0;
 
 char const *get_player_name() { return "Player_0b"; }
 
@@ -23,6 +24,7 @@ void initialize(unsigned int player_id, const struct move_t first_move,
                 struct gameconfig_t config) {
   board_2 = board_init(first_move.tile);
   config_2 = config;
+  p2_player_id = player_id;
   printf("Player %u initialized!\n", player_id);
 }
 
@@ -48,7 +50,7 @@ struct move_t play(const struct move_t previous_move,
   update_board_bounds(pm);
 
   struct move_t current_move = {};
-  current_move.player_id = 1;
+  current_move.player_id = p2_player_id;
 
   for (int i = p2_board_min_x - 1; i < p2_board_max_x + 2; i++) {
     for (int j = p2_board_min_y - 1; j < p2_board_max_y + 2; j++) {

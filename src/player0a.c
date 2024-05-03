@@ -16,6 +16,7 @@ int p1_board_min_x = 0;
 int p1_board_max_x = 0;
 int p1_board_min_y = 0;
 int p1_board_max_y = 0;
+int p1_player_id = 0;
 
 char const *get_player_name() { return "Player_0a"; }
 
@@ -23,6 +24,7 @@ void initialize(unsigned int player_id, const struct move_t first_move,
                 struct gameconfig_t config) {
   board_1 = board_init(first_move.tile);
   config_1 = config;
+  p1_player_id = player_id;
   printf("Player %u initialized!\n", player_id);
 }
 
@@ -48,7 +50,7 @@ struct move_t play(const struct move_t previous_move,
   update_board_bounds(pm);
 
   struct move_t current_move = {};
-  current_move.player_id = 1;
+  current_move.player_id = p1_player_id;
 
   //printf("xmin: %d; xmax: %d; ymin=%d; ymax=%d\n", p1_board_min_x, p1_board_max_x, p1_board_min_y, p1_board_max_y);
 

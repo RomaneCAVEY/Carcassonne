@@ -34,21 +34,25 @@ int board_add_check(struct board_t *board, struct tile_t tile, int x, int y) {
                    CARC_TILE_EMPTY) == 0)
     return 0;
 
+  int valid = 0;
   for (int i = -1; i <= 1; i++) {
     for (int j = -1; j <= 1; j++) {
       if (i != j && i != 2 + j && i != j - 2 &&
           (BOARD_CENTER + i + y) < BOARD_SIZE && (BOARD_CENTER + i + y) >= 0 &&
           (BOARD_CENTER + j + x) < BOARD_SIZE && (BOARD_CENTER + j + x) >= 0 &&
           compare_tile(board->tiles[BOARD_CENTER + y + i][BOARD_CENTER + x + j],
-                       CARC_TILE_EMPTY) == 0 &&
-          tile_check(tile,
-                     board->tiles[BOARD_CENTER + y + i][BOARD_CENTER + x + j],
-                     i - 2 * j))
-        return 1;
+                       CARC_TILE_EMPTY) == 0) {
+	
+	if (tile_check(tile, board->tiles[BOARD_CENTER + y + i][BOARD_CENTER + x + j], i - 2 * j)) {
+	  valid = 1;
+	} else {
+	  return 0;
+	}
+      }
     }
   }
 
-  return 0;
+  return valid;
 }
 
 struct tile_t board_get(struct board_t *board, int x, int y) {
