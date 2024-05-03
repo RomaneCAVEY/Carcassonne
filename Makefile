@@ -17,13 +17,13 @@ build: server client deck.o
 %.o: src/%.c
 	$(CC) $< $(CFLAGS) -c --coverage
 
-server: server.o deck.o tile.o board.o super_board.o graph.o score.o common.o
+server: server.o deck.o tile.o board.o super_board.o graph.o score.o common.o meeple.o
 	gcc $(CFLAGS) $^ -o install/$@ -lgcov --coverage $(LDFLAGS)
 
-player0a.so: player0a.o board.o deck.o tile.o
+player0a.so: player0a.o board.o deck.o tile.o meeple.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl -lgcov --coverage
 
-player0b.so: player0b.o board.o deck.o tile.o
+player0b.so: player0b.o board.o deck.o tile.o meeple.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl -lgcov --coverage
 
 player1.so: player1.o board.o deck.o tile.o graph.o super_board.o meeple.o
