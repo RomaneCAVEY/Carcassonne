@@ -72,14 +72,15 @@ int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, stru
   igraph_vector_int_init(&csize, 0);
   igraph_vector_int_init(&components, 0);
 
-  igraph_connected_components(&sboard->graph, &components, &csize, &count, IGRAPH_WEAK);
+  igraph_connected_components(&sboard.graph, &components, &csize, &count, IGRAPH_WEAK);
 
   igraph_integer_t nb_vertices = igraph_vector_int_size(&components);
 
   int *vertices = malloc(nb_vertices * sizeof(int));
   int size;
-
-  size = vector_extract_component(components, components[((sboard.size-1) * 13) + indexVertex],vertices);
+  //igraph_vector_int_print(&components);
+  igraph_integer_t a= VECTOR(components)[(sboard.size-1) * 13 + indexVertex];
+  size = vector_extract_component(components, a,vertices);
 
   for (int i=0; i<size; i++){
     for (int p1=0;p1 < meeple->size1 ; p1++){

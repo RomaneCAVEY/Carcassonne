@@ -9,6 +9,7 @@
 #include "board.h"
 #include "super_board.h"
 #include "meeple.h"
+#include "common.h"
 
 #ifndef BOARD_SIZE
 #define BOARD_SIZE 201
@@ -68,6 +69,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
 	current_move.player_id=1;
 	int flag = 0; // 
+	int max=0;
 	for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
 		if (flag == 1)
 			break;
@@ -77,6 +79,8 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 			// TO DO : check placement of tile (coordonnee)
 			if(compare_tile(board_get(board_1.board, i, j), CARC_TILE_EMPTY)){
 				if(is_place_available(board_1.board, i, j, tile)){
+					int score=calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player).a;
+
 					printf("----------- Place trouvé ! ----------- (%d, %d)\n", i, -j);
 					current_move.x=i;
 					current_move.y=-j;
@@ -137,6 +141,8 @@ int is_there_a_connection_beetween_tiles(struct board_t *board, struct tile_t ti
 	}
 	return 0;
 }
+
+
 
 /* Clean up the resources the player has been using. Is called once at
 the end of the game.
