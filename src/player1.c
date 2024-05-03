@@ -89,7 +89,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	// tile_display(current_move.tile);
 	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
 	add_tile_to_super_board(current_move.tile, &board_1, current_move.x, -current_move.y);
-	create_neato(&board_1);
+	create_neato(&board_1, "player1_graph.dot");
 	return current_move;
 }
 

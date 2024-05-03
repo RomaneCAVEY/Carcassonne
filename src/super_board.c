@@ -83,9 +83,9 @@ int add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_boa
 	return 1;
 }
 
-void create_neato(struct super_board_t * super_board)
+void create_neato(struct super_board_t * super_board, char * file_name)
 {
-	FILE* out = fopen("neato_graph.dot", "w+");
+	FILE* out = fopen(file_name, "w+");
 	fprintf(out, "graph {\n");
 	fprintf(out, "  node[style=filled];\n");
 	for (int i=0; i < super_board->size; ++i) {

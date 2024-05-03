@@ -232,6 +232,8 @@ int main(int argc, char *argv[]) {
   printf("\n---[SCORE]---\n");
   printf("- %s: %d\n", get_player_name0(), points.a);
   printf("- %s: %d\n", get_player_name1(), points.b);
+  
+  create_neato(&super_board, "server_graph.dot");
 
   if (is_game_over()) {
     if (points.a > points.b)

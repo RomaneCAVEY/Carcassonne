@@ -47,6 +47,6 @@ void add_color_to_super_board(struct tile_t tile, struct super_board_t* super_bo
 void free_super_board(struct super_board_t* super_board);
 
 
-void create_neato(struct super_board_t * super_board);
+void create_neato(struct super_board_t * super_board, char * file_name);
 
 #endif
