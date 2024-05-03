@@ -6,6 +6,8 @@
 #include <time.h>
 #include "deck.h"
 #include "board.h"
+#include "super_board.h"
+#include "score.h"
 #include "tile.h"
 #include "move.h"
 
@@ -61,7 +63,6 @@ int is_invalid(struct board_t *board, struct move_t move){
   if (board_add_check(board, move.tile, move.x, -move.y)) // y axis is inverted in our implementation
       return 0;
   return 1;
-
 }
 
 int is_game_over() {
@@ -145,11 +146,12 @@ int main(int argc, char *argv[]) {
   
     
   struct move_t current_move = {.player_id=SERVER, .x=0, .y=0, .tile=deck_get(config.deck, 0), .meeple=NO_CONNECTION};
-  struct board_t *board = board_init(current_move.tile);
+  struct super_board_t super_board;
+  init_super_board(current_move.tile, &super_board);
   
   if (debug) {
     printf("-------\nInitial tile (0, 0):\n");
-      tile_display(current_move.tile);
+    tile_display(current_move.tile);
   }
 
   
@@ -163,16 +165,19 @@ int main(int argc, char *argv[]) {
   initialize1(pcol1, current_move, copy_config(config));
 
   struct tile_t tile;
+  struct int_pair_t points = {.a = 0, .b = 0};
+  struct int_pair_t new_points;
   
   ///////////// BOUCLE DE JEU //////////////
   while (1){
     tile = draw_tile(config.deck);
 
     if (debug) {
-      if (current_player == 0)
-		printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name0());
-      else
-		printf("-------\nNew turn. Current player: %s\nTile to place:\n", get_player_name1());
+      if (current_player == 0) {
+	printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name0());
+      } else {
+	printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name1());
+      }
       tile_display(tile);
     }
     printf("[server] Previous move: (%d, %d)\n", current_move.x, current_move.y);
@@ -187,28 +192,55 @@ int main(int argc, char *argv[]) {
       printf("[server] Current player wants to place the tile at pos (%d, %d)\n", current_move.x, current_move.y);
 
     
-    if (is_invalid(board, current_move)) {
+    if (is_invalid(super_board.board, current_move)) {
       if (debug)
 	printf("[server] Invalid move!\n");
       break;
     }
     
+
+    add_tile_to_super_board(current_move.tile, &super_board, current_move.x, -current_move.y); // y axis is inverted in our implementation
+
+    // Calculate points
+    new_points = calculate_points(&super_board, config.mode, current_player);
+    points.a = points.a + new_points.a;
+    points.b = points.b + new_points.b;
+
+    if (debug)
+      printf("[server] New points for %s: %d (total %d); New points for %s: %d (total %d)", get_player_name0(), new_points.a, points.a, get_player_name1(), new_points.b, points.b);
+
     if (is_game_over()) {
       printf("[server] Game over!\n");
       break;
     }
-
-    board_add(board, current_move.tile, current_move.x, -current_move.y); // y axis is inverted in our implementation
-    // TODO: calculer les nouveaux points
 
     current_player = next_player(current_player);
   }
     
   ///////////// FIN BOUCLE DE JEU //////////////
   printf("==========\nGAME ENDED\n==========\n");
+  printf("\n---[SCORE]---\n");
+  printf("- %s: %d\n", get_player_name0(), points.a);
+  printf("- %s: %d\n", get_player_name1(), points.b);
+
+  if (is_game_over()) {
+    if (points.a > points.b)
+      printf("\n\e[0;30;107m %s won the game! \e[0m\n\n", get_player_name0());
+    else if (points.a < points.b)
+      printf("\n\e[0;30;107m %s won the game! \e[0m\n\n", get_player_name1());
+    else
+      printf("\n\e[0;30;107m Game ended with a tie! \e[0m\n\n");
+  } else {
+    if (current_player == 0)
+      printf("\n\e[0;30;107m %s won the game! (%s made an invalid move) \e[0m\n\n", get_player_name1(), get_player_name0());
+    else
+      printf("\n\e[0;30;107m %s won the game! (%s made an invalid move) \e[0m\n\n", get_player_name0(), get_player_name1());
+  }
+  
   finalize0();
   finalize1();
-  board_free(board);
+  board_free(super_board.board);
+  free_super_board(&super_board);
   deck_free(config.deck);
 
 

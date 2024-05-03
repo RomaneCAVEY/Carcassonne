@@ -82,6 +82,21 @@ void test_board_add_check()
   printf("\t\e[1;102m SUCCESS \e[0m\n");
 }
 
+void test_board_add_check_specific2()
+{
+  printf(" • %s", __func__);
+  
+  struct board_t *board = board_init(CARC_TILE_INIT);
+  assert(board_add(board, CARC_TILE_XROAD, 1, 0));
+  assert(board_add(board, CARC_TILE_GREEN, 0, 1));
+  
+  assert(board_add_check(board, CARC_TILE_XROAD, 1, 1) == 0);
+
+  board_free(board);
+  
+  printf("\t\e[1;102m SUCCESS \e[0m\n");  
+}
+
 void test_board_get()
 {
   printf(" • %s", __func__);
@@ -122,6 +137,7 @@ int board_tests()
   test_board_add_check();
   test_board_get();
   test_board_add_check_specific();
+  test_board_add_check_specific2();
 	
   return 0;
 }
