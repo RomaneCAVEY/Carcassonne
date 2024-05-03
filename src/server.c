@@ -174,18 +174,28 @@ int main(int argc, char *argv[]) {
 
     if (debug) {
       if (current_player == 0) {
-	printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name0());
+    printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name0());
       } else {
-	printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name1());
+    printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name1());
       }
       tile_display(tile);
     }
     printf("[server] Previous move: (%d, %d)\n", current_move.x, current_move.y);
     if (current_player == 0){
       current_move = play0(current_move, tile);
+      if (!compare_tile(tile, current_move.tile)) {
+        if (debug)
+          printf("[server] %s try to cheat !", get_player_name0());
+        break;
+      }
     }
     else{
       current_move = play1(current_move, tile);
+      if (!compare_tile(tile, current_move.tile)) {
+        if (debug)
+          printf("[server] %s try to cheat !", get_player_name1());
+        break;
+      }
     }
 
     if (debug)
@@ -194,7 +204,7 @@ int main(int argc, char *argv[]) {
     
     if (is_invalid(super_board.board, current_move)) {
       if (debug)
-	printf("[server] Invalid move!\n");
+        printf("[server] Invalid move!\n");
       break;
     }
     
