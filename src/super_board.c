@@ -83,10 +83,11 @@ int add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_boa
 	return 1;
 }
 
-void create_neato(struct super_board_t * super_board)
+void create_neato(struct super_board_t * super_board, char * file_name)
 {
-	FILE* out = fopen("neato_graph.dot", "w+");
+	FILE* out = fopen(file_name, "w+");
 	fprintf(out, "graph {\n");
+	fprintf(out, "  node[style=filled];\n");
 	for (int i=0; i < super_board->size; ++i) {
 		// printf("\n-----Index %d-----\n", i);
 		float x = (float) super_board->list[i].x * 5;
@@ -100,43 +101,43 @@ void create_neato(struct super_board_t * super_board)
 			switch (j%13)
 			{
 			case 0:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y+2);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y+2);
 				break;
 			case 1:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y+2);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y+2);
 				break;
 			case 2:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+1, y+2);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+1, y+2);
 				break;
 			case 3:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y+1);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y+1);
 				break;
 			case 4:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y);
 				break;
 			case 5:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y-1);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y-1);
 				break;
 			case 6:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+1, y-2);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+1, y-2);
 				break;
 			case 7:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y-2);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y-2);
 				break;
 			case 8:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y-2);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y-2);
 				break;
 			case 9:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y-1);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y-1);
 				break;
 			case 10:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y);
 				break;
 			case 11:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y+1);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y+1);
 				break;
 			case 12:
-				fprintf(out, "  %d [color=%s pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y);
+				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y);
 				break;
 			default:
 				break;

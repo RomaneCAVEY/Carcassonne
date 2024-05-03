@@ -177,18 +177,28 @@ int main(int argc, char *argv[]) {
 
     if (debug) {
       if (current_player == 0) {
-	printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name0());
+    printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name0());
       } else {
-	printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name1());
+    printf("-------\n[server] New turn. Current player: %s\n[server] Tile to place:\n", get_player_name1());
       }
       //tile_display(tile);
     }
     printf("[server] Previous move: (%d, %d)\n", current_move.x, current_move.y);
     if (current_player == 0){
       current_move = play0(current_move, tile);
+      if (!compare_tile(tile, current_move.tile)) {
+        if (debug)
+          printf("[server] %s try to cheat !", get_player_name0());
+        break;
+      }
     }
     else{
       current_move = play1(current_move, tile);
+      if (!compare_tile(tile, current_move.tile)) {
+        if (debug)
+          printf("[server] %s try to cheat !", get_player_name1());
+        break;
+      }
     }
 
     if (debug)
@@ -197,7 +207,7 @@ int main(int argc, char *argv[]) {
     
     if (is_invalid(super_board.board, current_move)) {
       if (debug)
-	printf("[server] Invalid move!\n");
+        printf("[server] Invalid move!\n");
       break;
     }
     tile_display_with_meeple(current_move);
@@ -224,6 +234,8 @@ int main(int argc, char *argv[]) {
   printf("\n---[SCORE]---\n");
   printf("- %s: %d\n", get_player_name0(), points.a);
   printf("- %s: %d\n", get_player_name1(), points.b);
+  
+  create_neato(&super_board, "server_graph.dot");
 
   if (is_game_over()) {
     if (points.a > points.b)

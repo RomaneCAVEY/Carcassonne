@@ -23,6 +23,8 @@ struct gameconfig_t config_1={};
 struct meeple_t meeple_player1={};
 
 
+unsigned int id_player = 0;
+
 int p1_board_min_x = 0;
 int p1_board_max_x = 0;
 int p1_board_min_y = 0;
@@ -35,6 +37,7 @@ char const* get_player_name(){
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
 	init_super_board(first_move.tile,&board_1);
 	create_dot_igraph1(board_1.graph);
+	id_player = player_id;
 	config_1=config;
 	meeple_player1=init_meeple(7);
 }
@@ -67,7 +70,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	int previous_x = previous_move.x;
 	int previous_y = previous_move.y;
 	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
-	current_move.player_id=1;
+	current_move.player_id=id_player;
 	int flag = 0; // 
 	int max=0;
 	for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
@@ -81,6 +84,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 				if(is_place_available(board_1.board, i, j, tile)){
 					int score=calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player).a;
 
+			  if(board_add_check(board_1.board, tile, i, j)){
 					printf("----------- Place trouvé ! ----------- (%d, %d)\n", i, -j);
 					current_move.x=i;
 					current_move.y=-j;
@@ -99,7 +103,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	// tile_display(current_move.tile);
 	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
 	add_tile_to_super_board(current_move.tile, &board_1, current_move.x, -current_move.y);
-	create_neato(&board_1);
+	create_neato(&board_1, "player1_graph.dot");
 	return current_move;
 }
 
@@ -108,7 +112,7 @@ int is_place_available(struct board_t *board,int i, int j,struct tile_t tile){
 
 	if (!compare_tile(board_get(board, i-1, j),CARC_TILE_EMPTY) && !tile_check(board_get(board, i-1, j), tile, WEST)) {
 		// printf("Can't place here : %d, %d\n", i, j);
-		return 0;
+		return 0;	
 	}
 	if (!compare_tile(board_get(board, i, j+1),CARC_TILE_EMPTY) && !tile_check(board_get(board, i, j+1), tile, NORTH)) {
 		// printf("Can't place here : %d, %d\n", i, j);

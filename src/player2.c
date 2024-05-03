@@ -21,6 +21,8 @@ struct super_board_t board_2={};
 struct gameconfig_t config_2={};
 struct meeple_t meeple_player2={};
 
+unsigned int id_player = 0;
+
 int p1_board_min_x = 0;
 int p1_board_max_x = 0;
 int p1_board_min_y = 0;
@@ -33,6 +35,7 @@ char const* get_player_name(){
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
 	init_super_board(first_move.tile, &board_2);
 	create_dot_igraph2((board_2.graph));
+	id_player = player_id;
 	config_2 = config;
 	meeple_player2=init_meeple(7);
 }
@@ -74,7 +77,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	int previous_x = previous_move.x;
 	int previous_y = previous_move.y;
 	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
-	current_move.player_id=2;
+	current_move.player_id=id_player;
 	int flag = 0; // 
 	for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
 		if (flag == 1)
@@ -84,7 +87,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 				break;
 			// TO DO : check placement of tile (coordonnee)
 			if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
-				if(is_place_available(board_2.board, i, j, tile)){
+			  if(board_add_check(board_2.board, tile, i, j)){
 					printf("----------- Place trouvé ! ----------- (%d, %d)\n", i, -j);
 					current_move.x=i;
 					current_move.y=-j;
@@ -107,46 +110,6 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
 	create_dot_igraph2(board_2.graph);
 	return current_move;
-}
-
-int is_place_available(struct board_t *board,int i, int j,struct tile_t tile){
-
-	if (!compare_tile(board_get(board, i-1, j),CARC_TILE_EMPTY) && !tile_check(board_get(board, i-1, j), tile, WEST)) {
-		// printf("Can't place here : %d, %d\n", i, j);
-		return 0;
-	}
-	if (!compare_tile(board_get(board, i, j+1),CARC_TILE_EMPTY) && !tile_check(board_get(board, i, j+1), tile, NORTH)) {
-		// printf("Can't place here : %d, %d\n", i, j);
-		return 0;
-	}
-	if (!compare_tile(board_get(board, i, j-1),CARC_TILE_EMPTY) && !tile_check(board_get(board, i, j-j), tile, SOUTH)){
-		// printf("Can't place here : %d, %d\n", i, j);
-		return 0;
-	}
-	if (!compare_tile(board_get(board, i+1, j),CARC_TILE_EMPTY) && !tile_check(board_get(board, i+1, j), tile, EAST)){
-		// printf("Can't place here : %d, %d\n", i, j);
-		return 0;
-	}
-	if (compare_tile(board_get(board, i-1, j),CARC_TILE_EMPTY) && 
-	compare_tile(board_get(board, i+1, j),CARC_TILE_EMPTY) && 
-	compare_tile(board_get(board, i, j-1),CARC_TILE_EMPTY) &&
-	compare_tile(board_get(board, i, j+1),CARC_TILE_EMPTY)) {
-		// printf("Can't place here : %d, %d\n", i, j);
-		return 0;
-	}
-	return 1;
-
-}
-
-
-
-int is_there_a_connection_beetween_tiles(struct board_t *board, struct tile_t tile, struct tile_t tile_to_add){
-	for (enum card_point p=0; p<4;p++ ){
-		if (tile_check(tile, tile_to_add , p)){
-			return 1;
-		}
-	}
-	return 0;
 }
 
 /* Clean up the resources the player has been using. Is called once at
