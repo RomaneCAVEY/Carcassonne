@@ -25,6 +25,7 @@ void init_super_board(struct tile_t tile, struct super_board_t *super_board){
   super_board->size = 0;
   add_color_to_super_board(tile, super_board);
   super_board->size++;
+  super_board->meeple = init_meeple(7);
 
   super_board->finished_structures.count = 0;
   super_board->finished_structures.size = 1;
@@ -156,5 +157,6 @@ void free_super_board(struct super_board_t* super_board){
   free(super_board->colors);
   free(super_board->list);
   free_graph(super_board->graph);
+  free_meeple(board->meeple);
   free(super_board->finished_structures.list);
 }

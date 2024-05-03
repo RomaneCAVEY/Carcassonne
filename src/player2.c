@@ -67,8 +67,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	struct move_t pm = previous_move;
 	pm.y = -pm.y;
 	add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, -previous_move.y);
-	add_meeple(&meeple_player2, previous_move);
-
+	add_meeple_to_board( *pm, board_2, config_2.mode);
 	update_board_bounds(pm);
 	struct move_t current_move={};
 	int previous_x = previous_move.x;
@@ -105,6 +104,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	// tile_display(current_move.tile);
 	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
 	add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
+	add_meeple(&board_2.meeple, &current_move, board_2, config_2.mode);
 	create_dot_igraph2(board_2.graph);
 	return current_move;
 }

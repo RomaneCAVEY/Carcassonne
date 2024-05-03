@@ -118,11 +118,6 @@ int main(int argc, char *argv[]) {
   }
     
 
-  // temporaire > TODO(implémenter les autres gamemode)
-  if (game_mode != NO_MEEPLE) {
-    printf("[server] WARNING: Provided game mode is not yet supported.\nDefaulting to NO_MEEPLE game mode.\n");
-    game_mode = NO_MEEPLE;
-  }
 
   ///////////// CHARGEMENT DES LIBRAIRIES //////////////
   void *pj0 = dlopen(player_1_path, RTLD_LAZY);
@@ -143,6 +138,7 @@ int main(int argc, char *argv[]) {
   srand(seed);
   int current_player = rand() % 2;
   struct gameconfig_t config = make_config();
+  config.mode = game_mode;
   deck_pos = 0;
   
     
@@ -201,9 +197,18 @@ int main(int argc, char *argv[]) {
       break;
     }
     tile_display_with_meeple(current_move);
-	add_meeple(&meeple, current_move);
+    
     add_tile_to_super_board(current_move.tile, &super_board, current_move.x, -current_move.y); // y axis is inverted in our implementation
 
+    if(mode != NO_MEEPLE){
+      if (add_meeple_to_board(&super_board->meeple, current_move, super_board, mode) == 0) {
+	if (debug)
+	  printf("[server] Player tried to place meeple at invalid pos (%d)\n", current_move.meeple);
+	break;
+      }
+    }
+
+    
     // Calculate points
     new_points = calculate_points(&super_board, config.mode, current_player);
     points.a = points.a + new_points.a;

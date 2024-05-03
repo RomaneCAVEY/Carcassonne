@@ -28,6 +28,7 @@ struct super_board_t{
   enum color_t* colors;
   int capacite;
   int size;
+  struct meeple_t meeple;
 };
 
 //Init the board
