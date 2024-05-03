@@ -93,6 +93,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	return current_move;
 }
 
+// 
 int is_place_available(struct board_t *board,int i, int j,struct tile_t tile){
 
 	if (!compare_tile(board_get(board, i-1, j),CARC_TILE_EMPTY) && !tile_check(board_get(board, i-1, j), tile, WEST)) {
