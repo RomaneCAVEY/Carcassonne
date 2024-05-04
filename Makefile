@@ -26,10 +26,10 @@ player0a.so: player0a.o board.o deck.o tile.o meeple.o
 player0b.so: player0b.o board.o deck.o tile.o meeple.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl -lgcov --coverage
 
-player1.so: player1.o board.o deck.o tile.o graph.o super_board.o meeple.o
+player1.so: player1.o board.o deck.o tile.o graph.o super_board.o meeple.o score.o common.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl -lgcov --coverage $(LDFLAGS)
 
-player2.so: player2.o board.o deck.o tile.o graph.o super_board.o meeple.o
+player2.so: player2.o board.o deck.o tile.o graph.o super_board.o meeple.o score.o common.o
 	gcc $(CFLAGS) -shared -o install/$@ $^ -ldl -lgcov --coverage $(LDFLAGS)
 
 client: player0a.so player0b.so player1.so player2.so

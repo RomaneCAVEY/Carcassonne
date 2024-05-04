@@ -259,7 +259,7 @@ int main(int argc, char *argv[]) {
   
   finalize0();
   finalize1();
-  board_free(super_board.board);
+  //board_free(super_board.board);
   free_super_board(&super_board);
   deck_free(config.deck);
   free_meeple(meeple);

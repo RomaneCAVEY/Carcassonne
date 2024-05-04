@@ -93,11 +93,11 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 					flag = 1;
 				}
 			}
-			if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
+		/* 	if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
 				printf("No placment found !\n");
 				current_move.x=previous_x;
 				current_move.y=previous_y;
-			}
+			} */
 		}
 	}
 	current_move.x=coordonnate_max.a;
@@ -134,7 +134,7 @@ the end of the game.
 *   functions must have been freed
 */
 void finalize(){
-	board_free(board_1.board);
+	//board_free(board_1.board);
 	deck_free(config_1.deck);
 	free_super_board(&board_1);
 	//free_meeple(board_1.meeple);

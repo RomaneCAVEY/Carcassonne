@@ -155,18 +155,21 @@ void create_neato(struct super_board_t * super_board, char * file_name)
 * @param:the super_board
 * @return: nothing
 */
+
 void free_super_board(struct super_board_t* super_board){
   free(super_board->colors);
   free(super_board->list);
+  free(super_board->finished_structures.list);
+
   free_graph(super_board->graph);
   free_meeple(super_board->meeple);
   board_free(super_board->board);
-  free(super_board->finished_structures.list);
 }
 
 
 struct super_board_t copy_super_board(struct super_board_t super_board){
 	struct super_board_t copy={};
+	init_super_board(board_get(super_board.board, 0, 0), &copy);
 	copy.board=copy_board(super_board.board);
 	copy.size=super_board.size;
 	copy.capacite=super_board.capacite;

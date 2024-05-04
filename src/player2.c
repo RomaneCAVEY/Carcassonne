@@ -87,11 +87,11 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 			// TO DO : check placement of tile (coordonnee)
 			if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
 			  if(board_add_check(board_2.board, tile, i, j)){
-				struct super_board_t copie_super_board= copy_super_board(board_2);
+					struct super_board_t copie_super_board= copy_super_board(board_2);
 					add_tile_to_super_board(current_move.tile, &copie_super_board, i, j);
 					int score=calculate_points(&copie_super_board, config_2.mode, id_player).b;
 					free_super_board(&copie_super_board);
-					if (score> max && (board_add_check(board_2.board, tile, i, j))){
+					if (score>=max && (board_add_check(board_2.board, tile, i, j))){
 						max=score;
 						coordonnate_max.a=i;
 						coordonnate_max.b=j;	
@@ -99,11 +99,11 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 					flag = 1;
 				}
 			}
-			if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
+			/* if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
 				printf("No placment found !\n");
 				current_move.x=previous_x;
 				current_move.y=previous_y;
-			}
+			} */
 		}
 	}
 	current_move.x=coordonnate_max.a;
@@ -126,7 +126,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
  */
 void finalize()
 {
-	board_free(board_2.board);
+	//board_free(board_2.board);
 	deck_free(config_2.deck);
 	free_super_board(&board_2);
 	//free_meeple(board_2.meeple);

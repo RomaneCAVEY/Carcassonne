@@ -69,6 +69,7 @@ void board_free(struct board_t *board) {
   free(board);
 }
 
+
 void board_display(struct board_t *board) {
   for (int i = 0; i < BOARD_SIZE; i++) {
     for (int j = 0; j < BOARD_SIZE; j++) {
