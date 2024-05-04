@@ -39,7 +39,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile)
 	igraph_vector_init(&weights, 0);
 
 	igraph_matrix_init(&mat, 13, 13);
-	for (i = 0; i < 13; i++) for (j = 0; j < 13; j++) {
+	for (int i = 0; i < 13; i++) for (int j = 0; j < 13; j++) {
 		MATRIX(mat, i, j) = m[i][j];
 	}
 

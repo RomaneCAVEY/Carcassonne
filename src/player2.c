@@ -1,25 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "move.h"
 #include "extended_player.h"
-#include "super_board.h"
 #include "struct_board.h"
-#include <stdlib.h>
 #include "graph.h"
 #include "deck.h"
 #include "board.h"
-#include "tile.h"
+#include "super_board.h"
 #include "meeple.h"
-
-
-#ifndef BOARD_SIZE
-#define BOARD_SIZE 201
-#endif
+#include "common.h"
+#include "score.h"
 
 
 
 //VARIABLE GLOBALE
 struct super_board_t board_2={};
 struct gameconfig_t config_2={};
-struct meeple_t meeple_player2={};
 
 unsigned int id_player = 0;
 
@@ -37,7 +34,7 @@ void initialize(unsigned int player_id, const struct move_t first_move, struct g
 	create_dot_igraph2((board_2.graph));
 	id_player = player_id;
 	config_2 = config;
-	meeple_player2=init_meeple(7);
+	board_2.meeple=init_meeple(7);
 }
 
 
@@ -70,7 +67,8 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	struct move_t pm = previous_move;
 	pm.y = -pm.y;
 	add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, -previous_move.y);
-	add_meeple_to_board( *pm, board_2, config_2.mode);
+	//add_meeple_to_board( &pm, board_2, config_2.mode);
+	add_meeple( &pm, board_2, config_2.mode);
 	update_board_bounds(pm);
 	struct move_t current_move={};
 	int previous_x = previous_move.x;
@@ -78,6 +76,8 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
 	current_move.player_id=id_player;
 	int flag = 0; // 
+	int max=0;
+	struct int_pair_t coordonnate_max={previous_x,previous_y};
 	for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
 		if (flag == 1)
 			break;
@@ -87,9 +87,15 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 			// TO DO : check placement of tile (coordonnee)
 			if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
 			  if(board_add_check(board_2.board, tile, i, j)){
-					printf("----------- Place trouvé ! ----------- (%d, %d)\n", i, -j);
-					current_move.x=i;
-					current_move.y=-j;
+				struct super_board_t copie_super_board= copy_super_board(board_2);
+					add_tile_to_super_board(current_move.tile, &copie_super_board, i, j);
+					int score=calculate_points(&copie_super_board, config_2.mode, id_player).b;
+					free_super_board(&copie_super_board);
+					if (score> max && (board_add_check(board_2.board, tile, i, j))){
+						max=score;
+						coordonnate_max.a=i;
+						coordonnate_max.b=j;	
+					}
 					flag = 1;
 				}
 			}
@@ -100,14 +106,14 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 			}
 		}
 	}
-	current_move.meeple= (13*(board_2.size)+rand()%13); 
-	add_meeple(&meeple_player2, current_move);
+	current_move.x=coordonnate_max.a;
+	current_move.y=coordonnate_max.b;
 
 	current_move.tile=tile;
 	// tile_display(current_move.tile);
 	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
 	add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
-	add_meeple(&board_2.meeple, &current_move, board_2, config_2.mode);
+	add_meeple( &current_move, board_2, config_2.mode);
 	create_dot_igraph2(board_2.graph);
 	return current_move;
 }
@@ -123,6 +129,6 @@ void finalize()
 	board_free(board_2.board);
 	deck_free(config_2.deck);
 	free_super_board(&board_2);
-	free_meeple(meeple_player2);
+	//free_meeple(board_2.meeple);
 
 }

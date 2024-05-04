@@ -26,7 +26,7 @@ int main(void) {
         printf("%" IGRAPH_PRId " --> %" IGRAPH_PRId ": %g\n",
                VECTOR(el)[j], VECTOR(el)[j + 1], VECTOR(weights)[i]);
     }
-
+	
     igraph_matrix_destroy(&mat);
     igraph_vector_destroy(&weights);
     igraph_vector_int_destroy(&el);

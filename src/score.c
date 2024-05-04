@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "score.h"
 #include "deck.h"
+#include "super_board.h"
+
 
 struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player) {
 

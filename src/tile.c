@@ -137,3 +137,12 @@ void tile_display_with_meeple(struct move_t move){
 		printf(URED"===>There is Meeple in  %d \n"COLOR_RESET, move.meeple);
 	}
 }
+
+struct tile_t copy_tile( struct tile_t tile){
+	struct tile_t copy={};
+	for (int i=0; i<MAX_CONNECTIONS;i++){
+		copy.c[i]=tile.c[i];
+		copy.t[i]=tile.t[i];
+	}
+	return copy;
+}

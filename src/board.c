@@ -79,3 +79,16 @@ void board_display(struct board_t *board) {
     }
   }
 }
+
+
+struct board_t* copy_board(struct board_t *board){
+	struct board_t *copy= board_init(board_get(board, 0, 0));
+	for (int i = -100 - 1; i < 100 ; i++) {
+		for (int j = -100 - 1; j < 100 ; j++) {
+			if(compare_tile(board_get(board, i, j), CARC_TILE_EMPTY)){
+				board_add(copy, board_get(board, i, j),i, j);
+			}
+		}
+	}
+	return copy;
+}

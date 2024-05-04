@@ -27,4 +27,11 @@ void tile_display(struct tile_t tile);
 //display the tile with the position of a possible meeple
 void tile_display_with_meeple(struct move_t move);
 
+/*Copy a tile
+* @param:a tile
+* @return: a copy of the tile
+*/
+struct tile_t copy_tile( struct tile_t tile);
+
+
 #endif //__TILE_H__

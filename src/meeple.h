@@ -2,7 +2,6 @@
 #define __MEEPLE_H__
 
 #include"move.h"
-#include "super_board.h"
 
 
 /* Struct meeple
@@ -28,21 +27,17 @@ struct meeple_t{
  */
 struct meeple_t init_meeple(int capacity);
 
-//serveur 
-int add_meeple_to_board(struct move_t* move, struct super_board_t sboard, enum gamemode_t gt);
-
-//client
-/*Add the meeple played in the move
- *@param: the meeple and the move and super_board
- *@return: the meeple with the new meeple according to the player who played 
- * */
-int add_meeple(struct meeple_t *meeple, struct move_t* move, struct super_board_t sboard, enum gamemode_t gt);
-
-/* check if there is a valide place to let a meeple*/
-int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple);
 
 /*get meeple back :) after closing component*/
 void get_back_meeple(struct meeple_t *meeple, int *vertices, int size);
+
+
+/*@ Copy a meeple
+ * @param: a meeple
+ * @return: a scopy of a meeple
+ */
+struct meeple_t copy_meeple(struct meeple_t meeple);
+
 
 /*free the tabs player1 and player2 of the meeple
  * */

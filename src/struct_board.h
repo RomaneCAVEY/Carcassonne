@@ -16,4 +16,11 @@ struct board_t {
 };
 
 
+/*Copy the super_biard
+* @param:the super_board
+* @return: void
+*/
+struct super_board_t copy_super_board(struct super_board_t super_board);
+
+
 #endif
