@@ -27,14 +27,14 @@ int p1_board_min_y = 0;
 int p1_board_max_y = 0;
 
 char const* get_player_name(){
-	return "Player_1";
+    return "Player_1";
 }
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
-	init_super_board(first_move.tile,&board_1);
-	create_dot_igraph1(board_1.graph);
-	id_player = player_id;
-	config_1=config;
+    init_super_board(first_move.tile,&board_1);
+    create_dot_igraph1(board_1.graph);
+    id_player = player_id;
+    config_1=config;
 }
 
 void update_board_bounds(struct move_t move) {
@@ -53,44 +53,51 @@ void update_board_bounds(struct move_t move) {
 
 struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 {
-	struct move_t pm = previous_move;
-	pm.y = -pm.y;
-	add_tile_to_super_board(previous_move.tile, &board_1, previous_move.x, -previous_move.y);
-	update_board_bounds(pm);
-	struct move_t current_move={};
-	int previous_x = previous_move.x;
-	int previous_y = previous_move.y;
-	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
-	current_move.player_id=id_player;
-	int flag = 0; // 
-	for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
-		if (flag == 1)
-			break;
-		for (int j = p1_board_min_y - 1; j < p1_board_max_y + 2; j++) {
-			if (flag == 1)
-				break;
-			// TO DO : check placement of tile (coordonnee)
-			if(compare_tile(board_get(board_1.board, i, j), CARC_TILE_EMPTY)){
-			  if(board_add_check(board_1.board, tile, i, j)){
-					printf("----------- Place trouvé ! ----------- (%d, %d)\n", i, -j);
-					current_move.x=i;
-					current_move.y=-j;
-					flag = 1;
-				}
-			}
-			if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
-				printf("No placment found !\n");
-				current_move.x=previous_x;
-				current_move.y=previous_y;
-			}
-		}
-	}
-	current_move.tile=tile;
-	// tile_display(current_move.tile);
-	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
-	add_tile_to_super_board(current_move.tile, &board_1, current_move.x, -current_move.y);
-	create_neato(&board_1, "player1_graph.dot");
-	return current_move;
+    struct move_t pm = previous_move;
+    pm.y = -pm.y;
+    add_tile_to_super_board(previous_move.tile, &board_1, previous_move.x, -previous_move.y);
+    update_board_bounds(pm);
+    struct move_t current_move={};
+    int previous_x = previous_move.x;
+    int previous_y = previous_move.y;
+    printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
+    current_move.player_id=id_player;
+    int flag = 0; //
+    struct tile_t ptile = copy_tile(tile); 
+    for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
+        if (flag == 1)
+            break;
+        for (int j = p1_board_min_y - 1; j < p1_board_max_y + 2; j++) {
+            if (flag == 1)
+                break;
+            // TO DO : check placement of tile (coordonnee)
+            if(compare_tile(board_get(board_1.board, i, j), CARC_TILE_EMPTY)){
+                for (int flip=0; flip<4; ++flip) {
+                    struct tile_t ftile = flip_tile(ptile);
+                    replace_tile(&ftile, &ptile);
+                    // changer dans le serv le compare de tuile
+                    if(board_add_check(board_1.board, ptile, i, j)){
+                        printf("----------- Place trouvé ! ----------- (%d, %d)\n", i, -j);
+                        current_move.x=i;
+                        current_move.y=-j;
+                        flag = 1;
+                        break;
+                    }
+                }
+            }
+            if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
+                printf("No placment found !\n");
+                current_move.x=previous_x;
+                current_move.y=previous_y;
+            }
+        }
+    }
+    current_move.tile=ptile;
+    // tile_display(current_move.tile);
+    // printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
+    add_tile_to_super_board(current_move.tile, &board_1, current_move.x, -current_move.y);
+    create_neato(&board_1, "player1_graph.dot");
+    return current_move;
 }
 
 /* Clean up the resources the player has been using. Is called once at
@@ -100,7 +107,7 @@ the end of the game.
 *   functions must have been freed
 */
 void finalize(){
-	board_free(board_1.board);
-	deck_free(config_1.deck);
-	free_super_board(&board_1);
+    board_free(board_1.board);
+    deck_free(config_1.deck);
+    free_super_board(&board_1);
 }

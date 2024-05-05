@@ -185,7 +185,7 @@ int main(int argc, char *argv[]) {
       current_move = play0(current_move, tile);
       if (!compare_tile(tile, current_move.tile)) {
         if (debug)
-          printf("[server] %s try to cheat !", get_player_name0());
+          printf("[server] %s try to cheat !\n", get_player_name0());
         break;
       }
     }
@@ -193,7 +193,7 @@ int main(int argc, char *argv[]) {
       current_move = play1(current_move, tile);
       if (!compare_tile(tile, current_move.tile)) {
         if (debug)
-          printf("[server] %s try to cheat !", get_player_name1());
+          printf("[server] %s try to cheat !\n", get_player_name1());
         break;
       }
     }
