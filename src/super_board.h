@@ -71,6 +71,10 @@ int add_meeple_to_board(struct meeple_t *meeple, struct move_t* move, struct sup
 /* check if there is a valide place to let a meeple*/
 int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple);
 
+void free_copy_super_board(struct super_board_t* copy);
+
+
+
 #endif
 
 

@@ -68,7 +68,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	pm.y = -pm.y;
 	add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, -previous_move.y);
 	//add_meeple_to_board( &pm, board_2, config_2.mode);
-	add_meeple( &pm, board_2, config_2.mode);
+	//add_meeple( &pm, board_2, config_2.mode);
 	update_board_bounds(pm);
 	struct move_t current_move={};
 	int previous_x = previous_move.x;
@@ -87,15 +87,16 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 			// TO DO : check placement of tile (coordonnee)
 			if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
 			  if(board_add_check(board_2.board, tile, i, j)){
-					struct super_board_t copie_super_board= copy_super_board(board_2);
+					/* struct super_board_t copie_super_board= copy_super_board(board_2);
 					add_tile_to_super_board(current_move.tile, &copie_super_board, i, j);
 					int score=calculate_points(&copie_super_board, config_2.mode, id_player).b;
-					free_super_board(&copie_super_board);
-					if (score>=max && (board_add_check(board_2.board, tile, i, j))){
-						max=score;
+					printf("score : %d",score);
+					free_copy_super_board(&copie_super_board);
+					if (score>=max ){
+						max=score; */
 						coordonnate_max.a=i;
 						coordonnate_max.b=j;	
-					}
+					//}
 					flag = 1;
 				}
 			}

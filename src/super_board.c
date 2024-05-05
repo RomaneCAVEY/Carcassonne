@@ -2,6 +2,7 @@
 #include "board.h"
 #include "meeple.h"
 #include "graph.h"
+#include "move.h"
 #include <igraph.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -169,28 +170,45 @@ void free_super_board(struct super_board_t* super_board){
 
 struct super_board_t copy_super_board(struct super_board_t super_board){
 	struct super_board_t copy={};
-	init_super_board(board_get(super_board.board, 0, 0), &copy);
-	copy.board=copy_board(super_board.board);
+	//init_super_board(board_get(super_board.board, 0, 0), &copy);
+	copy.board=board_init(board_get(super_board.board, 0, 0));
+	copy_board(super_board.board, copy.board);
+
 	copy.size=super_board.size;
 	copy.capacite=super_board.capacite;
 	copy.meeple=copy_meeple(super_board.meeple);
-	for (int i=0; i<super_board.size*13;i++){
+
+	copy.colors=malloc((super_board.capacite+1)*MAX_CONNECTIONS*sizeof(enum color_t));
+	for (int i=0; i<((super_board.size)*13);i++){
 		copy.colors[i]=super_board.colors[i];
 	}
+	
+	copy.list=malloc((super_board.capacite+1)*sizeof(struct utils_graph_t));
 	for (int i=0; i<super_board.size;i++){
 		copy.list[i]=super_board.list[i];
 	}
+
+	copy.finished_structures.list=malloc( super_board.finished_structures.size*sizeof(int));
+
 	copy.finished_structures.count=super_board.finished_structures.count;
 	copy.finished_structures.size=super_board.finished_structures.size;
 	for (int i=0; i<super_board.finished_structures.count;i++){
 		copy.finished_structures.list[i]=super_board.finished_structures.list[i];
 	}
 
-	igraph_copy(&copy.graph, &super_board.graph);
-
+	igraph_copy(&copy.graph, &super_board.graph); 
 	return copy;
 }
 
+
+void free_copy_super_board(struct super_board_t* copy){
+  free(copy->colors);
+  free(copy->list);
+  free(copy->finished_structures.list);
+  free_graph(copy->graph);
+  free_meeple(copy->meeple);
+  board_free(copy->board);
+}
 
 
 int add_meeple(struct move_t* move, struct super_board_t sboard, enum gamemode_t gt)

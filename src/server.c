@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
         printf("[server] Invalid move!\n");
       break;
     }
-    tile_display_with_meeple(current_move);
+    //tile_display_with_meeple(current_move);
     
     add_tile_to_super_board(current_move.tile, &super_board, current_move.x, -current_move.y); // y axis is inverted in our implementation
 

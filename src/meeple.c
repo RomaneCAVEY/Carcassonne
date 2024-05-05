@@ -4,7 +4,7 @@
 
 struct meeple_t init_meeple(int capacity)
 {
-  struct meeple_t meeple;
+  struct meeple_t meeple={};
   meeple.capacity1 = capacity;
   meeple.capacity2 = capacity;
   meeple.size1 = 0;
@@ -46,7 +46,10 @@ struct meeple_t copy_meeple(struct meeple_t meeple){
 	copy.size2=meeple.size2;
 	copy.capacity1=meeple.capacity1;
 	copy.capacity2=meeple.capacity2;
-	for (int i=0; meeple.size1;i++){
+  	copy.player1 = malloc(sizeof(int)*copy.capacity1);
+	copy.player2 = malloc(sizeof(int)*copy.capacity2);
+
+	for (int i=0; meeple.size1;i++){ 
 		copy.player1[i]=meeple.player1[i];
 	}
 	for (int i=0; meeple.size2;i++){

@@ -32,7 +32,6 @@ void board_display(struct board_t *board);
 * @param: a board
 * @return: a pointer of a copy of the board
 */
-struct board_t* copy_board(struct board_t *board);
-
+void copy_board(struct board_t *board, struct board_t* copy);
 
 #endif // __BOARD_H__
