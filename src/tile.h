@@ -21,6 +21,15 @@ int tile_check(struct tile_t t0, struct tile_t t1, enum card_point nesw);
 //create a random tile
 struct tile_t random_tile();
 
+// Copy a tile
+struct tile_t copy_tile(struct tile_t tile);
+
+// flip a tile
+struct tile_t flip_tile(struct tile_t tile);
+
+// take tile in and place it in tile out
+int replace_tile(struct tile_t * tile_in, struct tile_t * tile_out);
+
 //display the tile
 void tile_display(struct tile_t tile);
 

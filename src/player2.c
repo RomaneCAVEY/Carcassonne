@@ -26,7 +26,7 @@ int p1_board_min_y = 0;
 int p1_board_max_y = 0;
 
 char const* get_player_name(){
-	return "Player_2";
+    return "Player_2";
 }
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
@@ -64,59 +64,59 @@ void update_board_bounds(struct move_t move) {
  */
 struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 {
-	struct move_t pm = previous_move;
-	pm.y = -pm.y;
-	add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, -previous_move.y);
-	//add_meeple_to_board( &pm, board_2, config_2.mode);
-	//add_meeple( &pm, board_2, config_2.mode);
-	update_board_bounds(pm);
-	struct move_t current_move={};
-	int previous_x = previous_move.x;
-	int previous_y = previous_move.y;
-	printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
-	current_move.player_id=id_player;
-	int flag = 0; // 
+    struct move_t pm = previous_move;
+    pm.y = -pm.y;
+    add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, -previous_move.y);
+    update_board_bounds(pm);
+    struct move_t current_move={};
+    int previous_x = previous_move.x;
+    int previous_y = previous_move.y;
+    printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
+    current_move.player_id=id_player;
+	current_move.x=previous_x;
+    current_move.y=previous_y;
+    int flag = 0; // 
 	int max=0;
-	struct int_pair_t coordonnate_max={previous_x,previous_y};
-	for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
-		if (flag == 1)
-			break;
-		for (int j = p1_board_min_y - 1; j < p1_board_max_y + 2; j++) {
-			if (flag == 1)
-				break;
-			// TO DO : check placement of tile (coordonnee)
-			if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
-			  if(board_add_check(board_2.board, tile, i, j)){
-					/* struct super_board_t copie_super_board= copy_super_board(board_2);
-					add_tile_to_super_board(current_move.tile, &copie_super_board, i, j);
-					int score=calculate_points(&copie_super_board, config_2.mode, id_player).b;
-					printf("score : %d",score);
-					free_copy_super_board(&copie_super_board);
-					if (score>=max ){
-						max=score; */
-						coordonnate_max.a=i;
-						coordonnate_max.b=j;	
-					//}
-					flag = 1;
-				}
-			}
-			/* if (i == (BOARD_SIZE-1) && j == (BOARD_SIZE-1)) {
-				printf("No placment found !\n");
-				current_move.x=previous_x;
-				current_move.y=previous_y;
-			} */
-		}
+    struct tile_t ptile = copy_tile(tile);
+    for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
+/*         if (flag == 1)
+            break; */
+        for (int j = p1_board_min_y - 1; j < p1_board_max_y + 2; j++) {
+/*             if (flag == 1)
+                break; */
+            // TO DO : check placement of tile (coordonnee)
+            if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
+                for (int flip=0; flip<4; ++flip) {
+                    struct tile_t ftile = flip_tile(ptile);
+                    replace_tile(&ftile, &ptile);
+                    // changer dans le serv le compare de tuile
+                    if(board_add_check(board_2.board, ptile, i, j)){
+						struct super_board_t copie_super_board= copy_super_board(board_2);
+						add_tile_to_super_board(current_move.tile, &copie_super_board, i, j);
+						int score=calculate_points(&copie_super_board, config_2.mode, id_player).a;
+						printf("==============SCORE : %d\n\n============",score);
+						free_copy_super_board(&copie_super_board);
+						if (score>=max){
+							max=score; 
+							current_move.x=i;
+							current_move.y=-j;	
+					}
+                        flag = 1;
+                        //break;
+                    }
+                }
+            }
+        }
+    }
+	if (!flag){
+		printf("no placement found");
 	}
-	current_move.x=coordonnate_max.a;
-	current_move.y=coordonnate_max.b;
-
-	current_move.tile=tile;
-	// tile_display(current_move.tile);
-	// printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
-	add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
-	add_meeple( &current_move, board_2, config_2.mode);
-	create_dot_igraph2(board_2.graph);
-	return current_move;
+    current_move.tile=ptile;
+    // tile_display(current_move.tile);
+    // printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
+    add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
+    create_dot_igraph2(board_2.graph);
+    return current_move;
 }
 
 /* Clean up the resources the player has been using. Is called once at
