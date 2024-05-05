@@ -86,9 +86,9 @@ void board_display(struct board_t *board) {
 void copy_board(struct board_t *board, struct board_t* copy){
 	for (int i = -100 - 1; i < 100 ; i++) {
 		for (int j = -100 - 1; j < 100 ; j++) {
-			if(compare_tile(board_get(board, i, j), CARC_TILE_EMPTY)){
-				board_add(copy, board_get(board, i, j),i, j);
-			}
+							//copy->tiles[BOARD_CENTER + j][BOARD_CENTER + i] = board_get(board, j, i);
+				board_add(copy, board_get(board, j, i), i,j);
+
 		}
 	}
 }
