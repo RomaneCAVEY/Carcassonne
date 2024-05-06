@@ -12,23 +12,39 @@ struct meeple_t init_meeple(int capacity)
   meeple.player1 = malloc(sizeof(int)*meeple.capacity1);
   meeple.player2 = malloc(sizeof(int)*meeple.capacity2);
 
+  /*
+  for (int i=0; i<capacity; i++){
+    meeple.player1[i] = -1;
+    meeple.player2[i] = -1;
+    }*/
+    
   return meeple;
 };
 
 // SERVER VERSION
-
+void shift_position(int *tab, int size, int index_beginning)
+{
+  for (int i= index_beginning; i <size-1; i++){
+    tab[i] = tab[i+1];
+  }
+}
 
 void get_back_meeple(struct meeple_t *meeple, int *vertices, int size)
 {
+ 
   for (int i=0; i<size; i++){
-    for (int p1=0;p1 < meeple->size1 ; p1++){
+    for (int p1=0; p1 < meeple->size1 ; p1++){
       if(meeple->player1[p1] == vertices[i]){
 	meeple->size1 -=1;
+	shift_position(meeple->player1, meeple->size1, p1);
+	//meeple->player1[p1] = -1;
       }
     }
     for (int p2=0; p2 < meeple->size2 ; p2++){
       if(meeple->player2[p2] == vertices[i]){
 	meeple->size2 -=1;
+	shift_position(meeple->player2, meeple->size2, p2);
+	//meeple->player2[p2] = -1;
       }
     }
   }
