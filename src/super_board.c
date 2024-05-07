@@ -334,6 +334,9 @@ int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struc
       }
     }
   }
+  free(vertices);
+  igraph_vector_int_destroy(&components);
+  igraph_vector_int_destroy(&csize);
   //printf("\e[1;37;103m ADD A MEEPLE ON EDGE:\e[0m \n");
   return 1;
 }

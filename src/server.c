@@ -151,6 +151,7 @@ int main(int argc, char *argv[]) {
   if (debug) {
     printf("-------\nInitial tile (0, 0):\n");
     tile_display(current_move.tile);
+	//tile_display_with_meeple(current_move);
   }
 
   
