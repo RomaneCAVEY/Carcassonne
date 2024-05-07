@@ -69,7 +69,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     pm.y = -pm.y;
     add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, -previous_move.y);
     update_board_bounds(pm);
-	//add_meeple_to_board(&board_2.meeple,&pm,board_2,config_2.mode);
+	add_meeple_to_board(&pm,&board_2,config_2.mode);
 	//add_meeple(&pm, board_2,config_2.mode);
     struct move_t current_move={};
     int previous_x = previous_move.x;
@@ -78,7 +78,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     current_move.player_id=id_player;
 	current_move.x=previous_x;
     current_move.y=previous_y;
-    int flag = 0; //
+    //int flag = 0; //
 	int max=-1;
     struct tile_t ptile = copy_tile(tile); 
 	struct move_t best_positions[200];
@@ -103,8 +103,10 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 						free_copy_super_board(&copy);
 						if (score >max){
 							max=score;
-							nb_max=0;
-							printf("SCORE = %d \n",score);
+							struct move_t pos={.x=i,.y=-j,.tile=ptile};
+							nb_max=1;
+							best_positions[0]=pos;
+							printf("PLAYER 2 SCORE = %d \n",score);
 
 						}
 						if (score == max){
@@ -132,7 +134,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     // printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
     add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
     create_neato(&board_2, "player1_graph.dot");
-	//add_meeple(&current_move, board_2, config_2.mode);
+	add_meeple(&current_move, &board_2, config_2.mode);
     return current_move;
 }
 

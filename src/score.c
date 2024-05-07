@@ -7,9 +7,9 @@
 struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player) {
 
   // TODO: Implement all game modes
-  if (mode != NO_MEEPLE) {
-    printf("[score] \e[1;37;103mWARNING:\e[0m Current game mode not supported. Defaulting to NO_MEEPLE for score calculation\n");
-  }
+  //if (mode != NO_MEEPLE) {
+    //printf("[score] \e[1;37;103mWARNING:\e[0m Current game mode not supported. Defaulting to NO_MEEPLE for score calculation\n");
+ // }
   
   igraph_vector_int_t components;
   igraph_vector_int_t csize;
@@ -119,7 +119,7 @@ struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t 
 	} else if (current_player == 1) {
 	  total.b = total.b + score;
 	} else {
-	  printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.", vertices[0], current_player);
+	  //printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.", vertices[0], current_player);
 	}
       }
       
@@ -145,6 +145,10 @@ struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t 
 	if (nb_meeple.a < nb_meeple.b){
 	  total.b += score;
 	}
+	/* if(nb_meeple.a == nb_meeple.b){
+		printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.\n", vertices[0], current_player);
+		printf("meeple de joueur 0(id=%d)et meeple de joeur 2 (id=%d). \n", board->meeple.size1, board->meeple.size2);
+	} */
 	get_back_meeple(&board->meeple, vertices, size);
       }
 	

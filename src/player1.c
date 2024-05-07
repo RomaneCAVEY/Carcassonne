@@ -58,13 +58,13 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     pm.y = -pm.y;
     add_tile_to_super_board(previous_move.tile, &board_1, previous_move.x, -previous_move.y);
     update_board_bounds(pm);
-	//add_meeple_to_board(&board_1.meeple,&pm, board_1,config_1.mode);
+	add_meeple_to_board(&pm, &board_1,config_1.mode);
     struct move_t current_move={};
     int previous_x = previous_move.x;
     int previous_y = previous_move.y;
     printf("Previous move in player : (%d, %d)\n", previous_x, previous_y);
     current_move.player_id=id_player;
-    int flag = 0; //
+    //int flag = 0; //
 	int max=-1;
 	current_move.x=previous_x;
     current_move.y=previous_y;
@@ -94,8 +94,10 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 						free_copy_super_board(&copy);
 						if (score >max){
 							max=score;
-							nb_max=0;
-							printf("SCORE = %d \n",score);
+							struct move_t pos={.x=i,.y=-j,.tile=ptile};
+							nb_max=1;
+							best_positions[0]=pos;
+							printf("PLAYER 1 SCORE = %d \n",score);
 
 						}
 						if (score == max){
@@ -120,7 +122,8 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
             }*/
         } 
     }
-	struct move_t choice= best_positions[rand()%nb_max];
+	int a=rand()%nb_max;
+	struct move_t choice= best_positions[a];
 	current_move.x=choice.x;
     current_move.y=choice.y;
 	current_move.tile=choice.tile;
@@ -135,8 +138,9 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     tile_display(current_move.tile);
     // printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
     add_tile_to_super_board(current_move.tile, &board_1, current_move.x, -current_move.y);
-	//add_meeple(&current_move, board_1, config_1.mode);
-
+	add_meeple(&current_move, &board_1, config_1.mode);
+	//meeple_display(board_1.meeple);
+	//printf("%%%%%%%%  %d %%%%%%",current_move.meeple);
     create_neato(&board_1, "player1_graph.dot");
     return current_move;
 }

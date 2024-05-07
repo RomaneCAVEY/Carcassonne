@@ -38,6 +38,11 @@ void get_back_meeple(struct meeple_t *meeple, int *vertices, int size);
  */
 struct meeple_t copy_meeple(struct meeple_t meeple);
 
+/*@ Display a meeple
+ * @param: a meeple
+ * @return: void
+ */
+void meeple_display(struct meeple_t meeple);
 
 /*free the tabs player1 and player2 of the meeple
  * */
