@@ -74,3 +74,16 @@ struct meeple_t copy_meeple(struct meeple_t meeple){
 	return copy;
 
 }	
+
+
+void meeple_display(struct meeple_t meeple){
+	printf("\n Number of meeple of player 0: %d \n", meeple.size1);
+
+	for (int i=0; i<meeple.size1; i++){
+		printf(" %d,", meeple.player1[i]);
+	}
+	printf("\n Number of meeple of player 1: %d \n", meeple.size2);
+	for (int i=0; i<meeple.size2; i++){
+		printf(" %d,", meeple.player2[i]);
+	}
+}

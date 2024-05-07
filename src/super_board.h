@@ -63,19 +63,32 @@ struct super_board_t copy_super_board(struct super_board_t super_board);
  *@param: the meeple and the move and super_board
  *@return: the moove with the new meeple according to the player who played 
  * */
-int add_meeple(struct move_t* move, struct super_board_t sboard, enum gamemode_t gt);
+int add_meeple(struct move_t* move, struct super_board_t *sboard, enum gamemode_t gt);
 
 //serveur
 /*Add the meeple played in the move
  *@param: the meeple and the move and super_board
  *@return: the meeple with the new meeple according to the player who played 
  * */
-int add_meeple_to_board(struct meeple_t *meeple, struct move_t *move, struct super_board_t sboard, enum gamemode_t gt);
+
+int add_meeple_to_board(struct move_t* move, struct super_board_t *sboard, enum gamemode_t gt);
+
 /* check if there is a valide place to let a meeple*/
 int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple);
 
+/*Free the copy of the super_board
+ *@param: a copy of superboard
+ *@return:void
+ * */
 void free_copy_super_board(struct super_board_t* copy);
 
+
+/*Find the number of the component of the vertices
+ *@param: the components, the number of the tile, the count of components
+ *@return:the id of the component of the vertices
+ * */
+
+int find_right_component(igraph_vector_int_t components, int num_tile,igraph_integer_t count);
 
 
 #endif

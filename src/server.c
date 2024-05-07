@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
   }
     
 
-
+	//printf("GAME MODE : %d", game_mode);
   ///////////// CHARGEMENT DES LIBRAIRIES //////////////
   void *pj0 = dlopen(player_1_path, RTLD_LAZY);
   get_player_name0 = dlsym(pj0, "get_player_name");
@@ -151,6 +151,7 @@ int main(int argc, char *argv[]) {
   if (debug) {
     printf("-------\nInitial tile (0, 0):\n");
     tile_display(current_move.tile);
+	//tile_display_with_meeple(current_move);
   }
 
   
@@ -211,7 +212,7 @@ int main(int argc, char *argv[]) {
     add_tile_to_super_board(current_move.tile, &super_board, current_move.x, -current_move.y); // y axis is inverted in our implementation
 
     if(game_mode != NO_MEEPLE){
-      if (add_meeple_to_board(&super_board.meeple, &current_move, super_board, game_mode) == 0) {
+      if (add_meeple_to_board(&current_move, &super_board, game_mode) == 0) {
 	if (debug)
 	  printf("[server] Player tried to place meeple at invalid pos (%d)\n", current_move.meeple);
 	break;

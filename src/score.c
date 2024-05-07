@@ -7,9 +7,9 @@
 struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player) {
 
   // TODO: Implement all game modes
-  if (mode != NO_MEEPLE) {
-    // printf("[score] \e[1;37;103mWARNING:\e[0m Current game mode not supported. Defaulting to NO_MEEPLE for score calculation\n");
-  }
+  //if (mode != NO_MEEPLE) {
+    //printf("[score] \e[1;37;103mWARNING:\e[0m Current game mode not supported. Defaulting to NO_MEEPLE for score calculation\n");
+ // }
   
   igraph_vector_int_t components;
   igraph_vector_int_t csize;
@@ -106,50 +106,54 @@ struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t 
         int factor = color_score_factor(board->colors[vertices[0]]); 
         int center_vertices = count_center_vertices(vertices, size);
 
-        // We add the number of center vertices to the vertices count, since all vertices are duplicated,
-        // except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
-        int score = (size + center_vertices) / 2 * factor;
-        
-        //printf("[score] Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
-        if( mode == NO_MEEPLE){
-            // TODO: when playing with meeples, determine which player wins the points
-            if (current_player == 0) {
-                total.a = total.a + score;
-            } else if (current_player == 1) {
-                total.b = total.b + score;
-            } else {
-                printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.", vertices[0], current_player);
-            }
-        }
-        
-        if ( mode != NO_MEEPLE ){
-            struct int_pair_t nb_meeple = {.a=0, .b=0};
-            
-            for (int i=0; i<size; i++){
-            for (int p1=0;p1 < board->meeple.size1 ; p1++){
-                if(board->meeple.player1[p1] == vertices[i]){
-                    nb_meeple.a +=1;
-                }
-            }
-            for (int p2=0; p2 <board->meeple.size2 ; p2++){
-                if(board->meeple.player2[p2] == vertices[i]){
-                    nb_meeple.b +=1;
-                }
-            }
-            }
+      // We add the number of center vertices to the vertices count, since all vertices are duplicated,
+      // except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
+      int score = (size + center_vertices) / 2 * factor;
+      
+      //printf("[score] Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
+      if( mode == NO_MEEPLE){
+	// TODO: when playing with meeples, determine which player wins the points
+	if (current_player == 0) {
+	  total.a = total.a + score;
+	} else if (current_player == 1) {
+	  total.b = total.b + score;
+	} else {
+	  //printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.", vertices[0], current_player);
+	}
+      }
+      
+      if ( mode != NO_MEEPLE ){
+	struct int_pair_t nb_meeple = {.a=0, .b=0};
+	
+	for (int i=0; i<size; i++){
+	  for (int p1=0;p1 < board->meeple.size1 ; p1++){
+	    if(board->meeple.player1[p1] == vertices[i]){
+	      nb_meeple.a +=1;
+	    }
+	  }
+	  for (int p2=0; p2 <board->meeple.size2 ; p2++){
+	    if(board->meeple.player2[p2] == vertices[i]){
+	      nb_meeple.b +=1;
+	    }
+	  }
+	}
 
-            if (nb_meeple.a > nb_meeple.b){
-                total.a += score;
-            }
-            if (nb_meeple.a < nb_meeple.b){
-                total.b += score;
-            }
-            get_back_meeple(&board->meeple, vertices, size);
-        }
-        
-        
-        
-        //printf("[score] Total: %d\n", total);
+	if (nb_meeple.a > nb_meeple.b){
+		  total.a += score;
+	}
+	if (nb_meeple.a < nb_meeple.b){
+	  total.b += score;
+	}
+	/* if(nb_meeple.a == nb_meeple.b){
+		printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.\n", vertices[0], current_player);
+		printf("meeple de joueur 0(id=%d)et meeple de joeur 2 (id=%d). \n", board->meeple.size1, board->meeple.size2);
+	} */
+	get_back_meeple(&board->meeple, vertices, size);
+      }
+	
+      
+      
+      //printf("[score] Total: %d\n", total);
     } /*else {
       printf("[score] Structure nb %ld (vertex %d) is not finished\n", i, vertices[0]);
       }*/
