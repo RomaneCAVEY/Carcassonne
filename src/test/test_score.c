@@ -140,7 +140,7 @@ void test_caculate_points_no_meeple()
   calculate_points(&sb, NO_MEEPLE, 1);
   assert(r.a == 0 && r.b == 0); // All finished structures have already been evaluted, to there should be no new points.
 
-  board_free(sb.board);
+  // board_free(sb.board);
   free_super_board(&sb);
   
   printf("\t\e[1;102m SUCCESS \e[0m\n");  
