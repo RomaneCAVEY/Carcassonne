@@ -149,6 +149,11 @@ void create_neato(struct super_board_t * super_board, char * file_name)
 	// neato -Tx11 neato_graph.dot &
 }
 
+/* void add_node(FILE* out, int j, float x, float y, struct tile_t tile)
+{
+	if (j%13 < 3)
+		fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y+2);
+} */
 /*Free the memory
 * @param:the super_board
 * @return: void
