@@ -4,13 +4,7 @@
 #include "super_board.h"
 
 
-struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player) {
-
-  // TODO: Implement all game modes
-  if (mode != NO_MEEPLE) {
-    printf("[score] \e[1;37;103mWARNING:\e[0m Current game mode not supported. Defaulting to NO_MEEPLE for score calculation\n");
-  }
-  
+struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player) {  
   igraph_vector_int_t components;
   igraph_vector_int_t csize;
   igraph_integer_t count = 0;
@@ -111,7 +105,7 @@ struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t 
         int score = (size + center_vertices) / 2 * factor;
         
         //printf("[score] Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
-        if( mode == NO_MEEPLE){
+        if (mode == NO_MEEPLE) {
             // TODO: when playing with meeples, determine which player wins the points
             if (current_player == 0) {
                 total.a = total.a + score;
@@ -122,32 +116,30 @@ struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t 
             }
         }
         
-        if ( mode != NO_MEEPLE ){
-            struct int_pair_t nb_meeple = {.a=0, .b=0};
+        if (mode != NO_MEEPLE) {
+            struct int_pair_t nb_meeple = {.a = 0, .b = 0};
             
-            for (int i=0; i<size; i++){
-            for (int p1=0;p1 < board->meeple.size1 ; p1++){
-                if(board->meeple.player1[p1] == vertices[i]){
-                    nb_meeple.a +=1;
+            for (int i = 0; i<size; i++) {
+	      for (int p1 = 0; p1 < board->meeple.size1; p1++) {
+                if (board->meeple.player1[p1] == vertices[i]) {
+		  nb_meeple.a += 1;
                 }
-            }
-            for (int p2=0; p2 <board->meeple.size2 ; p2++){
-                if(board->meeple.player2[p2] == vertices[i]){
-                    nb_meeple.b +=1;
+	      }
+	      for (int p2 = 0; p2 < board->meeple.size2; p2++) {
+                if (board->meeple.player2[p2] == vertices[i]) {
+		  nb_meeple.b +=1;
                 }
-            }
+	      }
             }
 
-            if (nb_meeple.a > nb_meeple.b){
+            if (nb_meeple.a > nb_meeple.b) {
                 total.a += score;
             }
-            if (nb_meeple.a < nb_meeple.b){
+            if (nb_meeple.a < nb_meeple.b) {
                 total.b += score;
             }
             get_back_meeple(&board->meeple, vertices, size);
         }
-        
-        
         
         //printf("[score] Total: %d\n", total);
     } /*else {
