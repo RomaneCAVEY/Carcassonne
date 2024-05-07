@@ -58,16 +58,19 @@ void create_neato(struct super_board_t * super_board, char * file_name);
 struct super_board_t copy_super_board(struct super_board_t super_board);
 
 
-//serveur 
+//client 
+/*Add find where to place a meeple
+ *@param: the meeple and the move and super_board
+ *@return: the moove with the new meeple according to the player who played 
+ * */
 int add_meeple(struct move_t* move, struct super_board_t sboard, enum gamemode_t gt);
 
-//client
+//serveur
 /*Add the meeple played in the move
  *@param: the meeple and the move and super_board
  *@return: the meeple with the new meeple according to the player who played 
  * */
-int add_meeple_to_board(struct meeple_t *meeple, struct move_t* move, struct super_board_t sboard, enum gamemode_t gt);
-
+int add_meeple_to_board(struct meeple_t *meeple, struct move_t *move, struct super_board_t sboard, enum gamemode_t gt);
 /* check if there is a valide place to let a meeple*/
 int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple);
 

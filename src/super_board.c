@@ -211,6 +211,7 @@ void free_copy_super_board(struct super_board_t* copy){
 }
 
 
+
 int add_meeple(struct move_t* move, struct super_board_t sboard, enum gamemode_t gt)
 {
   if(gt == FINITE_MEEPLE){
@@ -221,86 +222,89 @@ int add_meeple(struct move_t* move, struct super_board_t sboard, enum gamemode_t
       return 0;
     }
   }
-  
+
   if( gt == INFINITE_MEEPLE){
-    if (sboard.meeple.capacity1 == sboard.meeple.size1 ){
+    if (sboard.meeple.capacity1 <= sboard.meeple.size1 ){
       sboard.meeple.capacity1 *= 2;
       sboard.meeple.player1 = realloc(sboard.meeple.player1, sizeof(int)*sboard.meeple.capacity1);
     }
 
-    if (sboard.meeple.capacity2 == sboard.meeple.size2 ){
+    if (sboard.meeple.capacity2 <= sboard.meeple.size2 ){
       sboard.meeple.capacity2 *= 2;
       sboard.meeple.player2 = realloc(sboard.meeple.player2, sizeof(int)*sboard.meeple.capacity2);
     }
-  }  
-  
-  
+  }
+
+
   for (int i= 0; i <12; i++){
-	if (check_add_meeple(sboard, move->meeple, &sboard.meeple)){
-		if (move->player_id == 0 ){
-		move->meeple = i;
-		sboard.meeple.player1[sboard.meeple.size1] = ((sboard.size-1) * 13) + move->meeple ;
-		sboard.meeple.size1 +=1;
-		return 1;
-		} else if (move->player_id == 1 ){
-		move->meeple = i;
-		sboard.meeple.player2[sboard.meeple.size2] = ((sboard.size-1) * 13) + move->meeple ;
-		sboard.meeple.size2 +=1;
-		return 1;
-		}
-	}
+    if (check_add_meeple(sboard, move->meeple, &sboard.meeple)){
+        if (move->player_id == 0 ){
+        move->meeple = i;
+        sboard.meeple.player1[sboard.meeple.size1] = ((sboard.size-1) * 13) + move->meeple ;
+        sboard.meeple.size1 +=1;
+        return 1;
+        } else if (move->player_id == 1 ){
+        move->meeple = i;
+        sboard.meeple.player2[sboard.meeple.size2] = ((sboard.size-1) * 13) + move->meeple ;
+        sboard.meeple.size2 +=1;
+        return 1;
+        }
+    }
   }
   return 0;
 }
-
-// CLIENT VERSION
-int add_meeple_to_board(struct meeple_t *meeple, struct move_t* move, struct super_board_t sboard, enum gamemode_t gt)
+int add_meeple_to_board(struct meeple_t *meeple, struct move_t *move, struct super_board_t sboard, enum gamemode_t gt)
 {
   if(gt == FINITE_MEEPLE){
     if (move->player_id == 1 && meeple->size2 == 7 ){
-      	move->meeple = 14;
-		return 0;
+          move->meeple = 14;
+        return 0;
     }
     if (move->player_id == 0 && meeple->size1 == 7 ){
       move->meeple = 14;
-	  return 0;
+      return 0;
     }
   }
-  
+
   if( gt == INFINITE_MEEPLE){
-    if (meeple->capacity1 == meeple->size1 ){
+    if (meeple->capacity1 <= meeple->size1 ){
       meeple->capacity1 *= 2;
       meeple->player1 = realloc(meeple->player1, sizeof(int)*meeple->capacity1);
     }
 
-    if (meeple->capacity2 == meeple->size2 ){
+    if (meeple->capacity2 <= meeple->size2 ){
       meeple->capacity2 *= 2;
       meeple->player2 = realloc(meeple->player2, sizeof(int)*meeple->capacity2);
     }
-  }  
-  
-  
+  }
+
+
   for (int i= 0; i <12; i++){
     if(check_add_meeple(sboard, i, meeple)){
       if (move->player_id == 0 ){
-	move->meeple = i;
-	meeple->player1[meeple->size1] = ((sboard.size-1) * 13) + move->meeple ;
-	meeple->size1 +=1;
-	return 1;
+    move->meeple = i;
+    meeple->player1[meeple->size1] = ((sboard.size-1) * 13) + move->meeple ;
+    meeple->size1 +=1;
+    return 1;
       }
 
       if (move->player_id == 1 ){
-	move->meeple = i;
-	meeple->player2[meeple->size2] = ((sboard.size-1) * 13) + move->meeple ;
-	meeple->size2 +=1;
-	return 1;
+    move->meeple = i;
+    meeple->player2[meeple->size2] = ((sboard.size-1) * 13) + move->meeple ;
+    meeple->size2 +=1;
+    return 1;
       }
     }
   }
-  	move->meeple = 14;
-  	return 0;
-  
+      move->meeple = 14;
+      return 0;
+
 }
+
+
+
+
+
 
 int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struct meeple_t *meeple)
 {
@@ -318,10 +322,9 @@ int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struc
 
   int *vertices = malloc(nb_vertices * sizeof(int));
   int size;
+  
   //igraph_vector_int_print(&components);
-
- // size = vector_extract_component(components, 0,vertices);
- size=2;
+  size = vector_extract_component(components, 0,vertices);
 
   for (int i=0; i<size; i++){
     for (int p1=0;p1 < sboard.meeple.size1 ; p1++){
@@ -337,3 +340,30 @@ int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struc
   }
   return 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
