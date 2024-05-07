@@ -89,6 +89,7 @@ struct tile_t copy_tile(struct tile_t tile)
     return cpy_tile;
 }
 
+
 struct tile_t flip_tile(struct tile_t tile)
 {
     struct tile_t new_tile = {.c={0}, .t={0}};
@@ -166,3 +167,9 @@ void tile_display(struct tile_t tile)
     printf( "\n");
 }
 
+void tile_display_with_meeple(struct move_t move){
+	tile_display(move.tile);
+	if ( move.meeple>13){
+		printf(URED"===>There is Meeple in  %d \n"COLOR_RESET, move.meeple);
+	}
+}

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include "score.h"
 #include "deck.h"
+#include "super_board.h"
+
 
 struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t mode, int current_player) {
 
@@ -62,63 +64,92 @@ struct int_pair_t calculate_points(struct super_board_t *board, enum gamemode_t 
 
       // Si le couple (tuile, côté) est déjà connu, on ne l'ajoute pas une deuxième fois.
       if (side < 4 && is_int_pair_in_list(tiles_sides, tile_count, tile, side) == 0) {
-	tiles_sides[tile_count].a = tile;
-	tiles_sides[tile_count].b = side;
-	tile_count++;
+        tiles_sides[tile_count].a = tile;
+        tiles_sides[tile_count].b = side;
+        tile_count++;
 
-	// On traite ce côté
-	switch(side) {
-	case 0: // North
-	  if (compare_tile(board_get(board->board, board->list[tile].x, board->list[tile].y - 1), CARC_TILE_EMPTY) == 1) {
-	    is_finished = 0;
-	  }
-	  break;
+        // On traite ce côté
+        switch(side) {
+            case 0: // North
+            if (compare_tile(board_get(board->board, board->list[tile].x, board->list[tile].y - 1), CARC_TILE_EMPTY) == 1) {
+                is_finished = 0;
+            }
+            break;
 
-	case 1: // East
-	  if (compare_tile(board_get(board->board, board->list[tile].x + 1, board->list[tile].y), CARC_TILE_EMPTY) == 1) {
-	    is_finished = 0;
-	  }
-	  break;
+            case 1: // East
+            if (compare_tile(board_get(board->board, board->list[tile].x + 1, board->list[tile].y), CARC_TILE_EMPTY) == 1) {
+                is_finished = 0;
+            }
+            break;
 
-	case 2: // South
-	  if (compare_tile(board_get(board->board, board->list[tile].x, board->list[tile].y + 1), CARC_TILE_EMPTY) == 1) {
-	    is_finished = 0;
-	  }
-	  break;
+            case 2: // South
+            if (compare_tile(board_get(board->board, board->list[tile].x, board->list[tile].y + 1), CARC_TILE_EMPTY) == 1) {
+                is_finished = 0;
+            }
+            break;
 
-	case 3: // West
-	  if (compare_tile(board_get(board->board, board->list[tile].x - 1, board->list[tile].y), CARC_TILE_EMPTY) == 1) {
-	    is_finished = 0;
-	  }
-	  break;
-	}
+            case 3: // West
+            if (compare_tile(board_get(board->board, board->list[tile].x - 1, board->list[tile].y), CARC_TILE_EMPTY) == 1) {
+                is_finished = 0;
+            }
+            break;
+        }
       }
     }
 
     if (is_finished == 1) {
-      // Add the structure to the list of already evaluted structures
-      add_finished_structure(board, vertices[0]);
+        // Add the structure to the list of already evaluted structures
+        add_finished_structure(board, vertices[0]);
+        
 
-      // Calculate the corresponding score
-      int factor = color_score_factor(board->colors[vertices[0]]); 
-      int center_vertices = count_center_vertices(vertices, size);
+        // Calculate the corresponding score
+        int factor = color_score_factor(board->colors[vertices[0]]); 
+        int center_vertices = count_center_vertices(vertices, size);
 
-      // We add the number of center vertices to the vertices count, since all vertices are duplicated,
-      // except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
-      int score = (size + center_vertices) / 2 * factor;
-      
-      //printf("[score] Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
-      
-      // TODO: when playing with meeples, determine which player wins the points
-      if (current_player == 0) {
-	total.a = total.a + score;
-      } else if (current_player == 1) {
-	total.b = total.b + score;
-      } else {
-	printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.", vertices[0], current_player);
-      }
-      
-      //printf("[score] Total: %d\n", total);
+        // We add the number of center vertices to the vertices count, since all vertices are duplicated,
+        // except for the center ones. We then divide by two to get the correct amount of non-duplicate vertices.
+        int score = (size + center_vertices) / 2 * factor;
+        
+        //printf("[score] Score for structure nb %ld (vertex %d): %d\n", i, vertices[0], score);
+        if( mode == NO_MEEPLE){
+            // TODO: when playing with meeples, determine which player wins the points
+            if (current_player == 0) {
+                total.a = total.a + score;
+            } else if (current_player == 1) {
+                total.b = total.b + score;
+            } else {
+                printf("[score] Finished structure (id=%d) was attributed to an unknown player (id=%d). Points will not be counted.", vertices[0], current_player);
+            }
+        }
+        
+        if ( mode != NO_MEEPLE ){
+            struct int_pair_t nb_meeple = {.a=0, .b=0};
+            
+            for (int i=0; i<size; i++){
+            for (int p1=0;p1 < board->meeple.size1 ; p1++){
+                if(board->meeple.player1[p1] == vertices[i]){
+                    nb_meeple.a +=1;
+                }
+            }
+            for (int p2=0; p2 <board->meeple.size2 ; p2++){
+                if(board->meeple.player2[p2] == vertices[i]){
+                    nb_meeple.b +=1;
+                }
+            }
+            }
+
+            if (nb_meeple.a > nb_meeple.b){
+                total.a += score;
+            }
+            if (nb_meeple.a < nb_meeple.b){
+                total.b += score;
+            }
+            get_back_meeple(&board->meeple, vertices, size);
+        }
+        
+        
+        
+        //printf("[score] Total: %d\n", total);
     } /*else {
       printf("[score] Structure nb %ld (vertex %d) is not finished\n", i, vertices[0]);
       }*/
@@ -146,17 +177,17 @@ void add_finished_structure(struct super_board_t *sb, int first_vertex) {
 
 int color_score_factor(enum color_t color) {
   switch (color) {
-  case GREEN:
-    return 1;
+    case GREEN:
+        return 1;
 
-  case GRAY:
-    return 4;
+    case GRAY:
+        return 4;
 
-  case BROWN:
-    return 8;
+    case BROWN:
+        return 8;
 
-  default:
-    return 0;
+    default:
+        return 0;
   }
 }
 

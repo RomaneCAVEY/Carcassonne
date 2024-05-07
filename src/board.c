@@ -1,3 +1,4 @@
+#include "board.h"
 #include "struct_board.h"
 #include "tile.h"
 #include <stdio.h>
@@ -69,6 +70,7 @@ void board_free(struct board_t *board) {
   free(board);
 }
 
+
 void board_display(struct board_t *board) {
   for (int i = 0; i < BOARD_SIZE; i++) {
     for (int j = 0; j < BOARD_SIZE; j++) {
@@ -78,4 +80,15 @@ void board_display(struct board_t *board) {
       }
     }
   }
+}
+
+
+void copy_board(struct board_t *board, struct board_t* copy){
+	for (int i = -100 - 1; i < 100 ; i++) {
+		for (int j = -100 - 1; j < 100 ; j++) {
+							//copy->tiles[BOARD_CENTER + j][BOARD_CENTER + i] = board_get(board, j, i);
+				board_add(copy, board_get(board, i, j), i,j);
+
+		}
+	}
 }

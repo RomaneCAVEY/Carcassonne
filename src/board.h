@@ -28,4 +28,10 @@ void board_free(struct board_t *board);
 
 void board_display(struct board_t *board);
 
+/*Copy the board
+* @param: a board
+* @return: a pointer of a copy of the board
+*/
+void copy_board(struct board_t *board, struct board_t* copy);
+
 #endif // __BOARD_H__

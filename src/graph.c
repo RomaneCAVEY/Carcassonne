@@ -39,7 +39,7 @@ igraph_t transform_tile_to_graph(struct tile_t tile)
 	igraph_vector_init(&weights, 0);
 
 	igraph_matrix_init(&mat, 13, 13);
-	for (i = 0; i < 13; i++) for (j = 0; j < 13; j++) {
+	for (int i = 0; i < 13; i++) for (int j = 0; j < 13; j++) {
 		MATRIX(mat, i, j) = m[i][j];
 	}
 
@@ -134,6 +134,31 @@ void create_dot_igraph2(igraph_t graph)
 	igraph_write_graph_dot(&graph, out);
 	fclose(out);
 }
+
+
+/* igraph_error_t igraph_connected_components(
+    const igraph_t *graph, igraph_vector_int_t *membership,
+    igraph_vector_int_t *csize, igraph_integer_t *no, igraph_connectedness_t mode
+);
+
+void function_get_point(struct super_board_t board){
+  
+//initialiser vector de pointor
+  
+igraph_vector_int_t memebership;
+igraph_vector_int_t cisize;
+int * ohno;
+
+igraph_connected_components(board.graph,  &memebership, &cisize, &ohno, IGRAPH_WEAK );
+
+
+int component_is_over(struct board_t board, ){
+	for 
+}
+
+ 
+} */
+
 
 void free_graph(igraph_t graph)
 {
