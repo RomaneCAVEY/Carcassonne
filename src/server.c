@@ -77,8 +77,8 @@ int main(int argc, char *argv[]) {
   ///////////// COMMAND LINE OPTIONS //////////////
   int debug = 0;
   enum gamemode_t game_mode = NO_MEEPLE;
-  char p1def[] = "./install/player0a.so";
-  char p2def[] = "./install/player0b.so";
+  char p1def[] = "./install/player1.so";
+  char p2def[] = "./install/player2.so";
   char *player_1_path = p1def;
   char *player_2_path = p2def;
 

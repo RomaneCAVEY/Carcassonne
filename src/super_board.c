@@ -92,6 +92,10 @@ void create_neato(struct super_board_t * super_board, char * file_name)
 	FILE* out = fopen(file_name, "w+");
 	fprintf(out, "graph {\n");
 	fprintf(out, "  node[style=filled];\n");
+	// Meeple :
+
+
+	// Vertices :
 	for (int i=0; i < super_board->size; ++i) {
 		// printf("\n-----Index %d-----\n", i);
 		float x = (float) super_board->list[i].x * 5;
@@ -106,42 +110,146 @@ void create_neato(struct super_board_t * super_board, char * file_name)
 			{
 			case 0:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y+2);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-0.5, y+2.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-0.5, y+2.5);
+				}
 				break;
 			case 1:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y+2);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+0.5, y+2.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+0.5, y+2.5);
+				}
 				break;
 			case 2:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+1, y+2);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+1.5, y+2.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+1.5, y+2.5);
+				}
 				break;
 			case 3:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y+1);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+2.5, y+1.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+2.5, y+1.5);
+				}
 				break;
 			case 4:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+2.5, y+0.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+2.5, y+0.5);
+				}
 				break;
 			case 5:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+2, y-1);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+2.5, y-0.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+2.5, y-0.5);
+				}
 				break;
 			case 6:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x+1, y-2);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+1.5, y-1.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+1.5, y-1.5);
+				}
 				break;
 			case 7:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y-2);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+0.5, y-1.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+0.5, y-1.5);
+				}
 				break;
 			case 8:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-1, y-2);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-0.5, y-1.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-0.5, y-1.5);
+				}
 				break;
 			case 9:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y-1);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-1.5, y-0.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-1.5, y-0.5);
+				}
 				break;
 			case 10:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-1.5, y+0.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-1.5, y+0.5);
+				}
 				break;
 			case 11:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x-2, y+1);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-1.5, y+1.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x-1.5, y+1.5);
+				}
 				break;
 			case 12:
 				fprintf(out, "  %d [fillcolor=%s,shape=\"circle\",pos=\"%f, %f!\"];\n", j, str_color[tile.c[j%13]], x, y);
+				for (int i = 0; i < super_board->meeple.size1; ++i) {
+					if (j == super_board->meeple.player1[i])
+						fprintf(out, "  %d [fillcolor=RED,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+0.5, y+0.5);
+				}
+				for (int i = 0; i < super_board->meeple.size2; ++i) {
+					if (j == super_board->meeple.player2[i])
+						fprintf(out, "  %d [fillcolor=BLUE,shape=\"circle\",pos=\"%f, %f!\"];\n", -j, x+0.5, y+0.5);
+				}
 				break;
 			default:
 				break;
