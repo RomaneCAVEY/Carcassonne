@@ -1,7 +1,7 @@
 IGRAPH_PATH ?= /net/npers/renault/save/igraph-0.10.10/install
-IGRAPH_LIBDIR = $(shell [ -e $(IGRAPH_PATH)/lib ] && \
-    echo $(IGRAPH_PATH)/lib || \
-    echo $(IGRAPH_PATH)/lib64) 
+IGRAPH_LIBDIR = $(shell [ -e $(IGRAPH_PATH)lib ] && \
+    echo $(IGRAPH_PATH)lib || \
+    echo $(IGRAPH_PATH)lib64) 
 
 CFLAGS = -std=gnu99 -Wall -Wextra -Wno-trampolines -fPIC -g3 -O0 \
 	-I$(IGRAPH_PATH)/include/igraph
@@ -49,7 +49,7 @@ test_common.o: src/test/test_common.c
 test_score.o: src/test/test_score.c
 	$(CC) src/test/test_score.c $(CFLAGS) -c
 
-alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o test_common.o common.o test_score.o score.o super_board.o graph.o
+alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o test_common.o common.o test_score.o score.o super_board.o graph.o meeple.o
 	gcc $(CLFAGS) $^ -o install/$@ -lgcov --coverage -ldl $(LDFLAGS)
 
 test: alltests

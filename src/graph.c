@@ -34,7 +34,6 @@ igraph_t transform_tile_to_graph(struct tile_t tile)
 	}
 	igraph_vector_t weights;
 	igraph_vector_int_t el;
-	igraph_integer_t i, j;
 	igraph_vector_int_init(&el, 0);
 	igraph_vector_init(&weights, 0);
 

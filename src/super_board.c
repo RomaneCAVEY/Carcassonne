@@ -3,6 +3,7 @@
 #include "meeple.h"
 #include "graph.h"
 #include "move.h"
+#include "score.h"
 #include <igraph.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -306,7 +307,7 @@ int add_meeple_to_board(struct meeple_t *meeple, struct move_t *move, struct sup
 
 
 
-int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struct meeple_t *meeple)
+int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple)
 {
    
   igraph_vector_int_t components;
@@ -324,6 +325,7 @@ int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struc
   int size;
   
   //igraph_vector_int_print(&components);
+  // TO DO : use indexVertex
   size = vector_extract_component(components, 0,vertices);
 
   for (int i=0; i<size; i++){

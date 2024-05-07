@@ -78,17 +78,12 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     current_move.player_id=id_player;
 	current_move.x=previous_x;
     current_move.y=previous_y;
-    int flag = 0; //
 	int max=-1;
     struct tile_t ptile = copy_tile(tile); 
 	struct move_t best_positions[200];
 	int nb_max=0;
     for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
-        //if (flag == 1)
-         //   break;
         for (int j = p1_board_min_y - 1; j < p1_board_max_y + 2; j++) {
-         //   if (flag == 1)
-           //     break;
             // TO DO : check placement of tile (coordonnee)
             if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
                 for (int flip=0; flip<4; ++flip) {
@@ -111,8 +106,6 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 							struct move_t pos={.x=i,.y=-j,.tile=ptile};
 							best_positions[nb_max]=pos;
 							nb_max+=1;
-							//printf("SCORE = %d \n",score);
-
 						}
                     }
                 }
