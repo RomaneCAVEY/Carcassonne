@@ -58,6 +58,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     pm.y = -pm.y;
     add_tile_to_super_board(previous_move.tile, &board_1, previous_move.x, -previous_move.y);
     update_board_bounds(pm);
+	//if(config_1.mode)
 	add_meeple_to_board(&pm, &board_1,config_1.mode);
     struct move_t current_move={};
     int previous_x = previous_move.x;

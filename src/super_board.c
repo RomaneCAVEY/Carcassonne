@@ -323,6 +323,9 @@ void free_copy_super_board(struct super_board_t* copy){
 
 int add_meeple(struct move_t* move, struct super_board_t *sboard, enum gamemode_t gt)
 {
+	if (gt==NO_MEEPLE){
+		return 0;
+	}
   if(gt == FINITE_MEEPLE){	
     if (move->player_id == 1 && sboard->meeple.size2 == 7 ){
       return 0;
@@ -346,7 +349,7 @@ int add_meeple(struct move_t* move, struct super_board_t *sboard, enum gamemode_
   }
 
 
-  for (int i= 0; i <12; i++){
+  for (int i= 1; i <12; i++){
     if (check_add_meeple(*sboard, move->meeple, &sboard->meeple)){
         if (move->player_id == 0 ){
         move->meeple = i;
@@ -369,6 +372,9 @@ int add_meeple(struct move_t* move, struct super_board_t *sboard, enum gamemode_
 // SERVER VERSION
 int add_meeple_to_board(struct move_t* move, struct super_board_t *sboard, enum gamemode_t gt)
 {
+	if (gt==NO_MEEPLE){
+		return 0;
+	}
    if(gt == FINITE_MEEPLE){	
     if (move->player_id == 1 && sboard->meeple.size2 == 7 ){
       return 0;
