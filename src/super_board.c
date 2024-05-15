@@ -428,7 +428,7 @@ int add_meeple_to_board(struct move_t* move, struct super_board_t *sboard, enum 
       return 1;
     }
   }
-  return 0
+  return 0;
 }
 
 
