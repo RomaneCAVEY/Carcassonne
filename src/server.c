@@ -12,7 +12,7 @@
 #include "tile.h"
 #include "move.h"
 
-#define DECK_SIZE 15
+#define DECK_SIZE 10
 
 char const* (*get_player_name0)();
 void (*initialize0)(unsigned int, const struct move_t, struct gameconfig_t);
