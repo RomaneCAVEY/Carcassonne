@@ -33,7 +33,7 @@ char const* get_player_name(){
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
 	init_super_board(first_move.tile, &board_2);
-	create_dot_igraph2((board_2.graph));
+	//create_dot_igraph2((board_2.graph));
 	id_player = player_id;
 	config_2 = config;
 	//board_2.meeple=init_meeple(7);
@@ -112,15 +112,24 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 							best_positions[nb_max]=pos;
 							nb_max+=1;
 						}
+						current_move.x=i;
+    					current_move.y=j;
+						current_move.tile=ptile;
                     }
                 }
             }
 		}
     }
-	struct move_t choice= best_positions[rand()%nb_max];
+	if (nb_max!=0){
+	int a=rand()%nb_max;
+	struct move_t choice= best_positions[a];
 	current_move.x=choice.x;
     current_move.y=choice.y;
 	current_move.tile=choice.tile;
+	}
+	else{
+		current_move.tile=tile;
+	}
 
 	if (current_move.x==previous_x && current_move.y==previous_y){
 		printf("==========No placement found=============");
@@ -129,7 +138,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     tile_display(current_move.tile);
     // printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
     add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
-    create_neato(&board_2, "player1_graph.dot");
+    //create_neato(&board_2, "player1_graph.dot");
 	add_meeple(&current_move, &board_2, config_2.mode);
     return current_move;
 }

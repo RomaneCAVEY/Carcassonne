@@ -100,23 +100,31 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 							best_positions[nb_max] = pos;
 							nb_max += 1;
 						}
+						current_move.x=i;
+    					current_move.y=j;
+						current_move.tile=ptile;
                         //printf("----------- Place trouvé ! ----------- (%d, %d)\n", i, -j);
                     }
                 }
             }
         } 
     }
+	if (nb_max!=0){
 	int a=rand()%nb_max;
 	struct move_t choice= best_positions[a];
 	current_move.x=choice.x;
     current_move.y=choice.y;
 	current_move.tile=choice.tile;
+	}
+	else{
+		current_move.tile=tile;
+	}
 
 	if (current_move.x==previous_x && current_move.y==previous_y){
 		printf("=========================No placement found===================");
 	}
 	struct super_board_t copy= copy_super_board(board_1);
-	create_neato(&copy, "copy_graph.dot");
+	//create_neato(&copy, "copy_graph.dot");
 	free_copy_super_board(&copy);
 
     tile_display(current_move.tile);
@@ -125,7 +133,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	add_meeple(&current_move, &board_1, config_1.mode);
 	//meeple_display(board_1.meeple);
 	//printf("%%%%%%%%  %d %%%%%%",current_move.meeple);
-    create_neato(&board_1, "player1_graph.dot");
+    //create_neato(&board_1, "player1_graph.dot");
     return current_move;
 }
 
