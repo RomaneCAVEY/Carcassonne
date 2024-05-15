@@ -25,6 +25,8 @@ int p1_board_max_x = 0;
 int p1_board_min_y = 0;
 int p1_board_max_y = 0;
 
+//board_2.meeple=init_meeple(7);
+
 char const* get_player_name(){
     return "Player_2";
 }
@@ -34,7 +36,7 @@ void initialize(unsigned int player_id, const struct move_t first_move, struct g
 	create_dot_igraph2((board_2.graph));
 	id_player = player_id;
 	config_2 = config;
-	board_2.meeple=init_meeple(7);
+	//board_2.meeple=init_meeple(7);
 }
 
 

@@ -17,7 +17,6 @@
 struct super_board_t board_1={};
 struct gameconfig_t config_1={};
 
-
 unsigned int id_player = 0;
 
 int p1_board_min_x = 0;
@@ -31,10 +30,10 @@ char const* get_player_name(){
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
 	init_super_board(first_move.tile,&board_1);
-	create_dot_igraph1(board_1.graph);
+	//create_dot_igraph1(board_1.graph);
 	id_player = player_id;
 	config_1=config;
-	board_1.meeple=init_meeple(7);
+	//board_1.meeple=init_meeple(7);
 }
 
 void update_board_bounds(struct move_t move) {
