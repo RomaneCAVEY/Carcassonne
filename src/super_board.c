@@ -343,6 +343,7 @@ void free_copy_super_board(struct super_board_t* copy){
 int add_meeple(struct move_t* move, struct super_board_t *sboard, enum gamemode_t gt)
 {
 	if (gt==NO_MEEPLE){
+		move->meeple=14;
 		return 0;
 	}
   if(gt == FINITE_MEEPLE){	
@@ -427,7 +428,7 @@ int add_meeple_to_board(struct move_t* move, struct super_board_t *sboard, enum 
       return 1;
     }
   }
-  return 0;
+  return 0
 }
 
 
