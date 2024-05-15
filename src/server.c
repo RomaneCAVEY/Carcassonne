@@ -12,7 +12,7 @@
 #include "tile.h"
 #include "move.h"
 
-#define DECK_SIZE 100
+#define DECK_SIZE 15
 
 char const* (*get_player_name0)();
 void (*initialize0)(unsigned int, const struct move_t, struct gameconfig_t);
@@ -25,7 +25,6 @@ struct move_t (*play1)(const struct move_t, const struct tile_t);
 void (*finalize1)();
 
 int deck_pos;
-
 struct gameconfig_t make_config() {
   struct gameconfig_t cfg = {
     .mode = NO_MEEPLE,
@@ -242,7 +241,7 @@ int main(int argc, char *argv[]) {
   printf("- %s: %d\n", get_player_name0(), points.a);
   printf("- %s: %d\n", get_player_name1(), points.b);
   
-  create_neato(&super_board, "server_graph.dot");
+  // create_neato(&super_board, "server_graph.dot");
 
   if (is_game_over()) {
     if (points.a > points.b)
