@@ -479,7 +479,7 @@ int find_right_component(igraph_vector_int_t components, int num_tile,igraph_int
 		int *vertices = malloc(nb_vertices * sizeof(int));
 		int size = vector_extract_component(components, i,vertices);
 		for (int j=0; j<size; j++){
-			if (vertices[j]==num_tile){
+			if (vertices[j]/13==num_tile){
 				return i;
 			}
 		}
