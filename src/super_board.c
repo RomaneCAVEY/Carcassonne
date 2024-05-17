@@ -457,12 +457,18 @@ int check_add_meeple(struct super_board_t sboard, enum conn_t indexVertex, struc
   for (int i=0; i<size; i++){
     for (int p1=0;p1 < sboard.meeple.size1 ; p1++){
       if(meeple->player1[p1] == vertices[i]){
-		return 0;
+	  free(vertices);
+	  igraph_vector_int_destroy(&components);
+	  igraph_vector_int_destroy(&csize);
+	  return 0;
       }
     }
     for (int p2=0; p2 < sboard.meeple.size2 ; p2++){
       if(meeple->player2[p2] == vertices[i]){
-		return 0;
+	  free(vertices);
+	  igraph_vector_int_destroy(&components);
+	  igraph_vector_int_destroy(&csize);
+	  return 0;
       }
     }
   }
