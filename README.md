@@ -30,8 +30,13 @@ To execute the tests write the commande below :
 
 ## how to display the graph :
 
-To display the graph write the commande below :
+To display the graph write after execution of server the commande below :
  - $> neato -Tx11 server_graph.dot &
+
+## how to display the coverage :
+
+To display the coverage write after execution of server the commande below :
+ - $> gcov *.o
 
 ## main link:
 

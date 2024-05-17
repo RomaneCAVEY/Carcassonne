@@ -35,19 +35,19 @@ player2.so: player2.o board.o deck.o tile.o graph.o super_board.o meeple.o score
 client: player1.so player2.so #player0a.so player0b.so
 
 test_tile.o: src/test/test_tile.c
-	$(CC) src/test/test_tile.c $(CFLAGS) -c
+	$(CC) src/test/test_tile.c $(CFLAGS) -c --coverage
 
 test_board.o: src/test/test_board.c
-	$(CC) src/test/test_board.c $(CFLAGS) -c
+	$(CC) src/test/test_board.c $(CFLAGS) -c --coverage
 
 test_deck.o: src/test/test_deck.c
-	$(CC) src/test/test_deck.c $(CFLAGS) -c
+	$(CC) src/test/test_deck.c $(CFLAGS) -c --coverage
 
 test_common.o: src/test/test_common.c
-	$(CC) src/test/test_common.c $(CFLAGS) -c
+	$(CC) src/test/test_common.c $(CFLAGS) -c --coverage
 
 test_score.o: src/test/test_score.c
-	$(CC) src/test/test_score.c $(CFLAGS) -c
+	$(CC) src/test/test_score.c $(CFLAGS) -c --coverage
 
 alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.o deck.o test_common.o common.o test_score.o score.o super_board.o graph.o meeple.o
 	gcc $(CLFAGS) $^ -o install/$@ -lgcov --coverage -ldl $(LDFLAGS)
