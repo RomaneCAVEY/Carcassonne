@@ -54,6 +54,9 @@ alltests: src/test/alltests.c test_deck.o test_tile.o test_board.o tile.o board.
 
 test: alltests
 
+neato:
+	neato -Tx11 server_graph.dot &
+
 install: server client test
 
 clean:
