@@ -25,7 +25,6 @@ int p1_board_max_x = 0;
 int p1_board_min_y = 0;
 int p1_board_max_y = 0;
 
-//board_2.meeple=init_meeple(7);
 
 char const* get_player_name(){
     return "Player_2";
@@ -33,7 +32,6 @@ char const* get_player_name(){
 
 void initialize(unsigned int player_id, const struct move_t first_move, struct gameconfig_t config) {
 	init_super_board(first_move.tile, &board_2);
-	//create_dot_igraph2((board_2.graph));
 	id_player = player_id;
 	config_2 = config;
 	//board_2.meeple=init_meeple(7);
@@ -72,7 +70,6 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     add_tile_to_super_board(previous_move.tile, &board_2, previous_move.x, -previous_move.y);
     update_board_bounds(pm);
 	add_meeple_to_board(&pm,&board_2,config_2.mode);
-	//add_meeple(&pm, board_2,config_2.mode);
     struct move_t current_move={};
     int previous_x = previous_move.x;
     int previous_y = previous_move.y;
@@ -80,24 +77,21 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
     current_move.player_id=id_player;
 	current_move.x=previous_x;
     current_move.y=previous_y;
-    //int flag = 0; //
 	int max=-1;
     struct tile_t ptile = copy_tile(tile); 
 	struct move_t best_positions[200];
 	int nb_max=0;
     for (int i = p1_board_min_x - 1; i < p1_board_max_x + 2; i++) {
         for (int j = p1_board_min_y - 1; j < p1_board_max_y + 2; j++) {
-            // TO DO : check placement of tile (coordonnee)
             if(compare_tile(board_get(board_2.board, i, j), CARC_TILE_EMPTY)){
+				// try with flip tile :
                 for (int flip=0; flip<4; ++flip) {
                     struct tile_t ftile = flip_tile(ptile);
                     replace_tile(&ftile, &ptile);
-                    // changer dans le serv le compare de tuile
                     if(board_add_check(board_2.board, ptile, i, j)){
                       	struct super_board_t copy= copy_super_board(board_2);
 						add_tile_to_super_board(ptile, &copy, i, j);
 						int score=calculate_points(&copy, config_2.mode, id_player).b;
-						//printf("SCORE = %d",score);
 						free_copy_super_board(&copy);
 						if (score >max){
 							max=score;
@@ -105,7 +99,6 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 							nb_max=1;
 							best_positions[0]=pos;
 							printf("PLAYER 2 SCORE = %d \n",score);
-
 						}
 						if (score == max){
 							struct move_t pos={.x=i,.y=-j,.tile=ptile};
@@ -136,10 +129,9 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
 	}
 
     tile_display(current_move.tile);
-    // printf("Va l'ajouter au coordonnée (%d, %d)\n", current_move.x, current_move.y);
     add_tile_to_super_board(current_move.tile, &board_2, current_move.x, -current_move.y);
-    //create_neato(&board_2, "player1_graph.dot");
 	add_meeple(&current_move, &board_2, config_2.mode);
+	//create_neato(&board_2, "player2_graph.dot"); // création du .dot
     return current_move;
 }
 
@@ -151,10 +143,7 @@ struct move_t play(const struct move_t previous_move, const struct tile_t tile)
  */
 void finalize()
 {
-	//board_free(board_2.board);
 	deck_free(config_2.deck);
 	free_super_board(&board_2);
-	//free_meeple(board_2.meeple);
-
 }
 

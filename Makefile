@@ -57,7 +57,7 @@ test: alltests
 install: server client test
 
 clean:
-	@rm -f *~ src/*~ *.o *.gcno *.gcda *.gcov
+	@rm -f *~ src/*~ *.o *.gcno *.gcda *.gcov *.dot
 
 .PHONY: client install test clean
 

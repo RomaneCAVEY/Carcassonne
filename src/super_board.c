@@ -87,25 +87,27 @@ int add_tile_to_super_board(struct tile_t tile, struct super_board_t * super_boa
 	return 1;
 }
 
+
+/*Create a file dot to display the graph
+* @param: super_board, name of the file with .dot
+* @return: void but created a file_name.dot in root
+*/
 void create_neato(struct super_board_t * super_board, char * file_name)
 {
 	FILE* out = fopen(file_name, "w+");
 	fprintf(out, "graph {\n");
 	fprintf(out, "  node[style=filled];\n");
-	// Meeple :
-
-
-	// Vertices :
+	// Vertices & meeples :
 	for (int i=0; i < super_board->size; ++i) {
-		// printf("\n-----Index %d-----\n", i);
+		// coordonate in the dot file
 		float x = (float) super_board->list[i].x * 5;
 		float y = (float) - super_board->list[i].y * 5;
+		// n° of the vertex in the center of the tile
 		int center = super_board->list[i].center;
+		// take the tile at this position
 		struct tile_t tile = board_get(super_board->board, x/5, -y/5);
-		// tile_display(tile);
-		// printf("x = %f, y = %f, center = %d", x, y, center);
+		// place all vertices of the tile in dot file (can be improved)
 		for (int j=(center-12); j < center+1; ++j) {
-			// printf("\n-----Index %d-----\n", j%13);
 			switch (j%13)
 			{
 			case 0:
@@ -260,10 +262,8 @@ void create_neato(struct super_board_t * super_board, char * file_name)
 	// Display edges :
 	igraph_es_t es;
 	igraph_eit_t eit;
-	// igraph_integer_t size;
 	igraph_es_all(&es, IGRAPH_EDGEORDER_ID);
 	igraph_eit_create(&super_board->graph, es, &eit);
-	// igraph_es_size(super_board->graph, &es, &size);
 	IGRAPH_EIT_RESET(eit);
 	while (!IGRAPH_EIT_END(eit)) {
 		igraph_integer_t e = IGRAPH_EIT_GET(eit);
@@ -271,20 +271,18 @@ void create_neato(struct super_board_t * super_board, char * file_name)
 		igraph_integer_t v = IGRAPH_TO(&super_board->graph, e);
 		fprintf(out, " %" IGRAPH_PRId " -- %"  IGRAPH_PRId ";\n", u, v);
 		IGRAPH_EIT_NEXT(eit);
-		// size--;
 	}
 	igraph_eit_destroy(&eit);
 	igraph_es_destroy(&es);
 	fprintf(out, "}\n");
 	fclose(out);
-	// neato -Tx11 neato_graph.dot &
+	// command used : neato -Tx11 file_name.dot &
 }
 
 /*Free the memory allocated by the super_board
 * @param:the super_board
 * @return: nothing
 */
-
 void free_super_board(struct super_board_t* super_board){
   free(super_board->colors);
   free(super_board->list);
@@ -298,7 +296,6 @@ void free_super_board(struct super_board_t* super_board){
 
 struct super_board_t copy_super_board(struct super_board_t super_board){
 	struct super_board_t copy={};
-	//init_super_board(board_get(super_board.board, 0, 0), &copy);
 	copy.board=board_init(board_get(super_board.board, 0, 0));
 	copy_board(super_board.board, copy.board);
 
@@ -491,52 +488,3 @@ int find_right_component(igraph_vector_int_t components, int num_tile,igraph_int
 	return 666;
 	//printf("\e[1;37;103m ADD A MEEPLE ON EDGE:\e[0m %d",num_tile);	
 }
-
-/* 
-void board_write_to_dot(const struct board_t* b, FILE* f) {
-  fprintf(f, "graph g {\n");
-  fprintf(f, "  graph [bgcolor=gray];\n"
-             "  node[style=filled];\n");
-  // Display vertices
-  igraph_vs_t vs;
-  igraph_vit_t vit;
-  igraph_vs_all(&vs);
-  igraph_vit_create(b->graph, vs, &vit);
-  while (!IGRAPH_VIT_END(vit)) {
-    unsigned int anchor;
-    struct move_t* m = moves_find_from_vertex_id(b->moves, IGRAPH_VIT_GET(vit), &anchor);
-    float x = SCALE_FACTOR * m->x + tile_dx(anchor);
-    if ((x >= MAX_BOARD_SIZE) || (x <= -MAX_BOARD_SIZE)) x = MAX_BOARD_SIZE;
-    float y = SCALE_FACTOR * m->y + tile_dy(anchor);
-    if ((y >= MAX_BOARD_SIZE) || (y <= -MAX_BOARD_SIZE)) y = MAX_BOARD_SIZE;
-    const char* cs = color_to_dot_string(m->tile.c[anchor]);
-    fprintf(f, " %" IGRAPH_PRId
-            " [fontcolor=white,fillcolor=%s,shape=circle,pos=\"%f,%f!\"];\n",
-            IGRAPH_VIT_GET(vit), cs, x, y);
-    IGRAPH_VIT_NEXT(vit);
-  }
-  printf("\n");
-  igraph_vit_destroy(&vit);
-  igraph_vs_destroy(&vs);
-  // Display edges
-  igraph_es_t es;
-  igraph_eit_t eit;
-  igraph_integer_t size;
-  igraph_es_all(&es, IGRAPH_EDGEORDER_ID);
-  igraph_eit_create(b->graph, es, &eit);
-  igraph_es_size(b->graph, &es, &size);
-  IGRAPH_EIT_RESET(eit);
-  while (!IGRAPH_EIT_END(eit)) {
-    igraph_integer_t e = IGRAPH_EIT_GET(eit);
-    igraph_integer_t u = IGRAPH_FROM(b->graph, e);
-    igraph_integer_t v = IGRAPH_TO(b->graph, e);
-    fprintf(f, " %" IGRAPH_PRId " -- %"  IGRAPH_PRId ";\n", u, v);
-    IGRAPH_EIT_NEXT(eit);
-    size--;
-  }
-  igraph_eit_destroy(&eit);
-  igraph_es_destroy(&es);
-  fprintf(f, "}\n");
-}
-
- */
