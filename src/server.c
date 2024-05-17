@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
   struct super_board_t super_board;
   init_super_board(current_move.tile, &super_board);
 
-  struct meeple_t meeple=init_meeple(7);
+  //struct meeple_t meeple=init_meeple(7);
   
   if (debug) {
     printf("-------\nInitial tile (0, 0):\n");
@@ -262,7 +262,7 @@ int main(int argc, char *argv[]) {
   //board_free(super_board.board);
   free_super_board(&super_board);
   deck_free(config.deck);
-  free_meeple(meeple);
+  //free_meeple(meeple);
 
 
   ///////////// OUTILISATION DES LIBRAIRIES  //////////////
