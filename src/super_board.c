@@ -367,7 +367,7 @@ int add_meeple(struct move_t* move, struct super_board_t *sboard, enum gamemode_
 
 
   for (int i= 1; i <12; i++){
-    if (check_add_meeple(*sboard, move->meeple, &sboard->meeple)){
+    if (check_add_meeple(*sboard, i, &sboard->meeple)){
         if (move->player_id == 0 ){
         move->meeple = i;
         sboard->meeple.player1[sboard->meeple.size1] = ((sboard->size-1) * 13) + move->meeple ;
@@ -431,7 +431,7 @@ int add_meeple_to_board(struct move_t* move, struct super_board_t *sboard, enum 
 
 
 
-int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struct meeple_t *meeple)
+int check_add_meeple(struct super_board_t sboard, enum conn_t indexVertex, struct meeple_t *meeple)
 {
 	//printf("\e[1;37;103m CHECK ADD MEEPLE:\e[0m ");
    
@@ -450,7 +450,7 @@ int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struc
   int size;
   
   //igraph_vector_int_print(&components);
-  int n=find_right_component(components, sboard.size - 1, count);
+  int n=find_right_component(components, (sboard.size - 1) * MAX_CONNECTIONS + indexVertex, count);
   
   size = vector_extract_component(components, n,vertices);
 
@@ -473,18 +473,19 @@ int check_add_meeple( struct super_board_t sboard, enum conn_t indexVertex,struc
   return 1;
 }
 
-int find_right_component(igraph_vector_int_t components, int num_tile,igraph_integer_t count){
-	igraph_integer_t nb_vertices = igraph_vector_int_size(&components);
-	for (int i=0; i<count;i++){
-		int *vertices = malloc(nb_vertices * sizeof(int));
-		int size = vector_extract_component(components, i,vertices);
-		for (int j=0; j<size; j++){
-			if (vertices[j]/13==num_tile){
-				return i;
-			}
-		}
-		free(vertices);
-	}
-	return 666;
-	//printf("\e[1;37;103m ADD A MEEPLE ON EDGE:\e[0m %d",num_tile);	
+int find_right_component(igraph_vector_int_t components, int num_sommet, igraph_integer_t count){
+  igraph_integer_t nb_vertices = igraph_vector_int_size(&components);
+  for (int i=0; i<count;i++){
+    int *vertices = malloc(nb_vertices * sizeof(int));
+    int size = vector_extract_component(components, i,vertices);
+    for (int j=0; j<size; j++){
+      if (vertices[j]==num_sommet){
+	free(vertices);
+	return i;
+      }
+    }
+    free(vertices);
+  }
+  return 666;
+  //printf("\e[1;37;103m ADD A MEEPLE ON EDGE:\e[0m %d",num_tile);	
 }
