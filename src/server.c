@@ -210,7 +210,7 @@ int main(int argc, char *argv[]) {
     
     add_tile_to_super_board(current_move.tile, &super_board, current_move.x, -current_move.y); // y axis is inverted in our implementation
 
-    if(game_mode != NO_MEEPLE){
+    if (game_mode != NO_MEEPLE && current_move.meeple < 13) {
       if (add_meeple_to_board(&current_move, &super_board, game_mode) == 0) {
 	if (debug)
 	  printf("[server] Player tried to place meeple at invalid pos (%d)\n", current_move.meeple);
